@@ -1,45 +1,36 @@
-var val, row_id, j, begin, item_id, item_type, now, row_id, d, sort='updated_up';
+var val, row_id, j, begin, item_id, item_type, now, row_id, d, sort_type='updated', sort_way='up';
 var compare_date = function (a, b) {
-    switch (sort) {
-        case 'updated_up': {
+    switch (sort_type) {
+        case 'updated': {
             a = new Date(a.date);
             b = new Date(b.date);
-            return (a - b);
+            if (sort_way=='up'){
+                return (a - b);
+            } else  return (b - a);
         }
-        case 'updated_down': {
-            a = new Date(a.date);
-            b = new Date(b.date);
-            return (b - a);
-        }
-        case 'status_up': {
+        case 'status': {
             a=+a.status;
             b=+b.status;
-            return (a-b);
+            if (sort_way=='up'){
+                return (a - b);
+            } else  return (b - a);
         }
-        case 'status_down': {
-            a=+a.status;
-            b=+b.status;
-            return (b-a);
-        }
-        case 'name_up':{
+        case 'name':{
+            console.log("name");
             a=a.title;
             b=b.title;
-            return a>b?1:-1;
+            console.log('a='+a);
+            console.log('b='+b);
+            if (sort_way=='up'){
+                return a>b?1:-1;
+            } else  return a>b?-1:1;
         }
-        case 'name_down': {
-            a=a.title;
-            b=b.title;
-            return a>b?-1:1;
-        }
-        case "author_up": {
+        case "author": {
             a=a.author;
             b=b.author;
-            return a>b?1:-1;
-        }
-        case "author_down": {
-            a=a.author;
-            b=b.author;
-            return a>b?-1:1;
+            if (sort_way=='up'){
+                return a>b?1:-1;
+            } else  return a>b?-1:1;
         }
         default: return 1;
     }
@@ -150,56 +141,22 @@ $(document).ready(function () {
         data.splice(row_id, 1);
         localStorage.data = JSON.stringify(data);
     });
-    $('#status_sort').click(function(){
-        if(sort=='status_down'){
-            sort='status_up';
+    $('#status_sort, #name_sort, #author_sort, #updated_sort').click(function(){
+        sort_type=$(this).data("type");
+        if($(this).data("way")=='down'){
+            sort_way='up';
+            $(this).data("way", 'up');
             val='<img src="up.jpg" style="width: 20px; height: 20px">'
             $(this).html(val);
             redraw();
         } else{
+            sort_way='down';
+            $(this).data("way", 'down');
             val='<img src="down.png" style="width: 20px; height: 20px">'
             $(this).html(val);
-            sort='status_down';
             redraw();
         }
-    });
-    $('#name_sort').click(function(){
-        if(sort=='name_down'){
-            sort='name_up';
-            val='<img src="up.jpg" style="width: 20px; height: 20px">'
-            $(this).html(val);
-            redraw();
-        } else{
-            val='<img src="down.png" style="width: 20px; height: 20px">'
-            $(this).html(val);
-            sort='name_down';
-            redraw();
-        }
-    });
-    $('#author_sort').click(function(){
-        if(sort=='author_down'){
-            sort='author_up';
-            val='<img src="up.jpg" style="width: 20px; height: 20px">'
-            $(this).html(val);
-            redraw();
-        } else {
-            val='<img src="down.png" style="width: 20px; height: 20px">'
-            $(this).html(val);
-            sort='author_down';
-            redraw();
-        }
-    });
-    $('#updated_sort').click(function(){
-        if(sort=='updated_down'){
-            sort='updated_up';
-            val='<img src="up.jpg" style="width: 20px; height: 20px">'
-            $(this).html(val);
-            redraw();
-        } else {
-            val='<img src="down.png" style="width: 20px; height: 20px">'
-            $(this).html(val);
-            sort='updated_down';
-            redraw();
-        }
+            console.log('sort_way='+sort_way);
+            console.log('sort_type='+sort_type);
     });
 });
