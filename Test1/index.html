@@ -1,0 +1,42 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Test1</title>
+    <link rel="stylesheet" type="text/css" href="Style.css">
+    <script src="jquery.js"></script>
+</head>
+<body>
+    <div class="content">
+        <form>
+            <label>Title:
+                <input type="text" name="title">
+            </label>
+            <br>
+            <label>Author:
+                <input type="text" name="author">
+                <br>
+            </label>
+            <input type="hidden" name="status" value="false">
+            <input type="submit" value="Add!" class="button_add">
+        </form>
+        <table>
+            <thead>
+                <tr>
+                    <td>Status <botton data-way="up" data-type="status" id="status_sort"><img src="up.jpg" style="width: 20px; height: 20px"></botton></td>
+                    <td>Name <botton data-way="up" data-type="name" id="name_sort"><img src="up.jpg" style="width: 20px; height: 20px"></botton></td>
+                    <td>Author <botton data-way="up" data-type="author" id="author_sort"><img src="up.jpg" style="width: 20px; height: 20px"></botton></td>
+                    <td>Last Updated <botton data-way="up" data-type="updated" id="updated_sort"><img src="up.jpg" style="width: 20px; height: 20px"></botton></td>
+                    <td></td>
+                </tr>
+            </thead>
+            <tbody id="articles">
+
+            </tbody>
+        </table>
+    </div>
+    <script src="jquery.js"></script>
+    <script src="moment.js"></script>
+    <script type="text/javascript" src="Script.js"></script>
+</body>
+</html>

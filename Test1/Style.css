@@ -1,0 +1,51 @@
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+td {
+    border: 1px solid black;
+    padding: 10px;
+}
+.red {
+    border-color: red;
+}
+.content {
+    width: 700px;;
+    margin: 30px auto 0;
+    /*display: inline-block;*/
+    /*text-align: center;*/
+}
+td.etitable{
+    width:20%;
+}
+.button_add{
+    background-color: #CEEFAA;
+    margin-bottom: 10px;
+    font-size: 1em;
+    padding: 5px 30px;
+    border-radius: 2px;
+    margin-top: 10px;
+    text-align: center;
+}
+#button_add:hover{
+    background-color: #449D44;
+    color: white;
+    cursor: pointer;
+    
+}
+.delete {
+    background-color: #E07D79;
+    padding: 5px 30px;
+    width: 100%;
+    margin: 0 auto;
+    border-radius: 2px;
+    text-align: center;
+}
+.delete:hover {
+    background-color: #D9534F;
+    color: white;
+    cursor: pointer;
+}
+input[name="title"]{
+    margin-bottom: 5px;
+}
