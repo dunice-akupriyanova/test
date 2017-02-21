@@ -9,29 +9,37 @@
 <body>
     <div class="content">
         <form>
-            <label>Title:
-                <input type="text" name="title">
-            </label>
-            <br>
-            <label>Author:
-                <input type="text" name="author">
-                <br>
-            </label>
-            <input type="hidden" name="status" value="false">
-            <input type="submit" value="Add!" class="button_add">
+            <div>
+                <label>Title:
+                    <input type="text" name="title">
+                 </label>
+            </div>
+            <div>
+                <label>Author:
+                    <input type="text" name="author">
+                    <br>
+                </label>
+            </div>
+            <div>
+                <input type="submit" value="Add!" class="button_add">
+            </div>
         </form>
+        <div class="show">
+            Show: <span class="pages5" data-limit="5">5</span>, <span class="pages10" data-limit="10">10</span>, <span class="all" data-limit="all">all</span>
+        </div>
+        <div class="navigation">
+        </div>
         <table>
             <thead>
                 <tr>
-                    <td>Status <botton data-way="up" data-type="status" id="status_sort"><img src="up.jpg" style="width: 20px; height: 20px"></botton></td>
-                    <td>Name <botton data-way="up" data-type="name" id="name_sort"><img src="up.jpg" style="width: 20px; height: 20px"></botton></td>
-                    <td>Author <botton data-way="up" data-type="author" id="author_sort"><img src="up.jpg" style="width: 20px; height: 20px"></botton></td>
-                    <td>Last Updated <botton data-way="up" data-type="updated" id="updated_sort"><img src="up.jpg" style="width: 20px; height: 20px"></botton></td>
+                    <td>Status <div data-way="up" data-type="status" id="status_sort"><img src="up.jpg" style="width: 20px; height: 20px"></div></td>
+                    <td>Name <div data-way="up" data-type="name" id="name_sort"><img src="up.jpg" style="width: 20px; height: 20px"></div></td>
+                    <td>Author <div data-way="up" data-type="author" id="author_sort"><img src="up.jpg" style="width: 20px; height: 20px"></div></td>
+                    <td>Last Updated <div data-way="up" data-type="updated" id="updated_sort"><img src="up.jpg" style="width: 20px; height: 20px"></div></td>
                     <td></td>
                 </tr>
             </thead>
             <tbody id="articles">
-
             </tbody>
         </table>
     </div>
