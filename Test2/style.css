@@ -12,9 +12,12 @@ body {
     position: absolute;
 }
 .header {
+    width: 1004px;
     height: 60px;
     padding-left: 20px;
     border-bottom: 2px solid #E7E9EE;
+    line-height: 60x;
+    vertical-align: middle;
 }
 .logo {
     width: 181px;
@@ -27,6 +30,8 @@ body {
     height: 30px;
     width: 30px;
     display: inline-block;
+    line-height: 60px;
+    vertical-align: middle;
 }
 .bizapp{
     color: #333333;
@@ -34,7 +39,6 @@ body {
     line-height: 30px;
     vertical-align: middle;
     margin-left: 5px;
-    margin-top: -20px;
 }
 .center {
     display: inline-block;
@@ -45,7 +49,6 @@ body {
 .dialogs {
     margin-top: 0px;
     padding-left: 0;
-    vertical-align: middle;
     display: inline-block;
     line-height: 60px;
 }
@@ -101,17 +104,16 @@ body {
     border: 1px solid #CCD0D9;
     border-radius: 2px;
     float: right;
-    margin-top: 15px;
+    margin-top: 17px;
     line-height: 60px;
     vertical-align: middle;
     background-color: white;
 }
 .auth {
+    line-height: 60px;
     height: 60px;
     width: 160px;
     display: inline-block;
-    vertical-align: middle;
-    margin-top: -22px;
     padding-left: 10px;
 }
 .status {
