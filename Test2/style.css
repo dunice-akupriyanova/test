@@ -1,3 +1,5 @@
+/* Код для подключения шрифта в /css/stylename.css */
+/* font-family: "OpenSansRegular"; */
 @font-face {
     font-family: "OpenSansRegular";
     src: url("fonts/OpenSansRegular/OpenSansRegular.eot");
@@ -98,6 +100,7 @@
     font-weight: normal;
 }
 body {
+    font-family: OpenSansRegular;
     background-color: #666699;
 }
 .main {
@@ -137,6 +140,7 @@ body {
     background: #5a4dc6 url("images/lightning.png") no-repeat 50% 50%;
 }
 .bizapp{
+    font-family: OpenSansRegular;
     color: #333333;
     display: inline-block;
     line-height: 30px;
@@ -144,6 +148,12 @@ body {
     margin-left: 7px;
     font-size: 20px;
     font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+.bold {
+    font-family: OpenSansBold;
+}
+.extraBold {
+    font-family: OpenSansExtraBold;
 }
 .center {
     position: absolute;
@@ -166,10 +176,10 @@ body {
 }
 .dialogs li{
     display: inline-block;
-    margin-left: 21px;
+    margin-left: 22px;
     line-height: 60px;
     height: 60px;
-    width: 157px;
+    width: 156px;
 }
 .dialogs li:nth-child(3){
     margin-left: 40px;
@@ -200,9 +210,11 @@ body {
     background: #CCD0D9 url("images/profile.png") no-repeat 10px 7px;
 }
 .dialogSignature {
+    font-family: OpenSansRegular;
     display: inline-block;
     margin-left: 9px;
     font-size: 13px;
+    margin-top: -2px;
     color: #656D78;
     line-height: 60px;
     vertical-align: middle;
@@ -266,6 +278,7 @@ body {
 }
 .Profile .dialogSignature {
     margin-left: 10px;
+    margin-top: 0px;
 }
 .status {
     width: 6px;
@@ -303,6 +316,7 @@ a {
     color: inherit;
 }
 .APPS {
+    font-family: OpenSansRegular;
     float: left;
     font-size: 18px;
     color: #333333;
@@ -327,7 +341,7 @@ a {
     padding-bottom: 10px;
 }
 .contactsItems {
-    margin: 49px auto;
+    margin: 50px auto;
     padding: 0;
 }
 .apps .appsItems {
@@ -349,13 +363,17 @@ a {
     border-radius: 3px;
     display: inline-block;
 }
-.appsSignature {
+.appsSignature { 
+    font-family: OpenSansRegular;
     display: inline-block;
     line-height: 30px;
     vertical-align: middle;
     font-size: 13px;
     color: #656D78;
     margin-left: 5px;
+}
+.appsItems .appsSignature {
+    margin-top: -3px;
 }
 .appsIcon.jira {
     background: #003167 url("images/jira.png") no-repeat 50% 50%;
@@ -422,6 +440,7 @@ a {
     border-radius: 3px;
 }
 .companyInc {
+    font-family: OpenSansBold;
     float: left;
     font-size: 13px;
     color: #434A54;
@@ -484,10 +503,11 @@ a {
     margin-top: -3px; 
 }
 .title>.appsSignature {
-    margin-top: -3px;
+    margin-top: -5px;
     margin-left: 4px;
 }
 .time {
+    font-family: OpenSansRegular;
     display: inline-block;
     font-size: 11px;
     color: #CCD0D9;
@@ -495,6 +515,7 @@ a {
     margin-right: 1px;
 }
 .content {
+    font-family: OpenSansRegular;
     padding-top: 16px;
     font-size: 12.7px;
     color: #CCD0D9;
@@ -503,10 +524,11 @@ a {
     line-height: 18px;
 }
 .likes {
+    font-family: OpenSansRegular;
     white-space: pre;
     font-size: 13px;
     color: #CCD0D9;
-    padding-top: 14px;
+    padding-top: 12px;
     margin-left: -1px;
     margin-bottom: 16.5px;
 }
@@ -514,7 +536,7 @@ a {
     color: #5A4DC6;
 }
 .reply {
-    margin-left: -2px; 
+    margin-left: -1px; 
 }
 .typeAway {
     height: 194px;
