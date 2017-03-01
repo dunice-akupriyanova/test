@@ -1,3 +1,102 @@
+@font-face {
+    font-family: "OpenSansRegular";
+    src: url("fonts/OpenSansRegular/OpenSansRegular.eot");
+    src: url("fonts/OpenSansRegular/OpenSansRegular.eot?#iefix")format("embedded-opentype"),
+    url("fonts/OpenSansRegular/OpenSansRegular.woff") format("woff"),
+    url("fonts/OpenSansRegular/OpenSansRegular.ttf") format("truetype");
+    font-style: normal;
+    font-weight: normal;
+}
+/* font-family: "OpenSansLight"; */
+@font-face {
+    font-family: "OpenSansLight";
+    src: url("fonts/OpenSansLight/OpenSansLight.eot");
+    src: url("fonts/OpenSansLight/OpenSansLight.eot?#iefix")format("embedded-opentype"),
+    url("fonts/OpenSansLight/OpenSansLight.woff") format("woff"),
+    url("fonts/OpenSansLight/OpenSansLight.ttf") format("truetype");
+    font-style: normal;
+    font-weight: normal;
+}
+/* font-family: "OpenSansItalic"; */
+@font-face {
+    font-family: "OpenSansItalic";
+    src: url("fonts/OpenSansItalic/OpenSansItalic.eot");
+    src: url("fonts/OpenSansItalic/OpenSansItalic.eot?#iefix")format("embedded-opentype"),
+    url("fonts/OpenSansItalic/OpenSansItalic.woff") format("woff"),
+    url("fonts/OpenSansItalic/OpenSansItalic.ttf") format("truetype");
+    font-style: normal;
+    font-weight: normal;
+}
+/* font-family: "OpenSansBold"; */
+@font-face {
+    font-family: "OpenSansBold";
+    src: url("fonts/OpenSansBold/OpenSansBold.eot");
+    src: url("fonts/OpenSansBold/OpenSansBold.eot?#iefix")format("embedded-opentype"),
+    url("fonts/OpenSansBold/OpenSansBold.woff") format("woff"),
+    url("fonts/OpenSansBold/OpenSansBold.ttf") format("truetype");
+    font-style: normal;
+    font-weight: normal;
+}
+/* font-family: "OpenSansExtraBold"; */
+@font-face {
+    font-family: "OpenSansExtraBold";
+    src: url("fonts/OpenSansExtraBold/OpenSansExtraBold.eot");
+    src: url("fonts/OpenSansExtraBold/OpenSansExtraBold.eot?#iefix")format("embedded-opentype"),
+    url("fonts/OpenSansExtraBold/OpenSansExtraBold.woff") format("woff"),
+    url("fonts/OpenSansExtraBold/OpenSansExtraBold.ttf") format("truetype");
+    font-style: normal;
+    font-weight: normal;
+}
+/* font-family: "OpenSansExtraBoldItalic"; */
+@font-face {
+    font-family: "OpenSansExtraBoldItalic";
+    src: url("fonts/OpenSansExtraBoldItalic/OpenSansExtraBoldItalic.eot");
+    src: url("fonts/OpenSansExtraBoldItalic/OpenSansExtraBoldItalic.eot?#iefix")format("embedded-opentype"),
+    url("fonts/OpenSansExtraBoldItalic/OpenSansExtraBoldItalic.woff") format("woff"),
+    url("fonts/OpenSansExtraBoldItalic/OpenSansExtraBoldItalic.ttf") format("truetype");
+    font-style: normal;
+    font-weight: normal;
+}
+/* font-family: "OpenSansBoldItalic"; */
+@font-face {
+    font-family: "OpenSansBoldItalic";
+    src: url("fonts/OpenSansBoldItalic/OpenSansBoldItalic.eot");
+    src: url("fonts/OpenSansBoldItalic/OpenSansBoldItalic.eot?#iefix")format("embedded-opentype"),
+    url("fonts/OpenSansBoldItalic/OpenSansBoldItalic.woff") format("woff"),
+    url("fonts/OpenSansBoldItalic/OpenSansBoldItalic.ttf") format("truetype");
+    font-style: normal;
+    font-weight: normal;
+}
+/* font-family: "OpenSansRegularItalic"; */
+@font-face {
+    font-family: "OpenSansRegularItalic";
+    src: url("fonts/OpenSansRegularItalic/OpenSansRegularItalic.eot");
+    src: url("fonts/OpenSansRegularItalic/OpenSansRegularItalic.eot?#iefix")format("embedded-opentype"),
+    url("fonts/OpenSansRegularItalic/OpenSansRegularItalic.woff") format("woff"),
+    url("fonts/OpenSansRegularItalic/OpenSansRegularItalic.ttf") format("truetype");
+    font-style: normal;
+    font-weight: normal;
+}
+/* font-family: "OpenSansSemiBold"; */
+@font-face {
+    font-family: "OpenSansSemiBold";
+    src: url("fonts/OpenSansSemiBold/OpenSansSemiBold.eot");
+    src: url("fonts/OpenSansSemiBold/OpenSansSemiBold.eot?#iefix")format("embedded-opentype"),
+    url("fonts/OpenSansSemiBold/OpenSansSemiBold.woff") format("woff"),
+    url("fonts/OpenSansSemiBold/OpenSansSemiBold.ttf") format("truetype");
+    font-style: normal;
+    font-weight: normal;
+}
+/* font-family: "OpenSansSemiBoldItalic"; */
+@font-face {
+    font-family: "OpenSansSemiBoldItalic";
+    src: url("fonts/OpenSansSemiBoldItalic/OpenSansSemiBoldItalic.eot");
+    src: url("fonts/OpenSansSemiBoldItalic/OpenSansSemiBoldItalic.eot?#iefix")format("embedded-opentype"),
+    url("fonts/OpenSansSemiBoldItalic/OpenSansSemiBoldItalic.woff") format("woff"),
+    url("fonts/OpenSansSemiBoldItalic/OpenSansSemiBoldItalic.ttf") format("truetype");
+    font-style: normal;
+    font-weight: normal;
+}
 body {
     background-color: #666699;
 }
@@ -6,7 +105,8 @@ body {
     width: 1024px;
     height: 923px;
     background-color: white;
-    border-radius: 3px;
+    border-radius: 5px;
+    font-family: sans-serif;
 }
 .container {
     position: absolute;
@@ -15,52 +115,65 @@ body {
     width: 1004px;
     height: 60px;
     padding-left: 20px;
-    border-bottom: 2px solid #E7E9EE;
+    border-bottom: 1px solid #CCD0D9;
     line-height: 60x;
     vertical-align: middle;
+    font-size: 0;
 }
 .logo {
-    width: 181px;
+    position: absolute;
+    width: 180px;
     display: inline-block;
     line-height: 60px;
 }
 .logoImage {
-    background-color: #5a4dc6;
+    margin: 16px 1px;
     border-radius: 50%;
     height: 30px;
     width: 30px;
     display: inline-block;
     line-height: 60px;
     vertical-align: middle;
+    background: #5a4dc6 url("images/lightning.png") no-repeat 50% 50%;
 }
 .bizapp{
     color: #333333;
     display: inline-block;
     line-height: 30px;
     vertical-align: middle;
-    margin-left: 5px;
+    margin-left: 7px;
+    font-size: 20px;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
 }
 .center {
+    position: absolute;
+    left: 200px;
     display: inline-block;
     line-height: 60px;
     height: 60px;
     width: 624px;
 }
 .dialogs {
+    float: left;
     margin-top: 0px;
     padding-left: 0;
     display: inline-block;
     line-height: 60px;
 }
 #firstDialog {
+    margin-left: 20px; 
     width: 128px;
 }
 .dialogs li{
     display: inline-block;
-    margin-left: 20px;
+    margin-left: 21px;
     line-height: 60px;
     height: 60px;
-    width: 176px;
+    width: 157px;
+}
+.dialogs li:nth-child(3){
+    margin-left: 40px;
+    width: 163px;
 }
 .dialogIcon {
     background-color: #CCD0D9;
@@ -71,10 +184,25 @@ body {
     width: 30px;
     border-radius: 50%;
 }
+.jonas {
+    background: #CCD0D9 url("images/jonas.png");
+}
+.sue {
+    background: #CCD0D9 url("images/sue.png") -2px -2px;
+}
+.frazer {
+    background: #CCD0D9 url("images/frazer.png") -4px -4px;
+}
+.first {
+    background: white url("images/main.png") no-repeat 50% 50%;
+}
+.profile {
+    background: #CCD0D9 url("images/profile.png") no-repeat 10px 7px;
+}
 .dialogSignature {
     display: inline-block;
-    margin-left: 5px;
-    font-size: 9px;
+    margin-left: 9px;
+    font-size: 13px;
     color: #656D78;
     line-height: 60px;
     vertical-align: middle;
@@ -82,12 +210,15 @@ body {
 .close {
     width: 16px;
     height: 16px;
-    background-color: #E6E9EE;
+    background: #E6E9EE url("images/cross.png") no-repeat 50% 50%;
     border-radius: 2px;
     margin-left: 5px;
     line-height: 60px;
     vertical-align: middle;
     display: inline-block;
+    float: right;
+    margin-top: 22px;
+    /*margin-right: 19px; */
 }
 .active {
     border-bottom: 2px solid #5a4dc6;
@@ -104,17 +235,37 @@ body {
     border: 1px solid #CCD0D9;
     border-radius: 2px;
     float: right;
-    margin-top: 17px;
+    margin-top: 15px;
     line-height: 60px;
     vertical-align: middle;
     background-color: white;
+    box-sizing: border-box;
 }
-.auth {
+.dots {
+    background: white url("images/dots.png") no-repeat 7px 13px;
+    margin-right: 1px; 
+}
+.arrow {
+    margin-right: 20px; 
+    margin-top: 16px; 
+    background: white url("images/arrow.png") no-repeat 50% 50%;
+}
+.plus {
+    background: white url("images/plus.png") no-repeat 10px 10px;
+}
+.Profile {
+    float: left;
+    position: absolute;
+    left: 824px;
     line-height: 60px;
     height: 60px;
-    width: 160px;
+    width: 130px;
     display: inline-block;
-    padding-left: 10px;
+    padding-left: 20px;
+    margin-top: 1px;
+}
+.Profile .dialogSignature {
+    margin-left: 10px;
 }
 .status {
     width: 6px;
@@ -122,7 +273,7 @@ body {
     border-radius: 50%;
     border: 2px solid white;
     margin-left: 20px;
-    margin-top: 20px;
+    margin-top: 21px;
 }
 .status.online {
     background-color: #A0D468;
@@ -137,20 +288,23 @@ body {
     background-color: #CCD0D9;
 }
 .left {
-    width: 200px;
-    height: 861px;
+    width: 201px;
+    height: 863px;
     background-color: #F6F7Fb;
-    border-right: 2px solid #E7E9EE;
+    border-right: 1px solid #CCD0D9;
     box-sizing: border-box;
     margin-right: 0px;
     display: inline-block;
     position: absolute;
+    border-radius: 0 0 0 5px;
 }
 a {
     text-decoration: none;
+    color: inherit;
 }
 .APPS {
-    font-size: 13px;
+    float: left;
+    font-size: 18px;
     color: #333333;
     height: 30px;
     line-height: 30px;
@@ -161,57 +315,278 @@ a {
     margin-top: 0;
 }
 .apps {
-    padding: 20px;
-    height: 212px;
-    border-bottom: 2px solid #E7E9EE;
+    padding: 21px 20px;
+    height: 209px;
+    border-bottom: 1px solid #CCD0D9;
 }
-.appsItems li, .contacts li {
+.appsItems li, .contacts li, .companyBox li {
     display: block;
     line-height: 30px;
     height: 30px;
     vertical-align: middle;
     padding-bottom: 10px;
 }
-.appsItems, .contactsItems {
-    margin: 20px auto;
+.contactsItems {
+    margin: 49px auto;
     padding: 0;
+}
+.apps .appsItems {
+    margin-top: 49px;
+    padding: 0;
+}
+.companyBox {
+     margin: 18px auto;
+    padding: 0;
+}
+.contactsItems li:first-child{
+    margin-top: -3px;
 }
 .appsIcon {
     line-height: 30px;
     vertical-align: middle;
     width: 30px;
     height: 30px;
-    border-radius: 2px;
+    border-radius: 3px;
     display: inline-block;
 }
 .appsSignature {
     display: inline-block;
     line-height: 30px;
     vertical-align: middle;
-    font-size: 12px;
+    font-size: 13px;
     color: #656D78;
     margin-left: 5px;
 }
 .appsIcon.jira {
-    background-color: #003167;
+    background: #003167 url("images/jira.png") no-repeat 50% 50%;
 }
 .appsIcon.github {
-    background-color: #323131;
+    background: #323131 url("images/git.png") no-repeat 50% 50%;
 }
 .appsIcon.amazon {
-    background-color: #Fa9900;
+    background: #FA9900 url("images/amazon.png") no-repeat 50% 50%;
 }
 .appsIcon.ms {
-    background-color: #E83F24;
+    background: #E83F24 url("images/ms.png") no-repeat 50% 50%;
+}
+.appsIcon.manager {
+    background: #656D78 url("images/manager.png") no-repeat 8px 7px;
+}
+.appsIcon.team {
+    background: #656D78 url("images/team.png") no-repeat 50% 50%;
+}
+.appsIcon.events {
+    background: url("images/Rounded Rectangle.png") no-repeat 50% 13px;
+}
+.oct {
+    height: 30px;
+    width: 30px;
+    background: url("images/Oct 22.png") no-repeat 7px 4px;
+}
+.notifications {
+    background: #656D78 url("images/notifications.png") no-repeat 50% 50%;
+}
+.arrows {
+    height: 30px;
+    width: 30px;
+    background: url("images/arrows.png") no-repeat 14px 10px;
+}
+.voting {
+    background: #656D78 url("images/voting.png") no-repeat 7px 7px;
 }
 .contacts {
     padding: 20px;
+    padding-top: 21px;
+}
+.right {
+    width: 200px;
+    display: inline-block;
+    position: absolute;
+    left: 823px;
+    height: 863px;
+    background-color: #F6F7Fb;
+    border-left: 1px solid #CCD0D9; 
+    border-radius: 0 0 5px 0;
+}
+.company {
+    padding: 20px;
+    padding-top: 21px;
+    border-bottom: 1px solid #CCD0D9;
+    height: 232px;
+    box-sizing: border-box;
+}
+.H {
+    height: 160px;
+    width: 160px;
+    background: white url("images/H.png") no-repeat 50% 50%;
+    border-radius: 3px;
+}
+.companyInc {
+    float: left;
+    font-size: 13px;
+    color: #434A54;
+    margin-top: 17px;
+    display: inline-block;
+}
+.settings {
+    margin-top: 10px;
+    margin-right: 1px;
+    background: white url("images/settings.png") no-repeat 50% 50%;
+}
+.companyBox {
+    padding-left: 20px; 
+}
+.companyBox .appsIcon {
+    background-color: #656D78;
 }
 .chat {
-    width: 624px;
-    height: 721px;
+    overflow-y: scroll;
+    scrollbar-base-color: #656D78 !important;
+    scrollbar-3dlight-color:  #656D78 !important;
+    scrollbar-arrow-color: #656D78 !important;
+    scrollbar-darkshadow-color: #656D78 !important;;
+    scrollbar-face-color: #656D78 !important;
+    scrollbar-highlight-color: #656D78 !important;
+    scrollbar-shadow-color: #656D78 !important;
+    padding-left: 20px;
+    width: 604px;
+    height: 722px;
     display: inline-block;
     position: absolute;
     left: 200px;
+    border-bottom: 1px solid #CCD0D9;
 }
-
+.chatItems {
+    margin: 0;
+    padding: 0;
+    width: 584px;
+    display: inline-block;
+}
+.chatItems li {
+    display: block;
+}
+.chatPost {
+}
+.title {
+    height: 72px;
+    border-top: 1px solid #CCD0D9;
+    margin-top: 0px;
+    box-sizing: border-box;
+    border-bottom: 1px solid #CCD0D9;
+    line-height: 70px;
+    vertical-align: middle;
+}
+.chatItems li:first-child>.title {
+    border-top: 0px;
+    height: 71px;
+}
+.title>.dialogIcon {
+    margin-top: -3px; 
+}
+.title>.appsSignature {
+    margin-top: -3px;
+    margin-left: 4px;
+}
+.time {
+    display: inline-block;
+    font-size: 11px;
+    color: #CCD0D9;
+    float: right;
+    margin-right: 1px;
+}
+.content {
+    padding-top: 16px;
+    font-size: 12.7px;
+    color: #CCD0D9;
+    font-style: italic;
+    hyphens: initial;
+    line-height: 18px;
+}
+.likes {
+    white-space: pre;
+    font-size: 13px;
+    color: #CCD0D9;
+    padding-top: 14px;
+    margin-left: -1px;
+    margin-bottom: 16.5px;
+}
+.like, .reply {
+    color: #5A4DC6;
+}
+.reply {
+    margin-left: -2px; 
+}
+.typeAway {
+    height: 194px;
+    width: 316px;
+    border-radius: 3px;
+    margin-top: 21px;
+    background: url("images/type-away-numero-dos.png") -3px -10px; 
+}
+.comment {
+    position: absolute;
+    display: inline-block;
+    position: absolute;
+    top: 783px;
+    left: 201px;
+    height: 102px;    
+    padding: 19px;
+    width: 582px;
+    background-color: #F6F7Fb;
+    border-top: 1px solid #CCD0D9; 
+}
+textarea {
+    resize:none;
+}
+.commentBox {
+    box-sizing: border-box;
+    padding: 20px; 
+    width: 584px;
+    height: 101px;
+    background-color: white;
+    border: 1px solid #CCD0D9;
+    border-radius: 3px;
+}
+.commentText {
+    color: #CCD0D9;
+    padding: 0;
+    width: 543px;
+    height: auto;
+    font-size: 12px;
+    border: 0px;
+    box-sizing: border-box;
+}
+.add {
+    z-index: 2;
+    opacity: 0;
+    position: absolute;
+    width: 30px;
+    height: 30px;
+}
+.fakeButton {
+    position: absolute;
+    bottom: 40px;
+    left: 39px;
+    z-index: 1;    
+    box-sizing: border-box;
+    display: inline-block;
+    width: 30px;
+    height: 30px;
+    border: 1px solid #CCD0D9;
+    border-radius: 2px;
+    background-color: white;
+    display: inline-block;
+}
+.post {
+    background-color: #5A4DC6;
+    position: absolute;
+    right: 38px;
+    font-weight: bold;
+    color: white;
+    font-size: 13px;
+    bottom: 41px;
+    border: 0px;
+    width: 80px;
+    height: 30px;
+    border-radius: 3px; 
+}
