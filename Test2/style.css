@@ -49,56 +49,6 @@
     font-style: normal;
     font-weight: normal;
 }
-/* font-family: "OpenSansExtraBoldItalic"; */
-@font-face {
-    font-family: "OpenSansExtraBoldItalic";
-    src: url("fonts/OpenSansExtraBoldItalic/OpenSansExtraBoldItalic.eot");
-    src: url("fonts/OpenSansExtraBoldItalic/OpenSansExtraBoldItalic.eot?#iefix")format("embedded-opentype"),
-    url("fonts/OpenSansExtraBoldItalic/OpenSansExtraBoldItalic.woff") format("woff"),
-    url("fonts/OpenSansExtraBoldItalic/OpenSansExtraBoldItalic.ttf") format("truetype");
-    font-style: normal;
-    font-weight: normal;
-}
-/* font-family: "OpenSansBoldItalic"; */
-@font-face {
-    font-family: "OpenSansBoldItalic";
-    src: url("fonts/OpenSansBoldItalic/OpenSansBoldItalic.eot");
-    src: url("fonts/OpenSansBoldItalic/OpenSansBoldItalic.eot?#iefix")format("embedded-opentype"),
-    url("fonts/OpenSansBoldItalic/OpenSansBoldItalic.woff") format("woff"),
-    url("fonts/OpenSansBoldItalic/OpenSansBoldItalic.ttf") format("truetype");
-    font-style: normal;
-    font-weight: normal;
-}
-/* font-family: "OpenSansRegularItalic"; */
-@font-face {
-    font-family: "OpenSansRegularItalic";
-    src: url("fonts/OpenSansRegularItalic/OpenSansRegularItalic.eot");
-    src: url("fonts/OpenSansRegularItalic/OpenSansRegularItalic.eot?#iefix")format("embedded-opentype"),
-    url("fonts/OpenSansRegularItalic/OpenSansRegularItalic.woff") format("woff"),
-    url("fonts/OpenSansRegularItalic/OpenSansRegularItalic.ttf") format("truetype");
-    font-style: normal;
-    font-weight: normal;
-}
-/* font-family: "OpenSansSemiBold"; */
-@font-face {
-    font-family: "OpenSansSemiBold";
-    src: url("fonts/OpenSansSemiBold/OpenSansSemiBold.eot");
-    src: url("fonts/OpenSansSemiBold/OpenSansSemiBold.eot?#iefix")format("embedded-opentype"),
-    url("fonts/OpenSansSemiBold/OpenSansSemiBold.woff") format("woff"),
-    url("fonts/OpenSansSemiBold/OpenSansSemiBold.ttf") format("truetype");
-    font-style: normal;
-    font-weight: normal;
-}
-/* font-family: "OpenSansSemiBoldItalic"; */
-@font-face {
-    font-family: "OpenSansSemiBoldItalic";
-    src: url("fonts/OpenSansSemiBoldItalic/OpenSansSemiBoldItalic.eot");
-    src: url("fonts/OpenSansSemiBoldItalic/OpenSansSemiBoldItalic.eot?#iefix")format("embedded-opentype"),
-    url("fonts/OpenSansSemiBoldItalic/OpenSansSemiBoldItalic.woff") format("woff"),
-    url("fonts/OpenSansSemiBoldItalic/OpenSansSemiBoldItalic.ttf") format("truetype");
-    font-style: normal;
-    font-weight: normal;
-}
 body {
     font-family: OpenSansRegular;
     background-color: #666699;
@@ -109,7 +59,6 @@ body {
     height: 923px;
     background-color: white;
     border-radius: 5px;
-    font-family: sans-serif;
 }
 .container {
     position: absolute;
@@ -140,14 +89,13 @@ body {
     background: #5a4dc6 url("images/lightning.png") no-repeat 50% 50%;
 }
 .bizapp{
-    font-family: OpenSansRegular;
+    font-family: OpenSansLight;
     color: #333333;
     display: inline-block;
     line-height: 30px;
     vertical-align: middle;
-    margin-left: 7px;
+    margin-left: 6px;
     font-size: 20px;
-    font-family: Verdana, Geneva, Tahoma, sans-serif;
 }
 .bold {
     font-family: OpenSansBold;
@@ -315,8 +263,8 @@ a {
     text-decoration: none;
     color: inherit;
 }
-.APPS {
-    font-family: OpenSansRegular;
+.APPS, .CONTACTS {
+    font-family: 'Open Sans Condensed Bold', arial;
     float: left;
     font-size: 18px;
     color: #333333;
@@ -324,6 +272,13 @@ a {
     line-height: 30px;
     vertical-align: middle;
     display: inline-block;
+}
+.APPS {
+    margin-left: -1px;
+}
+.CONTACTS {
+    margin-top: -1px;
+    margin-left: -1px;
 }
 .left .button {
     margin-top: 0;
@@ -341,16 +296,19 @@ a {
     padding-bottom: 10px;
 }
 .contactsItems {
-    margin: 50px auto;
+    margin: 49px auto;
     padding: 0;
 }
 .apps .appsItems {
-    margin-top: 49px;
+    margin-top: 48px;
     padding: 0;
 }
 .companyBox {
-     margin: 18px auto;
+    margin: 18px auto;
     padding: 0;
+}
+.companyBox .appsSignature {
+    margin-top: -2px;
 }
 .contactsItems li:first-child{
     margin-top: -3px;
@@ -373,10 +331,10 @@ a {
     margin-left: 5px;
 }
 .appsItems .appsSignature {
-    margin-top: -3px;
+    margin-top: -2px;
 }
 .appsIcon.jira {
-    background: #003167 url("images/jira.png") no-repeat 50% 50%;
+    background: #003167 url("images/jira.png") no-repeat 7px 50%;
 }
 .appsIcon.github {
     background: #323131 url("images/git.png") no-repeat 50% 50%;
@@ -385,7 +343,7 @@ a {
     background: #FA9900 url("images/amazon.png") no-repeat 50% 50%;
 }
 .appsIcon.ms {
-    background: #E83F24 url("images/ms.png") no-repeat 50% 50%;
+    background: #E83F24 url("images/ms.png") no-repeat 7px 50%;
 }
 .appsIcon.manager {
     background: #656D78 url("images/manager.png") no-repeat 8px 7px;
@@ -444,7 +402,7 @@ a {
     float: left;
     font-size: 13px;
     color: #434A54;
-    margin-top: 17px;
+    margin-top: 15px;
     display: inline-block;
 }
 .settings {
@@ -460,15 +418,9 @@ a {
 }
 .chat {
     overflow-y: scroll;
-    scrollbar-base-color: #656D78 !important;
-    scrollbar-3dlight-color:  #656D78 !important;
-    scrollbar-arrow-color: #656D78 !important;
-    scrollbar-darkshadow-color: #656D78 !important;;
-    scrollbar-face-color: #656D78 !important;
-    scrollbar-highlight-color: #656D78 !important;
-    scrollbar-shadow-color: #656D78 !important;
+    overflow-x: hidden;
     padding-left: 20px;
-    width: 604px;
+    width: 598px;
     height: 722px;
     display: inline-block;
     position: absolute;
@@ -484,8 +436,6 @@ a {
 .chatItems li {
     display: block;
 }
-.chatPost {
-}
 .title {
     height: 72px;
     border-top: 1px solid #CCD0D9;
@@ -500,10 +450,10 @@ a {
     height: 71px;
 }
 .title>.dialogIcon {
-    margin-top: -3px; 
+    margin-top: -4px; 
 }
 .title>.appsSignature {
-    margin-top: -5px;
+    margin-top: -6px;
     margin-left: 4px;
 }
 .time {
@@ -515,30 +465,32 @@ a {
     margin-right: 1px;
 }
 .content {
-    font-family: OpenSansRegular;
+    font-family: OpenSansItalic;
     padding-top: 16px;
-    font-size: 12.7px;
-    color: #CCD0D9;
-    font-style: italic;
-    hyphens: initial;
+    font-size: 13px;
+    color: #AAB2BD;
     line-height: 18px;
 }
 .likes {
     font-family: OpenSansRegular;
     white-space: pre;
     font-size: 13px;
-    color: #CCD0D9;
+    color: #AAB2BD;
     padding-top: 12px;
-    margin-left: -1px;
-    margin-bottom: 16.5px;
+    margin-left: -2px;
+    margin-bottom: 16px;
 }
 .like, .reply {
     color: #5A4DC6;
 }
 .reply {
-    margin-left: -1px; 
+    margin-left: -2px;
+}
+.dot {
+    padding: 8px;
 }
 .typeAway {
+    margin-bottom: -1px;
     height: 194px;
     width: 316px;
     border-radius: 3px;
@@ -553,7 +505,7 @@ a {
     left: 201px;
     height: 102px;    
     padding: 19px;
-    width: 582px;
+    width: 584px;
     background-color: #F6F7Fb;
     border-top: 1px solid #CCD0D9; 
 }
@@ -562,7 +514,7 @@ textarea {
 }
 .commentBox {
     box-sizing: border-box;
-    padding: 20px; 
+    padding: 15px 20px; 
     width: 584px;
     height: 101px;
     background-color: white;
@@ -570,11 +522,12 @@ textarea {
     border-radius: 3px;
 }
 .commentText {
+    font-family: OpenSansRegular;
     color: #CCD0D9;
     padding: 0;
     width: 543px;
     height: auto;
-    font-size: 12px;
+    font-size: 13px;
     border: 0px;
     box-sizing: border-box;
 }
@@ -602,10 +555,12 @@ textarea {
 .post {
     background-color: #5A4DC6;
     position: absolute;
-    right: 38px;
-    font-weight: bold;
+    right: 40px;
+    font-family: OpenSansBold;
     color: white;
-    font-size: 13px;
+    font-size: 12.5px;
+    padding-left: 5px;
+    padding-bottom: 3px;
     bottom: 41px;
     border: 0px;
     width: 80px;
