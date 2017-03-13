@@ -4,18 +4,9 @@ import { FormsModule }   from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
  
 
-import { Hero } from './hero';
-import { label } from './hero-detail.comonent';
-import {HeroDetailComponent.label2} from './hero-detail.comonent';
-const node7: Hero={name: 'node7', children:[], chosen: false};
-const node1: Hero={name: 'node1', children:[], chosen: false};
-const node2: Hero={name: 'node2', children:[node7], chosen: false};
-const node3: Hero={name: 'node3', children:[node1, node2], chosen: false};
-const node4: Hero={name: 'node4', children:[], chosen: false};
-const node5: Hero={name: 'node5', children:[node3, node4], chosen: false};
-const node6: Hero={name: 'node6', children:[], chosen: false};
+import { Node } from './node';
 
-const HEROES: Hero[] = [];
+const NODES: Node[] = [];
 
 @Component({
   selector: 'my-app',
@@ -23,18 +14,15 @@ const HEROES: Hero[] = [];
     <h1>{{title}}</h1>
     <form>
         <div>
-          <label>Node:</label> <input name="newName" [(ngModel)]="newName" #heroName />
+          <label>Node:</label> <input name="newName" [(ngModel)]="newName" #nodeName />
         </div>
         <div>
-          <label>newName: </label>{{newName}}
-        </div>
-        <div>
-            <input type="submit" value="Add!" class="button_add" (click)="add(heroName.value, heroes, label); heroName.value=''">
+            <input type="submit" value="Add!" class="button_add" (click)="add(nodeName.value, nodes); nodeName.value=''">
         </div>
     </form>
-    <ul class="heroes">
-      <li *ngFor="let hero of heroes">
-        <my-hero-detail [hero]="hero" [newName]="heroName.value"></my-hero-detail>
+    <ul class="nodes">
+      <li *ngFor="let node of nodes">
+        <new-node [node]="node" [newName]="nodeName.value"></new-node>
       </li>
     </ul>
   `,
@@ -43,12 +31,12 @@ const HEROES: Hero[] = [];
       background-color: #CFD8DC !important;
       color: white;
     }
-    .heroes {
+    .nodes {
       list-style-type: none;
       padding: 0;
       width: 15em;
     }
-    .heroes li {
+    .nodes li {
       cursor: pointer;
       position: relative;
       left: 0;
@@ -57,20 +45,20 @@ const HEROES: Hero[] = [];
       padding: .3em 0;
       border-radius: 4px;
     }
-    .heroes li.selected:hover {
+    .nodes li.selected:hover {
       background-color: #BBD8DC !important;
       color: white;
     }
-    .heroes li:hover {
+    .nodes li:hover {
       color: #607D8B;
       background-color: #DDD;
       left: .1em;
     }
-    .heroes .text {
+    .nodes .text {
       position: relative;
       top: -3px;
     }
-    .heroes .badge {
+    .nodes .badge {
       display: inline-block;
       font-size: small;
       color: white;
@@ -89,12 +77,10 @@ const HEROES: Hero[] = [];
 export class AppComponent {
   title = 'TreeView';
   newName: string='';
-  heroes = HEROES;
+  nodes = NODES;
   @Input()
-  label2: Hero;
-  add(n: string, heroes: Hero[], label): void {
-      heroes.push({name: n, children: [], chosen: false});
+  add(n: string, nodes: Node[]): void {
+      nodes.push({name: n, children: [], open: false});
     }    
   }
-}
 
