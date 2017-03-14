@@ -16,7 +16,7 @@ export class AppComponent {
   root=new Node('', [], false);
   add(name: string): void {
     if (!name) {return}
-      this.root.children.push(new Node(name, [], false));
+    this.root.children.push(new Node(name, [], false));
     }    
   }
 

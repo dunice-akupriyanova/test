@@ -23,7 +23,7 @@ export class NodeComponent {
   onSelect(node: Node): void {
     if(node.open){
       this.clear(node);
-    } else node.open=true;
+    } else { node.open=true; }
   }
   addNode(node: Node, newName: string): void {
     if (!newName) { return }
