@@ -9,28 +9,22 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 var core_1 = require('@angular/core');
-var NODES = [];
+var node_component_1 = require('../node.component/node.component');
 var AppComponent = (function () {
     function AppComponent() {
         this.title = 'TreeView';
         this.newName = '';
-        this.nodes = NODES;
+        this.root = new node_component_1.Node('', [], false);
     }
-    AppComponent.prototype.add = function (name, nodes) {
-        nodes.push({ name: name, children: [], open: false });
+    AppComponent.prototype.add = function (name) {
+        this.root.children.push(new node_component_1.Node(name, [], false));
     };
-    __decorate([
-        core_1.Input(), 
-        __metadata('design:type', Function), 
-        __metadata('design:paramtypes', [String, Array]), 
-        __metadata('design:returntype', void 0)
-    ], AppComponent.prototype, "add", null);
     AppComponent = __decorate([
         core_1.Component({
             selector: 'my-app',
             moduleId: module.id,
             templateUrl: './app.component.html',
-            styleUrls: ['./style.css']
+            styleUrls: ['../style.css']
         }), 
         __metadata('design:paramtypes', [])
     ], AppComponent);

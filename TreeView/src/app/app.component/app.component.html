@@ -4,11 +4,11 @@
         <label>Node:</label> <input name="newName" [(ngModel)]="newName" #nodeName />
     </div>
     <div>
-        <input type="submit" value="Add!" class="button_add" (click)="add(nodeName.value, nodes); nodeName.value=''">
+        <input type="submit" value="Add!" class="button_add" (click)="add(nodeName.value); nodeName.value=''">
     </div>
 </form>
 <ul class="nodes">
-    <li *ngFor="let node of nodes">
+    <li *ngFor="let node of root.children">
     <node [node]="node" [newName]="nodeName.value"></node>
     </li>
 </ul>

@@ -2,8 +2,8 @@ import { NgModule }      from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule }   from '@angular/forms';
 
-import { AppComponent }  from './app.component';
-import { NodeComponent } from './node.component';
+import { AppComponent }  from './app.component/app.component';
+import { NodeComponent } from './node.component/node.component';
 
 @NgModule({
   imports: [
@@ -12,7 +12,7 @@ import { NodeComponent } from './node.component';
   ],
   declarations: [
     AppComponent,
-    NodeComponent
+    NodeComponent,
   ],
   bootstrap: [ AppComponent ]
 })

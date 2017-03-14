@@ -1,8 +1,8 @@
-<div *ngIf="node">
+<div *ngIf="node.name">
     <span *ngIf="(node.children)&&(node.open!=true)&&(node.children.length)" (click)="onSelect(node)" class="badge">+</span><span *ngIf="(node.children)&&(node.open==true)&&(node.children.length)" (click)="onSelect(node)" class="badge">-</span>
     {{node.name}}
-    <button class="addNode" (click)="addLabel(node, newName)">+</button>
-    <ul class="nodes" *ngIf="node.open==true">
+    <button class="addNode" (click)="addNode(node, newName)">+</button>
+    <ul class="nodes" *ngIf="node.open">
         <li *ngFor="let nextNode of node.children">
         <node [node]="nextNode" [newName]="newName"></node>
     </ul>

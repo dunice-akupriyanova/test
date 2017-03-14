@@ -9,7 +9,6 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 var core_1 = require('@angular/core');
-var node_1 = require('./node');
 var NodeComponent = (function () {
     function NodeComponent() {
     }
@@ -22,24 +21,24 @@ var NodeComponent = (function () {
         }
     };
     NodeComponent.prototype.onSelect = function (node) {
-        if (node.open == true) {
+        if (node.open) {
             this.clear(node);
         }
         else
             node.open = true;
     };
-    NodeComponent.prototype.addLabel = function (node, newName) {
+    NodeComponent.prototype.addNode = function (node, newName) {
         if (!newName) {
             return;
         }
         if (!newName.length) {
             return;
         }
-        node.children.push({ name: newName, children: [], open: false });
+        node.children.push(new Node(newName, [], false));
     };
     __decorate([
         core_1.Input(), 
-        __metadata('design:type', node_1.Node)
+        __metadata('design:type', Node)
     ], NodeComponent.prototype, "node", void 0);
     __decorate([
         core_1.Input(), 
@@ -50,11 +49,20 @@ var NodeComponent = (function () {
             selector: 'node',
             moduleId: module.id,
             templateUrl: './node.component.html',
-            styleUrls: ['./style.css']
+            styleUrls: ['../style.css']
         }), 
         __metadata('design:paramtypes', [])
     ], NodeComponent);
     return NodeComponent;
 }());
 exports.NodeComponent = NodeComponent;
+var Node = (function () {
+    function Node(name, children, open) {
+        this.name = name;
+        this.children = children;
+        this.open = open;
+    }
+    return Node;
+}());
+exports.Node = Node;
 //# sourceMappingURL=node.component.js.map
