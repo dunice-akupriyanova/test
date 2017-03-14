@@ -17,6 +17,9 @@ var AppComponent = (function () {
         this.root = new node_component_1.Node('', [], false);
     }
     AppComponent.prototype.add = function (name) {
+        if (!name) {
+            return;
+        }
         this.root.children.push(new node_component_1.Node(name, [], false));
     };
     AppComponent = __decorate([
