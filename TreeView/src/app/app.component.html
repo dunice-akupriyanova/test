@@ -1,0 +1,14 @@
+<h1>{{title}}</h1>
+<form>
+    <div>
+        <label>Node:</label> <input name="newName" [(ngModel)]="newName" #nodeName />
+    </div>
+    <div>
+        <input type="submit" value="Add!" class="button_add" (click)="add(nodeName.value, nodes); nodeName.value=''">
+    </div>
+</form>
+<ul class="nodes">
+    <li *ngFor="let node of nodes">
+    <node [node]="node" [newName]="nodeName.value"></node>
+    </li>
+</ul>

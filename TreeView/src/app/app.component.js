@@ -16,8 +16,8 @@ var AppComponent = (function () {
         this.newName = '';
         this.nodes = NODES;
     }
-    AppComponent.prototype.add = function (n, nodes) {
-        nodes.push({ name: n, children: [], open: false });
+    AppComponent.prototype.add = function (name, nodes) {
+        nodes.push({ name: name, children: [], open: false });
     };
     __decorate([
         core_1.Input(), 
@@ -28,8 +28,9 @@ var AppComponent = (function () {
     AppComponent = __decorate([
         core_1.Component({
             selector: 'my-app',
-            template: "\n    <h1>{{title}}</h1>\n    <form>\n        <div>\n          <label>Node:</label> <input name=\"newName\" [(ngModel)]=\"newName\" #nodeName />\n        </div>\n        <div>\n            <input type=\"submit\" value=\"Add!\" class=\"button_add\" (click)=\"add(nodeName.value, nodes); nodeName.value=''\">\n        </div>\n    </form>\n    <ul class=\"nodes\">\n      <li *ngFor=\"let node of nodes\">\n        <new-node [node]=\"node\" [newName]=\"nodeName.value\"></new-node>\n      </li>\n    </ul>\n  ",
-            styles: ["\n    .selected {\n      background-color: #CFD8DC !important;\n      color: white;\n    }\n    .nodes {\n      list-style-type: none;\n      padding: 0;\n      width: 15em;\n    }\n    .nodes li {\n      cursor: pointer;\n      position: relative;\n      left: 0;\n      background-color: #EEE;\n      margin: .5em;\n      padding: .3em 0;\n      border-radius: 4px;\n    }\n    .nodes li.selected:hover {\n      background-color: #BBD8DC !important;\n      color: white;\n    }\n    .nodes li:hover {\n      color: #607D8B;\n      background-color: #DDD;\n      left: .1em;\n    }\n    .nodes .text {\n      position: relative;\n      top: -3px;\n    }\n    .nodes .badge {\n      display: inline-block;\n      font-size: small;\n      color: white;\n      padding: 0.8em 0.7em 0 0.7em;\n      background-color: #607D8B;\n      line-height: 1em;\n      position: relative;\n      left: -1px;\n      top: -4px;\n      height: 1.8em;\n      margin-right: .8em;\n      border-radius: 4px 0 0 4px;\n    }\n  "]
+            moduleId: module.id,
+            templateUrl: './app.component.html',
+            styleUrls: ['./style.css']
         }), 
         __metadata('design:paramtypes', [])
     ], AppComponent);
