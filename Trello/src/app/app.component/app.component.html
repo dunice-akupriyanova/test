@@ -1,0 +1,20 @@
+<div class="header">
+  <div class="logo">    
+  </div>
+</div>
+<div class="content">
+  <ul class="lists">
+    <li *ngFor="let list of lists" class="list">  
+      <list [list]="list" [lists]="lists"></list>
+    </li>
+    <li>
+      <form class="add_list">
+        <div>
+          Add a list
+        </div>
+        <input type="text" name="newList" [(ngModel)]="newName" placeholder="New List">
+        <input type="submit" value="Add" (click)="addList(newName)" class="add_button">
+      </form>
+    </li>
+  </ul>
+</div>

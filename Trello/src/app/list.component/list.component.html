@@ -1,0 +1,23 @@
+<div>
+    <div class="header_list">
+        <input name="list_name" [(ngModel)]="list.name" placeholder="List name">
+        <div class="close_list" (click)="removeList(list)">
+        </div>
+    </div>
+    <ul class="cards">
+        <li *ngFor="let card of list.cards" class="card">
+            <a class="list_card" href="#">
+                {{card.name}}
+            </a>
+        </li>
+        <li>
+            <form class="add_card">
+                <div>
+                    Add a card
+                </div>
+                <input type="text" name="newCard" [(ngModel)]="newCardName" placeholder="New Card">
+                <input type="submit" value="Add" (click)="addCard(newCardName)" class="add_button">
+            </form>
+        </li>
+    </ul>
+</div>
