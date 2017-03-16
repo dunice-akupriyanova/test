@@ -25,10 +25,10 @@
 <div class="content">
   <div *ngIf="currentBoard" class="show_board">
     <div class="current_board">
-      <input name="current_board_name" [(ngModel)]="currentBoard.name" placeholder="Board name">
+      <textarea rows=1 cols={{currentBoard.name.length}} name="current_board_name" [(ngModel)]="currentBoard.name" placeholder="Board name"></textarea>
     </div>
     <ul class="lists">
-      <li *ngFor="let list of currentBoard.lists" class="list">  
+      <li *ngFor="let list of currentBoard.lists" class="list"  (click)="showCurrent()">  
         <list [list]="list" [currentBoard]="currentBoard"></list>
       </li>
       <li>
@@ -57,9 +57,15 @@
 </div>
 <div class="window_overlay" id="window_overlay">
   <div class="window">
-    <div class="window_content" id="window_content">
-    </div>
-    <div class="delete" (click)="hideDetails()">
+	<div>
+		Name:
+	</div>
+	<textarea rows=1 cols={{currentCard.name.length+2}} name="current_card_name" [(ngModel)]="currentCard.name" placeholder="Card name"></textarea>	
+	<div>
+		Description:
+	</div>
+	<textarea rows=4 name="current_card_description" [(ngModel)]="currentCard.description" placeholder="Card desctiption"></textarea>
+    <div class="delete window_close" (click)="hideDetails()">
     </div>
   </div>
 </div>

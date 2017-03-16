@@ -1,6 +1,6 @@
 <div>
     <div class="header_list">
-        <input name="list_name" [(ngModel)]="list.name" placeholder="List name">
+        <textarea rows=1 cols={{list.name.length}} name="list_name" [(ngModel)]="list.name" placeholder="List name"></textarea>
         <div class="delete" (click)="removeList(list)">
         </div>
     </div>
