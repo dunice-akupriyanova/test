@@ -5,11 +5,13 @@ import { HttpModule } from '@angular/http';
 
 import { AppComponent } from './app.component/app.component';
 import { ListComponent } from './list.component/list.component';
+import { CardComponent } from './card.component/card.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    ListComponent
+    ListComponent,
+    CardComponent
   ],
   imports: [
     BrowserModule,

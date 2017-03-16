@@ -1,0 +1,13 @@
+<div class="card_date">
+    {{card.date}}
+</div>
+
+<div class={{card.id}}>
+    <input type="text" [(ngModel)]="card.name" class={{card.name}}>
+    <input type="text" [(ngModel)]="card.description" class={{card.description}}>
+</div>
+
+<div class="delete" (click)="removeCard(list, card)"></div>
+<div class="list_card">
+    {{card.name}}
+</div>

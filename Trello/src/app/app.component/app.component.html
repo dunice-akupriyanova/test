@@ -1,20 +1,67 @@
 <div class="header">
-  <div class="logo">    
+  <div class="boards_button">
+    <div class="boards_button_icon">
+    </div>
+    <div class="boards_button_text">Boards
+    </div>
+    <ul class="boards">
+      <li *ngFor="let board of boards" (click)="changeBoard(board)">
+        {{board.name}}
+        <div class="delete" (click)="removeBoard(board)">
+        </div>
+      </li>
+      <li>
+        <form class="add_board">
+          <div>
+            Add a board
+          </div>
+          <input type="text" name="newBoard" [(ngModel)]="newBoardName" placeholder="New Board">
+          <input type="submit" value="Add" (click)="addBoard(newBoardName)" class="add_button">
+      </form>
+      </li>
+    </ul>
   </div>
 </div>
 <div class="content">
-  <ul class="lists">
-    <li *ngFor="let list of lists" class="list">  
-      <list [list]="list" [lists]="lists"></list>
-    </li>
-    <li>
-      <form class="add_list">
-        <div>
-          Add a list
-        </div>
-        <input type="text" name="newList" [(ngModel)]="newName" placeholder="New List">
-        <input type="submit" value="Add" (click)="addList(newName)" class="add_button">
+  <div *ngIf="currentBoard" class="show_board">
+    <div class="current_board">
+      <input name="current_board_name" [(ngModel)]="currentBoard.name" placeholder="Board name">
+    </div>
+    <ul class="lists">
+      <li *ngFor="let list of currentBoard.lists" class="list">  
+        <list [list]="list" [currentBoard]="currentBoard"></list>
+      </li>
+      <li>
+        <form class="add_list">
+          <div>
+            Add a list
+          </div>
+          <input type="text" name="newList" [(ngModel)]="newName" placeholder="New List">
+          <input type="submit" value="Add" (click)="addList(newName)" class="add_button">
+        </form>
+      </li>
+    </ul>
+  </div>
+  <div *ngIf="!currentBoard" class="no_board">
+    <div class="add_first_board_text">
+      There is no board. Please, add one.
+    </div>
+    <form class="add_first_board">
+          <div>
+            Add a board
+          </div>
+          <input type="text" name="newBoard" [(ngModel)]="newBoardName" placeholder="New Board">
+          <input type="submit" value="Add" (click)="addBoard(newBoardName)" class="add_button">
       </form>
-    </li>
-  </ul>
+  </div>
+</div>
+<div class="window_overlay" id="window_overlay">
+  <div class="window">
+    <div class="window_content" id="window_content">
+    </div>
+    <div class="delete" (click)="hideDetails()">
+    </div>
+  </div>
+</div>
+<div id="footer">
 </div>

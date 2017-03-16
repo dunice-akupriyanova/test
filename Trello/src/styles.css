@@ -2,27 +2,26 @@ body {
     margin: 0 !important;
 }
 .header {
-    background-color: #026AA7;
+    z-index: 2;
     position: fixed;
     width: 100%;
     height: 30px;
     padding: 5px;
+    background: #026AA7 url('./images/header-logo.png') no-repeat 50% 50%;
 }
 .header_list {
     margin-bottom: 10px; 
 }
-.logo {
-    background-image: url('./images/header-logo.png');
-    background-repeat: no-repeat;
-    margin: 0 auto;
-    height: 30px;
-    width: 80px;
-}
 .content {
+    background-color: #0079BF;
+    min-width: 100%;
+    min-height: 100%;
     position: absolute;
     top: 40px;
 }
 .lists {
+    margin-top: 0;
+    padding-left: 5px;
     white-space: nowrap;
 }
 .list {
@@ -41,14 +40,14 @@ form {
 input {
     display: block;
 }
-input[name="newList"], input[name="newCard"] {
+input[name="newList"], input[name="newCard"], input[name="newBoard"] {
     padding-left: 5px; 
     margin-bottom: 5px;
     margin-top: 5px;
     border-radius: 3px;
     border: 1px solid #AAAAAA;
 }
-input[name="list_name"] {
+input[name="list_name"], input[name="current_board_name"], .change>input {
     padding-left: 8px;
     display: inline-block;
     font: 18px Arial,Helvetica,sans-serif;
@@ -57,8 +56,17 @@ input[name="list_name"] {
     resize:none;
     background-color: transparent;
 }
-input[name="list_name"]:focus{
+input[name="current_board_name"] {
+    margin: 0 auto;
+    color: white;
+    font: 18px Arial,Helvetica,sans-serif;
+    font-weight: 700;
+}
+input[name="list_name"]:focus, input[name="current_board_name"]:focus:focus{
     background-color: white;
+}
+input[name="current_board_name"]:focus {
+    color: black;
 }
 .add_button{
     background-color: #61BD4F;
@@ -69,7 +77,7 @@ input[name="list_name"]:focus{
     padding: 7px 20px;
     border-radius: 2px;
 }
-.close_list {
+.delete {
     cursor: pointer;
     height: 18px;
     width: 18px;
@@ -80,10 +88,10 @@ input[name="list_name"]:focus{
     margin-right: 3px;
     border-radius: 2px;
 }
-.close_list:hover{
+.delete:hover {
     background-color: #c7ccce;
 }
-.cards li {
+.cards li, .boards li {
     display: block;
 }
 .cards {
@@ -105,8 +113,115 @@ input[name="list_name"]:focus{
 }
 a {
     text-decoration: none;
-    display: block;
+    display: inline-block;
 }
 .card a {
+    width: 100%;
     color: black;
+}
+.card_date {
+    display: inline-block;
+    color: #8D8D8D;
+    font: 12px Arial,Helvetica,sans-serif;
+}
+.boards_button {
+    font: 14px Arial,Helvetica,sans-serif;
+    display: inline-block;
+    width: 90px;
+    height: 30px;
+    background-color: #4D85B3;
+    cursor: pointer;
+    border-radius: 3px;
+}
+.boards_button:hover {
+    background-color: #4F96BF;
+}
+.boards_button_icon {
+    display: inline-block;
+    margin: 0;
+    width: 30px;
+    height: 30px;
+    background: transparent url('./images/tab-icon.png') no-repeat 50% 50%;
+}
+.boards_button_text {    
+    margin-top: 1px;
+    font-weight: 600;
+    margin-right: 10px;
+    float: right;
+    line-height: 30px;
+    color: white;
+}
+.current_board {
+    color: white;
+    margin: 15px; 
+}
+.boards {
+    position: absolute;
+    cursor: default;
+    border-radius: 3px;
+    padding: 20px 10px 10px;
+    margin-top: -4px;
+    background-color: white;
+    line-height: 20px;
+    display: none;
+}
+.boards_button:hover .boards {
+    display: block;
+}
+.boards li {
+    cursor: pointer;
+    padding: 5px;
+    border-radius: 2px;
+    margin-bottom: 5px;
+    width: auto;
+    min-height: 20px;
+    background-color: #E2E4E6;
+}
+.boards li:last-child {
+    margin-bottom: 0;
+}
+.boards li:hover {
+    background-color: #C7CCCE;
+}
+.no_board {
+    text-align: center;
+}
+.add_first_board_text {
+    font: 18px Arial,Helvetica,sans-serif;
+    margin: 10px auto;
+    color: white;
+    width: 300px;
+    font-weight: 700;
+}
+.add_first_board {
+    padding: 10px;
+    border-radius: 3px;
+    background-color: #E2E4E6;
+    display: block;
+    text-align: center;
+}
+.window_overlay {
+    background-color: rgba(0,0,0,.6);
+    display: none;
+    /*display: flex;*/
+    z-index: 20;
+    position: absolute;
+    height: 100%;
+    width: 100%;
+}
+.show {
+    display: block;
+}
+.window {
+    padding: 10px;
+    border-radius: 3px;
+    margin: 3pc auto 5pc;
+    background-color: white;
+    width: 730px;
+    min-height: 40px;
+}
+.window_content {
+    display: inline-block;
+    width: 700px;
+    height: 50px;
 }
