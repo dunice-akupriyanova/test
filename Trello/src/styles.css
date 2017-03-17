@@ -1,4 +1,5 @@
 body {
+    font-family: Arial,Helvetica,sans-serif;
     margin: 0 !important;
 }
 .header {
@@ -20,18 +21,20 @@ body {
     top: 40px;
 }
 .lists {
+    width: auto;
     margin-top: 0;
     padding-left: 5px;
     white-space: nowrap;
 }
 .list {
+    font-size: 18px;
     white-space: normal;
     vertical-align: top;
     margin: 5px;
     padding: 10px;
     border-radius: 3px;
     display: inline-block;
-    width: 270px;
+    width: auto;
     background-color: #E2E4E6;
 }
 form {
@@ -47,6 +50,12 @@ input[name="newList"], input[name="newCard"], input[name="newBoard"] {
     border-radius: 3px;
     border: 1px solid #AAAAAA;
 }
+textarea {
+    overflow: hidden;
+}
+textarea:focus {
+    overflow: auto;
+}
 textarea[name="list_name"], textarea[name="current_board_name"], textarea[name="current_card_name"], textarea[name="current_card_description"] {
     padding-left: 8px;
     display: inline-block;
@@ -56,6 +65,7 @@ textarea[name="list_name"], textarea[name="current_board_name"], textarea[name="
     background-color: transparent;
 }
 textarea[name="current_board_name"] {
+    text-align: center;
 	display: block;
 	padding-left: 16px;
 	padding-right: 0;
@@ -121,6 +131,7 @@ textarea[name="current_board_name"]:focus {
     margin-top: 0px;
 }
 .card {
+    z-index: 2;
     width: 260px;
     background-color: white;
     margin-bottom: 6px;
@@ -140,6 +151,9 @@ a {
     display: inline-block;
     color: #8D8D8D;
     font: 12px Arial,Helvetica,sans-serif;
+}
+.card_name {
+    overflow: hidden;
 }
 .boards_button {
     font: 14px Arial,Helvetica,sans-serif;
@@ -230,6 +244,7 @@ a {
     display: block;
 }
 .window {
+    position: relative;
     padding: 10px;
     border-radius: 3px;
     margin: 3pc auto 5pc;
@@ -244,6 +259,9 @@ a {
 }
 .window_close {
 	position: absolute;
-	top: 55px;
-	left: 885px;
+	top: 7px;
+    right: 7px;
+}
+.window_text {
+    font-weight: bold;
 }

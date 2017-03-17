@@ -36,6 +36,10 @@ export class AppComponent {
     if (!newName) {return}
     this.currentBoard.lists.push(new List(newName, []));
     this.newName='';
+    // $( function() {
+      // $( ".sortable" ).sortable();
+    //   console.log('ok');
+    // } );
   }
   addBoard(newName): void {
     if (!newName) {return}
