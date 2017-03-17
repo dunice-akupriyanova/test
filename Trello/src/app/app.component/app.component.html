@@ -39,8 +39,10 @@
     <div class="current_board">
       <textarea rows=1 cols={{currentBoard.name.length}} name="current_board_name" [(ngModel)]="currentBoard.name" placeholder="Board name"></textarea>
     </div>
+    <!--<div  dnd-sortable-container [dropZones]="['boxers-zone1']" [sortableData]="currentBoard.lists">-->
     <div>
       <ul class="lists">
+        <!--<li *ngFor="let list of currentBoard.lists; let j = index" dnd-sortable [sortableIndex]="j" class="list"  (click)="showCurrent()">-->
         <li *ngFor="let list of currentBoard.lists" class="list"  (click)="showCurrent()">  
           <list [list]="list" [currentBoard]="currentBoard"></list>
         </li>
