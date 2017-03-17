@@ -13,6 +13,8 @@ export class ListComponent {
   list: List;
   @Input()
   currentBoard: Board;
+  @Input()
+  j: number;
   pull(array, target) {
       var args = [array, target],
           argsIndex = 0,

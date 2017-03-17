@@ -18,10 +18,10 @@ export class AppComponent {
   card6: Card=new Card('Card6', 'Description6', this.now.toLocaleString());
   card7: Card=new Card('Card7', 'Description7', this.now.toLocaleString());
   card8: Card=new Card('Card8', 'Description8', this.now.toLocaleString());
-  list1: List=new List(1, 'list1', [this.card1, this.card2]);
-  list2: List=new List(2, 'list2', [this.card3, this.card4]);
-  list3: List=new List(1, 'list3', [this.card5, this.card6]);
-  list4: List=new List(2, 'list4', [this.card7, this.card8]);
+  list1: List=new List(0, 'list1', [this.card1, this.card2]);
+  list2: List=new List(1, 'list2', [this.card3, this.card4]);
+  list3: List=new List(0, 'list3', [this.card5, this.card6]);
+  list4: List=new List(1, 'list4', [this.card7, this.card8]);
   board1: Board= new Board('Board1 Board1 Board1', [this.list1, this.list2]);
   board2: Board= new Board('Board2', [this.list3, this.list4]);
   boards: Array<Board>=[this.board1, this.board2];
@@ -34,7 +34,7 @@ export class AppComponent {
   }
   addList(newName): void {
     if (!newName) {return}
-    this.currentBoard.lists.push(new List(this.currentBoard.lists.length, newName, []));
+    this.currentBoard.lists.push(new List(this.currentBoard.lists.length-1, newName, []));
     this.newName='';
     // $( function() {
       // $( ".sortable" ).sortable();

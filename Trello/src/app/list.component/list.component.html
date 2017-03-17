@@ -1,10 +1,10 @@
 <div>
-    <div class="header_list">
+    <div class="header_list" dnd-sortable [sortableIndex]="j">
         <textarea rows=1 cols={{list.name.length}} name="list_name" [(ngModel)]="list.name" placeholder="List name"></textarea>
         <div class="delete" (click)="removeList(list)">
         </div>
     </div>
-    <div  dnd-sortable-container [dropZones]="['boxers-zone']" [sortableData]="list.cards">
+    <div  dnd-sortable-container [dropZones]="['drop-zone']" [sortableData]="list.cards">
         <ul class="cards">
             <li  class="card" *ngFor="let card of list.cards; let i = index" dnd-sortable [sortableIndex]="i">
                 <a (click)="showDetails(card, list)">
