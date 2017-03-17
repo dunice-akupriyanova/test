@@ -7,7 +7,7 @@
         </div>
     </div>
     <div  dnd-sortable-container [dropZones]="['boxers-zone']" [sortableData]="list.cards">
-        <ul class="cards sortable">
+        <ul class="cards">
             <li  class="card" *ngFor="let card of list.cards; let i = index" dnd-sortable [sortableIndex]="i">
                 <a (click)="showDetails(card, list)">
                     <card [card]="card" [list]="list"></card>

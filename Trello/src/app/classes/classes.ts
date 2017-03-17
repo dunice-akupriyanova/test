@@ -12,9 +12,11 @@ export class Card {
     }
 }
 export class List {
+    id: number;
     name: string;
     cards: Array<Card>;
-    constructor (name: string, cards: Card[]) {
+    constructor (id: number, name: string, cards: Card[]) {
+        this.id=id;
         this.name=name;
         this.cards=cards;
     }
