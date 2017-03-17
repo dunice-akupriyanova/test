@@ -1,5 +1,3 @@
-<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
-  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 <div class="header">
   <div class="boards_button">
     <div class="boards_button_icon">
@@ -26,28 +24,12 @@
 </div>
 <div class="content">
   <div *ngIf="currentBoard" class="show_board">
-
-<!--Раскомментировать в случае сомнения в правильности изменения массива данных-->
-    <!--<ul class="just_for_check">
-      <li *ngFor="let list of currentBoard.lists">
-        {{list.name}}
-        <ul>
-          <li *ngFor="let card of list.cards">
-            {{card.name}}
-          </li>
-        </ul>
-      </li>
-    </ul>-->
-
-
     <div class="current_board">
       <textarea rows=1 cols={{currentBoard.name.length}} name="current_board_name" [(ngModel)]="currentBoard.name" placeholder="Board name"></textarea>
     </div>
     <div  dnd-sortable-container [dropZones]="['drop-zone1']" [sortableData]="currentBoard.lists">
-    <!--<div>-->
       <ul class="lists">
         <li *ngFor="let list of currentBoard.lists; let j = index" class="list"  (click)="showCurrent()">
-        <!--<li *ngFor="let list of currentBoard.lists" class="list"  (click)="showCurrent()">  -->
           <list [list]="list" [currentBoard]="currentBoard" [j]="j"></list>
         </li>
         <li id="draggable" class="">
