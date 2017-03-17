@@ -118,6 +118,9 @@ textarea[name="current_board_name"]:focus {
 .delete:hover {
     background-color: #c7ccce;
 }
+.card_name {
+    overflow: hidden;
+}
 .cards li, .boards li {
     display: block;
 }
