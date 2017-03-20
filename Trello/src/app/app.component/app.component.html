@@ -22,7 +22,7 @@
     </ul>
   </div>
 </div>
-<div class="content">
+<div class="content" id="content">
   <div *ngIf="currentBoard" class="show_board">
     <div class="current_board">
       <textarea rows=1 cols={{currentBoard.name.length}} name="current_board_name" [(ngModel)]="currentBoard.name" placeholder="Board name"></textarea>
@@ -32,7 +32,7 @@
         <li *ngFor="let list of currentBoard.lists; let j = index" class="list"  (click)="showCurrent()">
           <list [list]="list" [currentBoard]="currentBoard" [j]="j"></list>
         </li>
-        <li id="draggable" class="">
+        <li>
           <form class="add_list">
             <div>
               Add a list

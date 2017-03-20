@@ -1,3 +1,30 @@
+.dnd-drag-start {
+    -moz-transform:scale(0.8);
+    -webkit-transform:scale(0.8);
+    transform:scale(0.8);
+    opacity:0.7;
+    border: 2px dashed #000;
+}
+
+.dnd-drag-enter {
+    opacity:0.7;
+    border: 2px dashed #000;
+}
+
+.dnd-drag-over {
+    border: 2px dashed #000;
+}
+
+.dnd-sortable-drag {
+  -moz-transform:scale(0.9);
+  -webkit-transform:scale(0.9);
+  transform:scale(0.9);
+  opacity:0;
+  background-color: grey !important;
+  color: grey !important;
+  border: 1px dashed #000;
+}
+
 body {
     font-family: Arial,Helvetica,sans-serif;
     margin: 0 !important;
@@ -134,7 +161,7 @@ textarea[name="current_board_name"]:focus {
     margin-top: 0px;
 }
 .card {
-    z-index: 2;
+    z-index: 5;
     width: 260px;
     background-color: white;
     margin-bottom: 6px;
@@ -267,4 +294,15 @@ a {
 }
 .window_text {
     font-weight: bold;
+}
+.hide {
+    opacity: 0;
+}
+.container {
+    width: 200px;
+    height: 50px;
+    background-color: gray;
+}
+.draggable {
+    /*z-index: 100;*/
 }

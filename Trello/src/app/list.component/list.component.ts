@@ -44,6 +44,18 @@ export class ListComponent {
     if (!newCardName) {return}
     this.list.cards.push(new Card(newCardName, '', this.now.toLocaleString()));
     this.newCardName='';
+    $(function() {
+      console.log('ok');
+      $('.draggable').draggable();
+      console.log('ok2');
+    })
+  }
+  isOK(): void {
+    console.log('0k');
+  }
+  isOK2(event): void {
+    console.log('0k2');
+    //console.log(event.pageX);
   }
   showDetails(card, list): void {
     document.getElementById('window_overlay').classList.add('show');
