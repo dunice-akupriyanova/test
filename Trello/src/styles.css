@@ -296,7 +296,7 @@ a {
     font-weight: bold;
 }
 .hide {
-    opacity: 0;
+    opacity: 0.5;
 }
 .container {
     width: 200px;
@@ -305,4 +305,10 @@ a {
 }
 .draggable {
     /*z-index: 100;*/
+}
+.pointer {
+    pointer-events:none;
+}
+ul li{
+    display: block;
 }

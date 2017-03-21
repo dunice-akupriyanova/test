@@ -8,12 +8,13 @@
     </div>
     <div  dnd-sortable-container [dropZones]="['drop-zone']" [sortableData]="list.cards">
         <ul class="cards">
-            <li  class="card draggable" *ngFor="let card of list.cards; let i = index" dnd-sortable [sortableIndex]="i" (onDragSuccess)="isOK2()" (onDropSuccess)="isOK()" (mousedown)="isOK2(event)">
+            <!--<li  class="card droppable draggable" *ngFor="let card of list.cards; let i = index" dnd-effect-allowed="isOK3(event)" dnd-sortable [sortableIndex]="i" (onDropSuccess)="isOK()" (mousedown)="isOK2(event)">-->
+            <li  class="card droppable draggable" *ngFor="let card of list.cards; let i = index" (onDropSuccess)="isOK()" (mousedown)="onMouseDown($event)" id='{{list.id}}+{{card.id}}'>
                 <a (click)="showDetails(card, list)">
                     <card [card]="card" [list]="list"></card>
                 </a>
             </li>
-            <li>
+            <li id='{{list.id}}+v'>
                 <form class="add_card">
                     <div>
                         Add a card
