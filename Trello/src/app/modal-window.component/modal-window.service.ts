@@ -4,7 +4,7 @@ import { Card } from '../models/classes';
 
 
 @Injectable()
-export class ModalWindowSetvice {  
+export class ModalWindowService {  
 
   private open = new Subject<Card>();
   private close = new Subject<Card>();

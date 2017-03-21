@@ -3,7 +3,7 @@ import {Card} from '../classes/classes';
 import {List} from '../classes/classes';
 import {Board} from '../classes/classes';
 import { AppComponent } from '../app.component/app.component';
-import {ModalWindowSetvice} from './modal-window.service';
+import {ModalWindowService} from './modal-window.service';
 
 @Component({
   selector: 'modal-window',
@@ -14,12 +14,12 @@ export class ModalWindowComponent {
   showModal = false;
 
   hideDetails(): void {
-    this.modalWindowSetvice.closeModal(this.currentCard);
+    this.modalWindowService.closeModal(this.currentCard);
     this.showModal = false;
   }
 
-  constructor(private modalWindowSetvice: ModalWindowSetvice) {
-    modalWindowSetvice.open$.subscribe(data => {
+  constructor(private modalWindowService: ModalWindowService) {
+    modalWindowService.open$.subscribe(data => {
         this.currentCard = <Card>data;
         this.showModal = true;
     });

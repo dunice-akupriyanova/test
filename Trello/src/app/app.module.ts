@@ -8,7 +8,7 @@ import { AppComponent } from './app.component/app.component';
 import { ListComponent } from './list.component/list.component';
 import { CardComponent } from './card.component/card.component';
 import {ModalWindowComponent} from './modal-window.component/modal-window.component';
-import {ModalWindowSetvice} from './modal-window.component/modal-window.service';
+import {ModalWindowService} from './modal-window.component/modal-window.service';
 
 @NgModule({
   declarations: [
@@ -23,7 +23,7 @@ import {ModalWindowSetvice} from './modal-window.component/modal-window.service'
     HttpModule,
     DndModule.forRoot()
   ],
-  providers: [ModalWindowSetvice],
+  providers: [ModalWindowService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

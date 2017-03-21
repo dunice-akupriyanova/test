@@ -3,7 +3,7 @@ import {Card} from '../models/classes';
 import {List} from '../models/classes';
 import {Board} from '../models/classes';
 import { AppComponent } from '../app.component/app.component';
-import {ModalWindowSetvice} from '../modal-window.component/modal-window.service';
+import {ModalWindowService} from '../modal-window.component/modal-window.service';
 
 @Component({
   selector: 'list',
@@ -45,10 +45,10 @@ export class ListComponent {
     this.list.cards.push(new Card(newCardName, '', this.now.toLocaleString()));
     this.newCardName='';
   }
-  constructor(private modalWindowSetvice: ModalWindowSetvice) {
-    modalWindowSetvice.close$.subscribe();
+  constructor(private modalWindowService: ModalWindowService) {
+    modalWindowService.close$.subscribe();
   }
   showDetails(card): void {
-    this.modalWindowSetvice.openModal(card);
+    this.modalWindowService.openModal(card);
   }
 }
