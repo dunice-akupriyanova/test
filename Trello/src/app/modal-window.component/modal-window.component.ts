@@ -1,7 +1,7 @@
 import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
-import {Card} from '../classes/classes';
-import {List} from '../classes/classes';
-import {Board} from '../classes/classes';
+import {Card} from '../models/classes/card';
+import {List} from '../models/classes/list';
+import {Board} from '../models/classes/board';
 import { AppComponent } from '../app.component/app.component';
 import {ModalWindowService} from './modal-window.service';
 
