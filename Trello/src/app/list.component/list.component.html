@@ -1,5 +1,3 @@
-<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
-  <script src="//ajax.aspnetcdn.com/ajax/jquery.ui/1.10.3/jquery-ui.min.js"></script>
 <div>
     <div class="header_list" dnd-sortable [sortableIndex]="j">
         <textarea rows=1 cols={{list.name.length}} name="list_name" [(ngModel)]="list.name" placeholder="List name"></textarea>
@@ -8,13 +6,12 @@
     </div>
     <div  dnd-sortable-container [dropZones]="['drop-zone']" [sortableData]="list.cards">
         <ul class="cards">
-            <!--<li  class="card droppable draggable" *ngFor="let card of list.cards; let i = index" dnd-effect-allowed="isOK3(event)" dnd-sortable [sortableIndex]="i" (onDropSuccess)="isOK()" (mousedown)="isOK2(event)">-->
-            <li  class="card droppable draggable" *ngFor="let card of list.cards; let i = index" (onDropSuccess)="isOK()" (mousedown)="onMouseDown($event)" id='{{list.id}}+{{card.id}}'>
+            <li  class="card" *ngFor="let card of list.cards; let i = index" dnd-sortable [sortableIndex]="i">
                 <a (click)="showDetails(card, list)">
                     <card [card]="card" [list]="list"></card>
                 </a>
             </li>
-            <li id='{{list.id}}+v'>
+            <li>
                 <form class="add_card">
                     <div>
                         Add a card
