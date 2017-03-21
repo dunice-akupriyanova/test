@@ -51,7 +51,7 @@
         <li *ngFor="let list of currentBoard.lists; let j = index" class="list">
           <list [list]="list" [currentBoard]="currentBoard" [j]="j"></list>
         </li>
-        <li id="draggable" class="">
+        <li id="draggable" class="list">
           <form class="add_list">
             <div>
               Add a list
