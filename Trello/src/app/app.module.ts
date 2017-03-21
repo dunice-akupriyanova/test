@@ -7,13 +7,15 @@ import {DndModule} from 'ng2-dnd';
 import { AppComponent } from './app.component/app.component';
 import { ListComponent } from './list.component/list.component';
 import { CardComponent } from './card.component/card.component';
-
+import {ModalWindowComponent} from './modal-window.component/modal-window.component';
+import {ModalWindowSetvice} from './modal-window.component/modal-window.service';
 
 @NgModule({
   declarations: [
     AppComponent,
     ListComponent,
-    CardComponent
+    CardComponent,
+    ModalWindowComponent
   ],
   imports: [
     BrowserModule,
@@ -21,7 +23,7 @@ import { CardComponent } from './card.component/card.component';
     HttpModule,
     DndModule.forRoot()
   ],
-  providers: [],
+  providers: [ModalWindowSetvice],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

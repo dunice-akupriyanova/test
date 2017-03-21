@@ -1,8 +1,9 @@
 import { Component, Input } from '@angular/core';
-import {Card} from '../classes/classes';
-import {List} from '../classes/classes';
-import {Board} from '../classes/classes';
+import {Card} from '../models/classes';
+import {List} from '../models/classes';
+import {Board} from '../models/classes';
 import { AppComponent } from '../app.component/app.component';
+import {ModalWindowSetvice} from '../modal-window.component/modal-window.service';
 
 @Component({
   selector: 'list',
@@ -36,7 +37,6 @@ export class ListComponent {
   removeList(list): void {
     this.pull(this.currentBoard.lists, list);
   }
-  static currentCard: Card=new Card('', '', '');
   newCardName: string;
   now=new Date();
   addCard(newCardName, board): void {
@@ -45,8 +45,10 @@ export class ListComponent {
     this.list.cards.push(new Card(newCardName, '', this.now.toLocaleString()));
     this.newCardName='';
   }
-  showDetails(card, list): void {
-    document.getElementById('window_overlay').classList.add('show');
-	ListComponent.currentCard=card;
+  constructor(private modalWindowSetvice: ModalWindowSetvice) {
+    modalWindowSetvice.close$.subscribe();
+  }
+  showDetails(card): void {
+    this.modalWindowSetvice.openModal(card);
   }
 }

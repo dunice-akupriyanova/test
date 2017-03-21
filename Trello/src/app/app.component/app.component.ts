@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
-import {Card} from '../classes/classes';
-import {List} from '../classes/classes';
-import {Board} from '../classes/classes';
+import {Card} from '../models/classes';
+import {List} from '../models/classes';
+import {Board} from '../models/classes';
 import {ListComponent} from '../list.component/list.component';
+
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -27,11 +28,7 @@ export class AppComponent {
   boards: Array<Board>=[this.board1, this.board2];
   currentBoard: Board=this.boards[0];
   newName: string;
-  currentCard: Card=new Card('', '', '');  
   newBoardName: string;
-  showCurrent(): void {
-	  this.currentCard=ListComponent.currentCard;
-  }
   addList(newName): void {
     if (!newName) {return}
     this.currentBoard.lists.push(new List(this.currentBoard.lists.length-1, newName, []));
@@ -77,9 +74,8 @@ export class AppComponent {
       this.currentBoard=this.boards[0];
     }
   }
-  hideDetails(): void {
-    let details=document.getElementById('window_overlay');
-    details.classList.remove('show');
-
+  showModal=true;
+  onClose(event){
+    this.showModal=false;
   }
 }
