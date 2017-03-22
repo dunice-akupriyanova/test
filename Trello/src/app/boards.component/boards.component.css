@@ -1,0 +1,24 @@
+.title {
+    margin: 0 auto;
+    width: 100px;
+    font: 20px Arial,Helvetica,sans-serif;
+    color: white;
+    font-weight: 700;
+}
+.board_name {
+    display: inline-block;
+    margin-right: 15px;
+}
+.list:hover {
+    background-color: #CCD1D3;
+}
+li.list:last-child:hover{
+    background-color: #E2E4E6;
+}
+input[name="newBoard"] {
+    padding-left: 5px; 
+    margin-bottom: 5px;
+    margin-top: 5px;
+    border-radius: 3px;
+    border: 1px solid #AAAAAA;
+}

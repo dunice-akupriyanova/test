@@ -1,0 +1,47 @@
+.header_list {
+    margin-bottom: 10px; 
+}
+input[name="newCard"] {
+    padding-left: 5px; 
+    margin-bottom: 5px;
+    margin-top: 5px;
+    border-radius: 3px;
+    border: 1px solid #AAAAAA;
+}
+textarea[name="list_name"] {
+    padding-left: 8px;
+    display: inline-block;
+    font: 18px Arial,Helvetica,sans-serif;
+    border: 0;
+    resize:none;
+    background-color: transparent;
+	max-width: 230px;
+}
+textarea[name="list_name"]:focus {
+    background-color: white;
+}
+.cards li {
+    display: block;
+}
+.cards {
+    padding: 0;
+}
+.cards li:last-child {
+    margin-top: 10px;
+}
+.cards li:first-child {
+    margin-top: 0px;
+}
+.card {
+    z-index: 2;
+    width: 260px;
+    background-color: white;
+    margin-bottom: 6px;
+    border-radius: 3px;
+    cursor: pointer;
+    padding: 6px 6px 2px 8px;
+}
+.card a {
+    width: 100%;
+    color: black;
+}

@@ -7,7 +7,8 @@ import {ModalWindowService} from './modal-window.service';
 
 @Component({
   selector: 'modal-window',
-  templateUrl: './modal-window.component.html'
+  templateUrl: './modal-window.component.html',
+  styleUrls:['./modal-window.component.css']
 })
 export class ModalWindowComponent {
   currentCard: Card;

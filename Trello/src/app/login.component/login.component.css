@@ -1,0 +1,18 @@
+.login_container {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: #0079BF;
+}
+.login {
+    border-radius: 5px;
+    padding: 1px 20px 20px;
+    background-color: #E2E4E6;;
+    width: 400px;
+    margin: 40px auto;
+    height: auto;
+}
+input[name='login'], input[name='password'] {
+    margin-top: 10px;
+    margin-bottom: 10px; 
+}

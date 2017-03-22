@@ -1,0 +1,44 @@
+textarea[name="current_card_name"], textarea[name="current_card_description"] {
+    padding-left: 8px;
+    display: inline-block;
+    font: 18px Arial,Helvetica,sans-serif;
+    border: 0;
+    resize:none;
+    background-color: transparent;
+}
+textarea[name="current_card_name"] {
+	max-width: 690px;
+	display: block;
+}
+textarea[name="current_card_description"] {
+	width: 430px;
+	overflow:auto;
+}
+textarea[name="current_card_name"]:focus, textarea[name="current_card_description"]:focus{
+    background-color: white;
+}
+.window_overlay {
+    background-color: rgba(0,0,0,.6);
+    top: 0;
+    z-index: 20;
+    position: fixed;
+    height: 100%;
+    width: 100%;
+}
+.window {
+    position: relative;
+    padding: 10px;
+    border-radius: 3px;
+    margin: 3pc auto 5pc;
+    background-color: white;
+    width: 730px;
+    min-height: 40px;
+}
+.window_close {
+	position: absolute;
+	top: 7px;
+    right: 7px;
+}
+.window_text {
+    font-weight: bold;
+}

@@ -1,0 +1,37 @@
+
+.lists {
+    width: auto;
+    margin-top: 0;
+    padding-left: 25px;
+    white-space: nowrap;
+}
+input[name="newList"] {
+    padding-left: 5px; 
+    margin-bottom: 5px;
+    margin-top: 5px;
+    border-radius: 3px;
+    border: 1px solid #AAAAAA;
+}
+textarea[name="current_board_name"] {
+    padding-left: 8px;
+    display: inline-block;
+    font: 18px Arial,Helvetica,sans-serif;
+    border: 0;
+    resize:none;
+    background-color: transparent;
+    text-align: center;
+	display: block;
+	padding-left: 16px;
+	padding-right: 0;
+    margin: 0 auto;
+    color: white;
+    font-weight: 700;
+}
+textarea[name="current_board_name"]:focus {
+    background-color: white;
+    color: black;
+}
+.current_board {
+    color: white;
+    margin: 15px; 
+}

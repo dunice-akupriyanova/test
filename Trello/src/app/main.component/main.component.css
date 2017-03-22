@@ -1,0 +1,54 @@
+.header {
+    z-index: 2;
+    position: fixed;
+    width: 100%;
+    height: 30px;
+    padding: 5px;
+    background: #026AA7 url('../../assets/images/header-logo.png') no-repeat 50% 50%;
+}
+.boards_button {
+    font: 14px Arial,Helvetica,sans-serif;
+    display: inline-block;
+    width: 90px;
+    height: 30px;
+    background-color: #4D85B3;
+    cursor: pointer;
+    border-radius: 3px;
+}
+.boards_button:hover {
+    background-color: #4F96BF;
+}
+.boards_button_icon {
+    display: inline-block;
+    margin: 0;
+    width: 30px;
+    height: 30px;
+    background: transparent url('../../assets/images/tab-icon.png') no-repeat 50% 50%;
+}
+.boards_button_text {    
+    margin-top: 1px;
+    font-weight: 600;
+    margin-right: 10px;
+    float: right;
+    line-height: 30px;
+    color: white;
+}
+.login_button {
+    font-size: 18px;
+    display: inline-block;
+    float: right;
+    background-color: #4F96BF;
+    border-radius: 3px;
+    width: 60px;
+    text-align: center;
+    text-decoration: none;
+    color: white;
+    line-height: 20px;
+    font-weight: 600;
+    height: 20px;
+    padding: 5px;
+    margin-right: 15px;
+}
+.login_button a {
+    color: white;
+}

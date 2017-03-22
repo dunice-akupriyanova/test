@@ -1,0 +1,23 @@
+<div class="content">
+  <div *ngIf="currentBoard" class="show_board">
+    <div class="current_board">
+      <textarea rows=1 cols={{currentBoard.name.length}} name="current_board_name" [(ngModel)]="currentBoard.name" placeholder="Board name"></textarea>
+    </div>
+    <div  dnd-sortable-container [dropZones]="['drop-zone1']" [sortableData]="currentBoard.lists">
+      <ul class="lists">
+        <li *ngFor="let list of currentBoard.lists; let j = index" class="list">
+          <list [list]="list" [currentBoard]="currentBoard" [j]="j"></list>
+        </li>
+        <li id="draggable" class="list">
+          <form class="add_list">
+            <div>
+              Add a list
+            </div>
+            <input type="text" name="newList" [(ngModel)]="newName" placeholder="New List">
+            <input type="submit" value="Add" (click)="addList(newName)" class="add_button">
+          </form>
+        </li>
+      </ul>
+    </div>
+  </div>
+<modal-window></modal-window>

@@ -7,7 +7,8 @@ import {ModalWindowService} from '../modal-window.component/modal-window.service
 
 @Component({
   selector: 'list',
-  templateUrl: './list.component.html'
+  templateUrl: './list.component.html',
+  styleUrls: ['./list.component.css']
 })
 export class ListComponent {
   @Input()

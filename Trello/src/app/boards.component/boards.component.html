@@ -1,0 +1,19 @@
+<div class="content"> 
+    <div class="title">Boards</div>
+    <ul>
+        <li *ngFor="let board of boards" class="list">
+            <a class="board_name" routerLink="/board/{{board.id}}" routerLinkActive="active">{{board.name}}</a>
+            <div class="delete" (click)="removeBoard(board)">
+            </div>
+        </li>
+        <li class="list">
+            <form class="add_board">
+                <div>
+                Add a board
+                </div>
+                <input type="text" name="newBoard" [(ngModel)]="newBoardName" placeholder="New Board">
+                <input type="submit" value="Add" (click)="addBoard(newBoardName)" class="add_button">
+            </form>
+        </li>
+    </ul>
+</div>
