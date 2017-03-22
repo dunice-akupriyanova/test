@@ -7,4 +7,13 @@ import { AppComponent } from '../app.component/app.component';
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent {
+  login: string;
+  saveLogin(login): void {
+    if (login) {
+      localStorage.setItem('login', login);
+    } else {
+      localStorage.setItem('login', '');
+      return;
+    }
+  }
 }

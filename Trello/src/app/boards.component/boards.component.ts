@@ -8,8 +8,8 @@ import { BackendService } from '../services/backend.service';
 @Component({
   selector: 'boards',
   templateUrl: './boards.component.html',
-  providers: [BackendService],
-  styleUrls: ['./boards.component.css']
+  styleUrls: ['./boards.component.css'],
+  providers: [BackendService]
 })
 export class BoardsComponent {
     currentBoard: Board;

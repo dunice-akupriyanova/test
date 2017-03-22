@@ -38,9 +38,6 @@ export class CurrentBoardComponent {
         if (!newName) {return}
         this.boards.push(new Board(+new Date(), newName, []));
         this.newBoardName='';
-        // if (this.boards.length==1) {
-        //     this.currentBoard=this.boards[0];
-        // }
     }
     showModal=true;
     onClose(event){

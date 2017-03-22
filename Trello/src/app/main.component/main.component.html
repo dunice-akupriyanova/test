@@ -7,10 +7,16 @@
       </a>
     </div>
   </div>
-  <div class="login_button">
-      <a routerLink="/login" routerLinkActive="active">
-          Login
-      </a>
+  <div class="login">
+    <div *ngIf="login.length" class="user_name">
+      {{login}}
+    </div>
+    <div class="login_button">
+        <a routerLink="/login" routerLinkActive="active">
+            Login
+        </a>
+    </div>
   </div>
 </div>
 <router-outlet></router-outlet>
+<div class="content"></div>

@@ -35,3 +35,62 @@ textarea[name="current_board_name"]:focus {
     color: white;
     margin: 15px; 
 }
+.content {
+    padding-top: 20px;
+    background-color: #0079BF;
+    min-width: 100%;
+    min-height: 100%;
+    position: absolute;
+    top: 40px;
+}
+.list {
+    font-size: 18px;
+    white-space: normal;
+    vertical-align: top;
+    margin: 5px;
+    padding: 10px;
+    border-radius: 3px;
+    display: inline-block;
+    width: auto;
+    background-color: #E2E4E6;
+}
+form {
+    display: inline-block;
+}
+input {
+    display: block;
+}
+textarea {
+    overflow: hidden;
+}
+textarea:focus {
+    overflow: auto;
+}
+.add_button{
+    background-color: #61BD4F;
+    color: white;
+    padding: 5px;
+    font-weight: 700;
+    border: 0;
+    padding: 7px 20px;
+    border-radius: 2px;
+}
+.delete {
+    cursor: pointer;
+    height: 18px;
+    width: 18px;
+    background: #CDD2D4 url("../../assets/images/cross.png") no-repeat 50% 50%;
+    display: inline-block;
+    float: right;
+    margin-top: 3px;
+    margin-right: 3px;
+    border-radius: 2px;
+}
+.delete:hover {
+    background-color: #c0c5c7;
+}
+a {
+    text-decoration: none;
+    color: inherit;
+    display: inline-block;
+}

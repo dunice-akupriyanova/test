@@ -13,6 +13,16 @@
     height: auto;
 }
 input[name='login'], input[name='password'] {
+    display: block;
     margin-top: 10px;
     margin-bottom: 10px; 
+}
+.green_button{
+    background-color: #61BD4F;
+    color: white;
+    padding: 5px;
+    font-weight: 700;
+    border: 0;
+    padding: 7px 20px;
+    border-radius: 2px;
 }

@@ -42,3 +42,14 @@ textarea[name="current_card_name"]:focus, textarea[name="current_card_descriptio
 .window_text {
     font-weight: bold;
 }
+.delete {
+    cursor: pointer;
+    height: 18px;
+    width: 18px;
+    background: #CDD2D4 url("../../assets/images/cross.png") no-repeat 50% 50%;
+    display: inline-block;
+    float: right;
+    margin-top: 3px;
+    margin-right: 3px;
+    border-radius: 2px;
+}
