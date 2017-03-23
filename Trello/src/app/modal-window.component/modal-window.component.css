@@ -9,13 +9,14 @@ textarea[name="current_card_name"], textarea[name="current_card_description"] {
 textarea[name="current_card_name"] {
 	max-width: 690px;
 	display: block;
+    overflow: hidden;
 }
 textarea[name="current_card_description"] {
 	width: 430px;
-	overflow:auto;
 }
 textarea[name="current_card_name"]:focus, textarea[name="current_card_description"]:focus{
     background-color: white;
+    overflow: auto;
 }
 .window_overlay {
     background-color: rgba(0,0,0,.6);

@@ -1,14 +1,14 @@
 <div class="window_overlay" id="window_overlay" *ngIf="showModal">
-  <div class="window">
-	<div class="window_text">
-		Name:
-	</div>
-	<textarea (focusout)="changeDate(currentCard)" rows=1 cols={{currentCard.name.length+2}} name="current_card_name" [(ngModel)]="currentCard.name" placeholder="Card name"></textarea>	
-	<div class="window_text">
-		Description:
-	</div>
-	<textarea (focusout)="changeDate(currentCard)" rows=4 name="current_card_description" [(ngModel)]="currentCard.description" placeholder="Card desctiption"></textarea>
-    <div class="delete window_close" (click)="hideDetails(currentCard)">
-    </div>
-  </div>
+		<div class="window">
+				<div class="window_text">
+						Name:
+				</div>
+				<textarea (focusout)="changeDate(currentCard)" rows=1 cols={{currentCard.name.length+1}} name="current_card_name" [(ngModel)]="currentCard.name" placeholder="Card name"></textarea>	
+				<div class="window_text">
+						Description:
+				</div>
+				<textarea (focusout)="changeDate(currentCard)" rows=4 name="current_card_description" [(ngModel)]="currentCard.description" placeholder="Card desctiption"></textarea>
+				<div class="delete window_close" (click)="hideDetails(currentCard)">
+				</div>
+		</div>
 </div>

@@ -15,8 +15,7 @@ export class CurrentBoardComponent {
     currentBoard: Board;
     constructor(
         private backendService: BackendService,
-        private route: ActivatedRoute,
-        private router: Router,
+        private route: ActivatedRoute
         ) { }
     boards: Array<Board>=this.backendService.getBoards();
     ngOnInit() {
@@ -29,7 +28,7 @@ export class CurrentBoardComponent {
     newBoardName: string;
     addList(newName): void {
         if (!newName) {return}
-        this.currentBoard.lists.push(new List(+new Date(), newName, []));
+        this.currentBoard.lists.push(new List(newName, []));
         this.newName='';
     }
     addBoard(newName): void {

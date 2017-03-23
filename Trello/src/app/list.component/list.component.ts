@@ -45,9 +45,7 @@ export class ListComponent {
         this.list.cards.push(new Card(newCardName, '', this.now.toLocaleString()));
         this.newCardName='';
     }
-    constructor(private modalWindowService: ModalWindowService) {
-        modalWindowService.close$.subscribe();
-    }
+    constructor(private modalWindowService: ModalWindowService) { }
     showDetails(card): void {
         this.modalWindowService.openModal(card);
     }

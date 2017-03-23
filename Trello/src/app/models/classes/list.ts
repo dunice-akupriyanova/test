@@ -1,10 +1,8 @@
 import {Card} from './card';
 export class List {
-    id: number;
     name: string;
     cards: Array<Card>;
-    constructor (id: number, name: string, cards: Card[]) {
-        this.id=id;
+    constructor (name: string, cards: Card[]) {
         this.name=name;
         this.cards=cards;
     }
