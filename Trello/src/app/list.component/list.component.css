@@ -1,6 +1,19 @@
 .header_list {
     margin-bottom: 10px; 
 }
+.delete {
+    float: right;
+    cursor: pointer;
+    vertical-align: middle;
+    height: 18px;
+    width: 18px;
+    background: #CDD2D4 url("../../assets/images/cross.png") no-repeat 50% 50%;
+    display: inline-block;
+    border-radius: 2px;
+}
+.delete:hover {
+    background-color: #c0c5c7;
+}
 input[name="newCard"] {
     padding-left: 5px; 
     margin-bottom: 5px;

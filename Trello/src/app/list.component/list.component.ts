@@ -39,7 +39,7 @@ export class ListComponent {
     }
     newCardName: string;
     now=new Date();
-    addCard(newCardName, board): void {
+    addCard(newCardName): void {
         this.now=new Date();
         if (!newCardName) {return}
         this.list.cards.push(new Card(newCardName, '', this.now.toLocaleString()));

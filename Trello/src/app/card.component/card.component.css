@@ -6,3 +6,16 @@
     color: #8D8D8D;
     font: 12px Arial,Helvetica,sans-serif;
 }
+.delete {
+    float: right;
+    cursor: pointer;
+    vertical-align: middle;
+    height: 18px;
+    width: 18px;
+    background: #CDD2D4 url("../../assets/images/cross.png") no-repeat 50% 50%;
+    display: inline-block;
+    border-radius: 2px;
+}
+.delete:hover {
+    background-color: #c0c5c7;
+}

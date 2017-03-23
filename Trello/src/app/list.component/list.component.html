@@ -6,7 +6,7 @@
     </div>
     <div  dnd-sortable-container [dropZones]="['drop-zone']" [sortableData]="list.cards">
         <ul class="cards">
-            <li  class="card" *ngFor="let card of list.cards; let i = index" dnd-sortable [sortableIndex]="i" (click)="showDetails(card, list)">
+            <li  class="card" *ngFor="let card of list.cards; let i = index" dnd-sortable [sortableIndex]="i" (click)="showDetails(card)">
                 <card [card]="card" [list]="list"></card>              
             </li>
             <li>
@@ -15,7 +15,7 @@
                         Add a card
                     </div>
                     <input type="text" name="newCard" [(ngModel)]="newCardName" placeholder="New Card">
-                    <input type="submit" value="Add" (click)="addCard(newCardName, currentBoard)" class="add_button">
+                    <input type="submit" value="Add" (click)="addCard(newCardName)" class="add_button">
                 </form>
             </li>
         </ul>
