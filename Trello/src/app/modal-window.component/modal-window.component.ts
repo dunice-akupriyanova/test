@@ -12,14 +12,13 @@ export class ModalWindowComponent {
     showModal = false;
 
     hideDetails(card: Card): void {
-        this.modalWindowService.closeModal(this.currentCard);
         this.showModal = false;
     }
     changeDate(card: Card): void {
         card.date=(new Date()).toLocaleString();
     }
     constructor(private modalWindowService: ModalWindowService) {
-        modalWindowService.open$.subscribe(data => {
+        modalWindowService.open.subscribe(data => {
             this.currentCard = <Card>data;
             this.showModal = true;
         });
