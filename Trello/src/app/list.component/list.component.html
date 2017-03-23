@@ -1,5 +1,5 @@
 <div>
-    <div class="header_list" dnd-sortable [sortableIndex]="j">
+    <div class="header_list" dnd-sortable [sortableIndex]="index">
         <textarea rows=1 cols={{list.name.length}} name="list_name" [(ngModel)]="list.name" placeholder="List name"></textarea>
         <div class="delete" (click)="removeList(list)">
         </div>
@@ -15,7 +15,7 @@
                         Add a card
                     </div>
                     <input type="text" name="newCard" [(ngModel)]="newCardName" placeholder="New Card">
-                    <input type="submit" value="Add" (click)="addCard(newCardName)" class="add_button">
+                    <input type="submit" value="Add" (click)="addCard()" class="add_button">
                 </form>
             </li>
         </ul>

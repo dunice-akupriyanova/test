@@ -37,9 +37,6 @@ export class BackendService {
         return BackendService.boards;
     }
     getBoardByID(id: number|string){
-        let getBoard = function(element, index, array) {
-            return element.id==+id;
-        }
-        return BackendService.boards.find(getBoard);
+        return BackendService.boards.find((element)=>element.id==+id);
     }
 }

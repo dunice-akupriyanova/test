@@ -9,18 +9,15 @@ import { ModalWindowService } from './modal-window.service';
 })
 export class ModalWindowComponent {
     currentCard: Card;
-    showModal = false;
-
-    hideDetails(card: Card): void {
-        this.showModal = false;
-    }
-    changeDate(card: Card): void {
-        card.date=(new Date()).toLocaleString();
-    }
     constructor(private modalWindowService: ModalWindowService) {
         modalWindowService.open.subscribe(data => {
             this.currentCard = <Card>data;
-            this.showModal = true;
         });
+    }
+    hideDetails(card: Card): void {
+        this.currentCard=null;
+    }
+    changeDate(card: Card): void {
+        card.date=(new Date()).toLocaleString();
     }
 }

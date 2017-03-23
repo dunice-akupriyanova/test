@@ -15,37 +15,17 @@ export class ListComponent {
     @Input()
     currentBoard: Board;
     @Input()
-    j: number;
-    pull(array, target) {
-        var args = [array, target],
-            argsIndex = 0,
-            argsLength = args.length,
-            length = array ? array.length : 0;
-
-        while (++argsIndex < argsLength) {
-            var index = -1,
-                value = args[argsIndex];
-            while (++index < length) {
-                if (array[index] === value) {
-                    array.splice(index--, 1);
-                    length--;
-                }
-            }
-        }
-        return array;
-      }
-    removeList(list): void {
-        this.pull(this.currentBoard.lists, list);
-    }
+    index: number;
     newCardName: string;
-    now=new Date();
-    addCard(newCardName): void {
-        this.now=new Date();
-        if (!newCardName) {return}
-        this.list.cards.push(new Card(newCardName, '', this.now.toLocaleString()));
+    constructor(private modalWindowService: ModalWindowService) { }
+    removeList(list): void {
+        this.currentBoard.lists.splice(this.currentBoard.lists.findIndex((element)=>element==list), 1);
+    }
+    addCard(): void {
+        if (!this.newCardName) { return; }
+        this.list.cards.push(new Card(this.newCardName, '', (new Date()).toLocaleString()));
         this.newCardName='';
     }
-    constructor(private modalWindowService: ModalWindowService) { }
     showDetails(card): void {
         this.modalWindowService.openModal(card);
     }

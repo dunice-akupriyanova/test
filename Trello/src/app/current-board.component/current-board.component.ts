@@ -13,31 +13,21 @@ import { Router, ActivatedRoute, Params } from '@angular/router';
 })
 export class CurrentBoardComponent {
     currentBoard: Board;
+    newName: string;
+    boards: Array<Board>=this.backendService.getBoards();
     constructor(
         private backendService: BackendService,
         private route: ActivatedRoute
         ) { }
-    boards: Array<Board>=this.backendService.getBoards();
     ngOnInit() {
         this.route.params
             .subscribe((params)=> {            
                 this.currentBoard=this.backendService.getBoardByID(+params['id']);
             });        
     }
-    newName: string;
-    newBoardName: string;
-    addList(newName): void {
-        if (!newName) {return}
-        this.currentBoard.lists.push(new List(newName, []));
+    addList(): void {
+        if (!this.newName) { return; }
+        this.currentBoard.lists.push(new List(this.newName, []));
         this.newName='';
-    }
-    addBoard(newName): void {
-        if (!newName) {return}
-        this.boards.push(new Board(+new Date(), newName, []));
-        this.newBoardName='';
-    }
-    showModal=true;
-    onClose(event){
-        this.showModal=false;
     }
 }
