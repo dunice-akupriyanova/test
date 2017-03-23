@@ -7,7 +7,6 @@ import { Board } from '../models/classes/board';
 
 @Injectable()
 export class BackendService {
-    login: string=localStorage.getItem('login');
     static boards: Array<Board>=[
         new Board(1, 'Board1 Board1 Board1', [
             new List(1, 'List1', [
@@ -21,10 +20,18 @@ export class BackendService {
                 new Card('Card6', 'Description6', (new Date()).toLocaleString())
             ]),
         ]),
-        new Board(2, 'Board2', [])
+        new Board(2, 'Board2', [
+            new List(3, 'List3', [
+                new Card('Card7', 'Description7', (new Date()).toLocaleString())
+            ]),
+            new List(4, 'List4', [
+                new Card('Card8', 'Description8', (new Date()).toLocaleString()),
+                new Card('Card9', 'Description9', (new Date()).toLocaleString())
+            ]),
+        ])
     ];
-    getUser(): srting {
-        return this.login;
+    getUser(): string {
+        return 'default';
     }
     getBoards(): Array<Board>{
         return BackendService.boards;

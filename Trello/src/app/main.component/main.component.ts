@@ -1,6 +1,4 @@
-import { Component, Input } from '@angular/core';
-import { AppComponent } from '../app.component/app.component';
-import { Board } from '../models/classes/board';
+import { Component } from '@angular/core';
 import { BackendService } from '../services/backend.service';
 
 @Component({

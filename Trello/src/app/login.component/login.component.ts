@@ -1,5 +1,4 @@
-import { Component, Input } from '@angular/core';
-import { AppComponent } from '../app.component/app.component';
+import { Component } from '@angular/core';
 
 @Component({
   selector: 'login',
@@ -7,13 +6,4 @@ import { AppComponent } from '../app.component/app.component';
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent {
-  login: string;
-  saveLogin(login): void {
-    if (login) {
-      localStorage.setItem('login', login);
-    } else {
-      localStorage.setItem('login', '');
-      return;
-    }
-  }
 }

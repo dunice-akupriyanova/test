@@ -1,15 +1,12 @@
-import { Component, Input } from '@angular/core';
-import {Card} from '../models/classes/card';
-import {List} from '../models/classes/list';
-import {Board} from '../models/classes/board';
-import { AppComponent } from '../app.component/app.component';
+import { Component } from '@angular/core';
+import { Board } from '../models/classes/board';
 import { BackendService } from '../services/backend.service';
 
 @Component({
-  selector: 'boards',
-  templateUrl: './boards.component.html',
-  styleUrls: ['./boards.component.css'],
-  providers: [BackendService]
+    selector: 'boards',
+    templateUrl: './boards.component.html',
+    styleUrls: ['./boards.component.css'],
+    providers: [BackendService]
 })
 export class BoardsComponent {
     currentBoard: Board;
@@ -28,14 +25,14 @@ export class BoardsComponent {
             length = array ? array.length : 0;
 
         while (++argsIndex < argsLength) {
-        var index = -1,
-            value = args[argsIndex];
-        while (++index < length) {
-            if (array[index] === value) {
-            array.splice(index--, 1);
-            length--;
+            var index = -1,
+                value = args[argsIndex];
+            while (++index < length) {
+                if (array[index] === value) {
+                array.splice(index--, 1);
+                length--;
+                }
             }
-        }
         }
         return array;
     }

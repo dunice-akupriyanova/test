@@ -1,8 +1,7 @@
 import 'rxjs/add/operator/switchMap';
-import { Component, OnInit, HostBinding } from '@angular/core';
-import {Card} from '../models/classes/card';
-import {List} from '../models/classes/list';
-import {Board} from '../models/classes/board';
+import { Component, OnInit } from '@angular/core';
+import { List } from '../models/classes/list';
+import { Board } from '../models/classes/board';
 import { BackendService } from '../services/backend.service';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 
@@ -21,11 +20,10 @@ export class CurrentBoardComponent {
         ) { }
     boards: Array<Board>=this.backendService.getBoards();
     ngOnInit() {
-    this.route.params
-        .subscribe((params)=> {            
-            this.currentBoard=this.backendService.getBoardByID(+params['id']);
-        });
-        
+        this.route.params
+            .subscribe((params)=> {            
+                this.currentBoard=this.backendService.getBoardByID(+params['id']);
+            });        
     }
     newName: string;
     newBoardName: string;
@@ -41,6 +39,6 @@ export class CurrentBoardComponent {
     }
     showModal=true;
     onClose(event){
-    this.showModal=false;
+        this.showModal=false;
     }
 }
