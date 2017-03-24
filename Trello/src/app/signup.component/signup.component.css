@@ -1,0 +1,28 @@
+.signup_container {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: #0079BF;
+}
+.signup {
+    border-radius: 5px;
+    padding: 1px 20px 20px;
+    background-color: #E2E4E6;;
+    width: 400px;
+    margin: 40px auto;
+    height: auto;
+}
+input[name='email'], input[name='password'] {
+    display: block;
+    margin-top: 10px;
+    margin-bottom: 10px; 
+}
+.green_button{
+    background-color: #61BD4F;
+    color: white;
+    padding: 5px;
+    font-weight: 700;
+    border: 0;
+    padding: 7px 20px;
+    border-radius: 2px;
+}

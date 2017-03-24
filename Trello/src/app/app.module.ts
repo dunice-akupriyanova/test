@@ -15,7 +15,8 @@ import { LoginComponent } from './login.component/login.component';
 import { MainComponent } from './main.component/main.component';
 import { BoardsComponent } from './boards.component/boards.component';
 import { CurrentBoardComponent } from './current-board.component/current-board.component';
-
+import { LoggedOutComponent } from './logged-out.component/logged-out.component';
+import { SignupComponent } from './signup.component/signup.component';
 
 @NgModule({
     declarations: [
@@ -24,6 +25,8 @@ import { CurrentBoardComponent } from './current-board.component/current-board.c
         CardComponent,
         ModalWindowComponent,
         LoginComponent,
+        LoggedOutComponent,
+        SignupComponent,
         MainComponent,
         BoardsComponent,
         CurrentBoardComponent

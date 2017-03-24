@@ -1,0 +1,19 @@
+<div class="signup_container">
+    <div class="signup">
+        <h1>
+            Sign up
+        </h1> 
+        <form (ngSubmit)="onSubmit()" #signupForm="ngForm">
+            <label>
+                E-mail
+                <input type="text" name="email" placeholder="E-mail">
+            </label>
+            <label>
+                Password
+                <input type="password" name="password" placeholder="Password">
+            </label>
+            <input class="green_button" routerLinkActive="active" type="submit" value="Sign up">
+            <!--routerLink="/boards"-->
+        </form>
+    </div>
+</div>
