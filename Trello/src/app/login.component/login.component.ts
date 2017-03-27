@@ -1,9 +1,31 @@
 import { Component } from '@angular/core';
+import { Http, Response } from '@angular/http';
+import { AuthService } from '../services/auth.service';
+import { Router } from '@angular/router';
+
+import { Injectable }              from '@angular/core';
+import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/operator/catch';
+import 'rxjs/add/operator/map';
 
 @Component({
   selector: 'login',
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.css']
+  styleUrls: ['./login.component.css'],
+  providers: [AuthService]
 })
 export class LoginComponent {
+    email: string;
+    password: string;
+    answer: any={};
+    auth: boolean=false;
+    constructor (private http: Http, private authService: AuthService, private router: Router) {}
+    onSubmit(): void {
+        this.authService.postForm(this.email, this.password, 'http://localhost:3000/auth/login').subscribe(
+                     data  => {this.answer=data; this.authService.setUser(data)},
+                     error =>  {});
+        this.email='';
+        this.password='';
+        this.router.navigate(['/boards']);
+    }
 }

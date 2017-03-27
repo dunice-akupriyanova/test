@@ -6,11 +6,11 @@
         <form (ngSubmit)="onSubmit()" #signupForm="ngForm">
             <label>
                 E-mail
-                <input type="text" name="email" placeholder="E-mail">
+                <input type="text" name="email" placeholder="E-mail" [(ngModel)]="email">
             </label>
             <label>
                 Password
-                <input type="password" name="password" placeholder="Password">
+                <input type="password" name="password" placeholder="Password" [(ngModel)]="password">
             </label>
             <input class="green_button" routerLinkActive="active" type="submit" value="Sign up">
             <!--routerLink="/boards"-->
