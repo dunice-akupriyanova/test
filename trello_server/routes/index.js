@@ -6,6 +6,7 @@ var User = require('../models/user');
 
 /* GET home page. */
 router.get('/', function (req, res, next) {
+  console.log('index, wth!');
   res.render('index', { title: 'Express' });
 });
 
@@ -21,7 +22,7 @@ router.post('/test', function (req, res, next) {
 
   user.save((err, dbres) => {
     console.log(err, dbres);
-    res.send('respond with a resource');
+    res.send('Ok');
   });
 });
 
