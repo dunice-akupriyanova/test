@@ -14,23 +14,9 @@ router.get('/signup', function (req, res, next) {
   console.log('signup');
 });
 
-router.post('/signup', function (req, res, next) {
-  res.send('{}');
-  console.log('OK_signup_post');
-  console.log(req.body);
-});
-
 router.post('/test', function (req, res, next) {
-  console.log('OK_test_post', req.body);
+  console.log('OK test post', req.body);
 
-  // User.create(req.body, function (err, dbres) {
-  //   if (err) {
-  //     console.log(err);
-  //     return res.status(400).send();
-  //   }
-  //   console.log('successful', dbres);
-  //   res.send('respond with a resource');
-  // });
   var user = new User(req.body);
 
   user.save((err, dbres) => {
@@ -40,20 +26,4 @@ router.post('/test', function (req, res, next) {
 });
 
 
-
-// router.route('/signup')
-// .all(function(req, res, next) {
-//   console.log('OK_ALL');
-//   next();
-// })
-// .post(function(req, res, next) {
-//   console.log('OK_POST');
-// });
-
-
-
 module.exports = router;
-// module.exports = function(app, db) {
-//   noteRoutes(app, db);
-//   // Тут, позже, будут и другие обработчики маршрутов 
-// };
