@@ -11,16 +11,17 @@ var session = require('express-session');
 var db = mongoose.connection;
 var cors = require('cors');
 
+mongoose.connect('mongodb://localhost/trello-dev');
+
 db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', function() {
   console.log("we're connected!");
 });
 
-mongoose.connect('mongodb://localhost/trello-dev');
 
 var index = require('./routes/index');
 var users = require('./routes/users');
-var auth = require('./auth/auth');
+var auth0 = require('./auth/auth0');
 
 var app = express();
 // app.use(bodyParser());
@@ -42,7 +43,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', index);
 app.use('/users', users);
-app.use('/auth', auth);
+app.use('/auth0', auth0);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

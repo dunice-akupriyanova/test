@@ -7,31 +7,24 @@ import 'rxjs/add/operator/map';
 
 @Injectable()
 export class AuthService {
-    user: any;
+  tokens: any;
   constructor (private http: Http) {}
-  postForm(email: string, password: string, url: string): Observable<any> {
+  postForm(username: string, password: string, url: string): Observable<any> {
 
     let headers = new Headers({ 'Content-Type': 'application/json' });
     let options = new RequestOptions({ headers: headers });
 
-    return this.http.post(url, { email, password }, options)
+    return this.http.post(url, { username, password }, options)
                     .map(this.extractData)
                     .catch(this.handleError);
   }
-  setUser(user): void {
-    this.user=user;
+  setTokens(tokens): void {
+    this.tokens=tokens;
     console.log('set');
-    console.log(this.user);
-  }
-  getUser(): any {
-      console.log('get');
-      console.log(this.user);
-      return this.user;
-  }
+    console.log(this.tokens);
+  }  
   private extractData(res: Response) {
     let body = res.json();
-    // console.log('data');
-    // console.log(body);
     return body;
   }
   private handleError (error: Response | any) {
@@ -48,7 +41,7 @@ export class AuthService {
     return Observable.throw(errMsg);
   }
   logOut(): Observable<any> {
-    return this.http.get('http://localhost:3000/auth/logout')
+    return this.http.get('http://localhost:3000/auth0/logout')
                     .map(this.extractData)
                     .catch(this.handleError);
   }

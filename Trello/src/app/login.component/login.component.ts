@@ -15,16 +15,15 @@ import 'rxjs/add/operator/map';
   providers: [AuthService]
 })
 export class LoginComponent {
-    email: string;
+    username: string;
     password: string;
     answer: any={};
     auth: boolean=false;
     constructor (private http: Http, private authService: AuthService, private router: Router) {}
     onSubmit(): void {
-        this.authService.postForm(this.email, this.password, 'http://localhost:3000/auth/login').subscribe(
-                     data  => {this.answer=data; this.authService.setUser(data)},
-                     error =>  {});
-        this.email='';
+        this.authService.postForm(this.username, this.password, 'http://localhost:3000/auth0/token').subscribe(
+                     data  => {this.answer=data; this.authService.setTokens(data)});
+        this.username='';
         this.password='';
         this.router.navigate(['/boards']);
     }
