@@ -20,8 +20,11 @@ export class LoginComponent {
     answer: any={};
     auth: boolean=false;
     constructor (private http: Http, private authService: AuthService, private router: Router) {}
+    goToBoatds(): void {
+        this.router.navigate(['/boards']);
+    }
     onSubmit(): void {
-        this.authService.postForm(this.username, this.password, 'http://localhost:3000/auth0/token').subscribe(
+        this.authService.postForm(this.username, this.password, 'http://localhost:3000/auth/token').subscribe(
                      data  => {this.answer=data; this.authService.setTokens(data)});
         this.username='';
         this.password='';

@@ -21,7 +21,8 @@ db.once('open', function() {
 
 var index = require('./routes/index');
 var users = require('./routes/users');
-var auth0 = require('./auth/auth0');
+var auth = require('./auth/auth');
+var boards = require('./routes/boards/boards');
 
 var app = express();
 // app.use(bodyParser());
@@ -43,7 +44,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', index);
 app.use('/users', users);
-app.use('/auth0', auth0);
+app.use('/auth', auth);
+app.use('/boards', boards);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

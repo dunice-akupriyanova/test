@@ -18,6 +18,6 @@ export class MainComponent {
     constructor(private backendService: BackendService, private http: Http, private authService: AuthService) { }
     login: string=this.backendService.getUser();
     logOut(): void {
-        this.authService.logOut().subscribe();;
+        this.authService.logOut().subscribe();
     }
 }

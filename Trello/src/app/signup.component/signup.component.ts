@@ -20,7 +20,7 @@ export class SignupComponent {
     password: string;
     constructor (private http: Http, private authService: AuthService, private router: Router) {}
     onSubmit(): void {
-        this.authService.postForm(this.email, this.password, 'http://localhost:3000/auth0/signup').subscribe(
+        this.authService.postForm(this.email, this.password, 'http://localhost:3000/auth/signup').subscribe(
                      data  => {},
                      error =>  {});
         console.log("ok");
