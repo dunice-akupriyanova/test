@@ -12,7 +12,12 @@ import 'rxjs/add/operator/map';
 export class BoardService {
     tokens = this.authService.getTokens();
     boards: Array<Board> = this.boardsService.getBoards();
-    constructor(private http: Http, private authService: AuthService, private boardsService: BoardsService) { }
+    static currentBoard: Board;
+    constructor(
+        private http: Http,
+        private authService: AuthService,
+        private boardsService: BoardsService
+    ) { }
     private extractData(res: Response) {
         let body = res.json();
         return body;
@@ -30,15 +35,36 @@ export class BoardService {
         console.error(errMsg);
         return Observable.throw(errMsg);
     }
-    getBoardByID(id: number | string) {
-        console.log('getBoardByID');
-        console.log(this.boards);
-        return this.boards.find((element) => element.id == id);
-    }
     deleteBoard(id): Observable<any> {
         let headers = new Headers({ 'Authorization': `JWT ${this.tokens.accessToken}` });
         let options = new RequestOptions({ headers: headers });
         return this.http.delete(`http://localhost:3000/boards/${id}`, options)
             .map(this.extractData);
+    }
+    getBoardFromServer(id): Observable<any> {
+        let headers = new Headers({ 'Authorization': `JWT ${this.tokens.accessToken}` });
+        let options = new RequestOptions({ headers: headers });
+        return this.http.get(`http://localhost:3000/boards/${id}`, options)
+            .map(this.extractData)
+            .catch(this.handleError);
+    }
+    getBoard(data): Board {
+        if (!data) {
+            console.log('no data');
+            return;
+        }
+        return new Board(data._id, data.name, data.lists);
+        // console.log(BoardsService.boards);
+    }
+    updateBoard(): Observable<any> {
+        console.log('accessToken=' + this.tokens.accessToken);
+        let headers = new Headers({ 'Authorization': `JWT ${this.tokens.accessToken}` });
+        let options = new RequestOptions({ headers: headers });
+        return this.http.put(`http://localhost:3000/boards/${BoardService.currentBoard.id}`, { name: BoardService.currentBoard.name, lists: BoardService.currentBoard.lists }, options)
+            .map(this.extractData)
+            .catch(this.handleError);
+    }
+    setCurrentBoard(board): void {
+        BoardService.currentBoard = board;
     }
 }

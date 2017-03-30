@@ -3,11 +3,13 @@ import { Card } from '../models/classes/card';
 import { List } from '../models/classes/list';
 import { Board } from '../models/classes/board';
 import { ModalWindowService } from '../modal-window.component/modal-window.service';
+import { BoardService } from '../services/board.service';
 
 @Component({
     selector: 'list',
     templateUrl: './list.component.html',
-    styleUrls: ['./list.component.css']
+    styleUrls: ['./list.component.css'],
+    providers: [BoardService]
 })
 export class ListComponent {
     @Input()
@@ -17,16 +19,24 @@ export class ListComponent {
     @Input()
     index: number;
     newCardName: string;
-    constructor(private modalWindowService: ModalWindowService) { }
+    constructor(
+        private modalWindowService: ModalWindowService,
+        private boardService: BoardService
+    ) { }
     removeList(list): void {
-        this.currentBoard.lists.splice(this.currentBoard.lists.findIndex((element)=>element==list), 1);
+        this.currentBoard.lists.splice(this.currentBoard.lists.findIndex((element) => element == list), 1);
+        this.boardService.updateBoard().subscribe();
     }
     addCard(): void {
         if (!this.newCardName) { return; }
         this.list.cards.push(new Card(this.newCardName, '', (new Date()).toLocaleString()));
-        this.newCardName='';
+        this.newCardName = '';
+        this.boardService.updateBoard().subscribe();
     }
     showDetails(card): void {
         this.modalWindowService.openModal(card);
+    }
+    updateBoard(): void {
+        this.boardService.updateBoard().subscribe();
     }
 }

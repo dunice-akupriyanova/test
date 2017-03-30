@@ -1,15 +1,16 @@
 <div class="header">
-  <div class="boards_button">
-    <div class="boards_button_icon">
-    </div>    
-    <div class="boards_button_text">
-      <a routerLink="/boards" routerLinkActive="active">Boards
-      </a>
+  <a routerLink="/boards" routerLinkActive="active">
+    <div class="boards_button">
+      <div class="boards_button_icon">
+      </div>
+        <div class="boards_button_text">
+          Boards
+        </div>
     </div>
-  </div>
+  </a>
   <div class="login">
-    <div *ngIf="login" class="user_name">
-      {{login}}
+    <div *ngIf="user" class="user_name">
+      {{user.username}}
     </div>
     <div class="login_button">
         <a (click)="logOut()" routerLink="/logged-out" routerLinkActive="active">

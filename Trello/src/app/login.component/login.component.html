@@ -11,8 +11,15 @@
             <label>
                 Password
                 <input type="password" name="password" placeholder="Password" [(ngModel)]="password">
-            </label>
-            <input class="green_button" type="submit" value="Log in">
+            </label>            
+            <div class="buttons">
+                <input class="green_button" type="submit" value="Log in">
+                <a routerLink="/logged-out" routerLinkActive="active">
+                    <div class="blue_button">
+                        Back
+                    </div>
+                </a>
+            </div>
         </form>
         <!--<input [(ngModel)]="answer.username">-->
     </div>

@@ -12,10 +12,14 @@ import { BoardService } from '../services/board.service';
     providers: [BackendService, AuthService, BoardsService, BoardService]
 })
 export class BoardsComponent {
-    answer: any;
     boards: Array<Board> = [];
     newBoardName: string;
-    constructor(private backendService: BackendService, private authService: AuthService, private boardsService: BoardsService, private boardService: BoardService) { }
+    constructor(
+        private backendService: BackendService,
+        private authService: AuthService,
+        private boardsService: BoardsService,
+        private boardService: BoardService
+    ) { }
     addBoard(): void {
         if (!this.newBoardName) { return; }
         // this.boards.push(new Board(+new Date(), this.newBoardName, []));        
@@ -26,7 +30,6 @@ export class BoardsComponent {
         this.newBoardName = '';
         this.boardsService.getBoardsFromServer().subscribe(
             data => {
-                this.answer = data;
                 this.boardsService.putBoards(data);
                 this.boards = this.boardsService.getBoards();
             });
@@ -39,7 +42,6 @@ export class BoardsComponent {
     ngOnInit() {
         this.boardsService.getBoardsFromServer().subscribe(
             data => {
-                this.answer = data;
                 this.boardsService.putBoards(data);
                 this.boards = this.boardsService.getBoards();
             });

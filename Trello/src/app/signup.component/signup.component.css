@@ -17,7 +17,7 @@ input[name='email'], input[name='password'] {
     margin-top: 10px;
     margin-bottom: 10px; 
 }
-.green_button{
+.green_button {
     background-color: #61BD4F;
     color: white;
     padding: 5px;
@@ -25,4 +25,22 @@ input[name='email'], input[name='password'] {
     border: 0;
     padding: 7px 20px;
     border-radius: 2px;
+}
+.buttons {
+    display: inline-block;
+    vertical-align: middle;
+    line-height: 20px;
+}
+.blue_button {
+    vertical-align: middle;
+    display: inline-block;
+    font: 13.3333px Arial;
+    color: white;
+    font-weight: 800;
+    width: 100px;
+    height: 22px;
+    padding-top: 8px;
+    text-align: center;
+    border-radius: 2px;
+    background-color: blue;
 }

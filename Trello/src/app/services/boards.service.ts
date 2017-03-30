@@ -9,6 +9,7 @@ import 'rxjs/add/operator/map';
 
 @Injectable()
 export class BoardsService {
+  tokens = this.authService.getTokens();
   static boards: Array<Board> = [];
   constructor(private http: Http, private authService: AuthService) { }
   private extractData(res: Response) {
@@ -29,7 +30,6 @@ export class BoardsService {
     console.error(errMsg);
     return Observable.throw(errMsg);
   }
-  tokens = this.authService.getTokens();
   getBoardsFromServer(): Observable<any> {
     let headers = new Headers({ 'Authorization': `JWT ${this.tokens.accessToken}` });
     let options = new RequestOptions({ headers: headers });
@@ -49,9 +49,6 @@ export class BoardsService {
   }
   getBoards(): Array<Board> {
     return BoardsService.boards;
-  }
-  getBoardByID(id: number | string) {
-      return BoardsService.boards.find((element) => element.id == id);
   }
   addBoard(name): Observable<any> {
     let headers = new Headers({ 'Authorization': `JWT ${this.tokens.accessToken}` });

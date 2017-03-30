@@ -1,12 +1,12 @@
 <div>
-    <div class="header_list" dnd-sortable [sortableIndex]="index">
-        <textarea rows=1 cols={{list.name.length}} name="list_name" [(ngModel)]="list.name" placeholder="List name"></textarea>
+    <div (onDropSuccess)="updateBoard()" class="header_list" dnd-sortable [sortableIndex]="index">
+        <textarea (focusout)='updateBoard()' rows=1 cols={{list.name.length}} name="list_name" [(ngModel)]="list.name" placeholder="List name"></textarea>
         <div class="delete" (click)="removeList(list)">
         </div>
     </div>
-    <div  dnd-sortable-container [dropZones]="['drop-zone']" [sortableData]="list.cards">
+    <div dnd-sortable-container [dropZones]="['drop-zone']" [sortableData]="list.cards">
         <ul class="cards">
-            <li  class="card" *ngFor="let card of list.cards; let i = index" dnd-sortable [sortableIndex]="i" (click)="showDetails(card)">
+            <li (onDropSuccess)="updateBoard()"  class="card" *ngFor="let card of list.cards; let i = index" dnd-sortable [sortableIndex]="i" (click)="showDetails(card)">
                 <card [card]="card" [list]="list"></card>              
             </li>
             <li>

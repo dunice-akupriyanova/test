@@ -21,11 +21,14 @@ export class SignupComponent {
     constructor (private http: Http, private authService: AuthService, private router: Router) {}
     onSubmit(): void {
         this.authService.postForm(this.email, this.password, 'http://localhost:3000/auth/signup').subscribe(
-                     data  => {},
+                     data  => {
+                        this.authService.setTokens(data);
+                        this.authService.auth(data.accessToken).subscribe(user => {
+                            this.router.navigate(['/boards']);
+                        });
+                     },
                      error =>  {});
-        console.log("ok");
         this.email='';
         this.password='';
-        this.router.navigate(['/boards']);
     }
 }

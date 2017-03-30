@@ -3,7 +3,6 @@ var router = express.Router();
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var User = require('../models/user');
-var Board = require('../models/board');
 var JwtStrategy = require('passport-jwt').Strategy;
 var ExtractJwt = require('passport-jwt').ExtractJwt;
 var app = express();
@@ -39,7 +38,7 @@ router.post('/token', function(req, res, next) {
     if (req.body.username && req.body.password) {
         var username = req.body.username;
         var password = req.body.password;
-        User.findOne({ username : username},function(err,user){
+        User.findOne({ username : username },function(err,user){
           if (err) return next(err);
           if (!user) return res.send(false);
           if (password != user.password) return res.send(false);
@@ -69,8 +68,12 @@ router.get('/test', function (req, res, next) {
 });
 
 router.get("/user", auth.authenticate(), function(req, res) {  
-    res.json(req.user);
+    if (req.user) {
+        res.json(req.user);
+    }
 });
+
+
 
 router.get('/logout', function(req, res) {
   console.log('ok logout auth');
@@ -78,20 +81,41 @@ router.get('/logout', function(req, res) {
 });
 
 router.post('/signup', function (req, res, next) {
-  console.log('OK signup post auth');
-  var user = new User({ username: req.body.username, password: req.body.password});
-  console.log('auth user='+user);
-  user.save(function(err) {
-    console.log(err);
-    return err
-      ? next(err)
-      : req.logIn(user, function(err) {        
-        console.log('auth err='+err);
-        return err
-          ? next(err)
-          : res.send(JSON.stringify(user));
-      });
-  });
+    console.log('OK signup post auth');
+    var user = new User({ username: req.body.username, password: req.body.password});
+    // console.log('signup user='+user);
+    User.findOne({ username : req.body.username }, function(err,founduser){
+    // var found=false;
+    // console.log('founduser');
+    // console.log(founduser);
+        if (!founduser) {
+            user.save(function(err) {
+                console.log(err);
+                var accessTokenPayload = {
+                        id: user._id,
+                        exp: Date.now()+10*60*1000
+                    };
+                var refreshTokenPayload = {
+                    id: user._id,
+                    exp: Date.now()+7*24*60*60*1000
+                };
+                var accessToken = jwt.encode(accessTokenPayload, cfg.jwtSecret);
+                var refreshToken = jwt.encode(refreshTokenPayload, cfg.jwtSecret);
+                return err
+                ? next(err)
+                : req.logIn(user, function(err) {        
+                    console.log('auth err='+err);
+                    return err
+                    ? next(err)
+                    : res.json({
+                            accessToken: accessToken,
+                            refreshToken: refreshToken
+                        });
+                });
+            });
+        }
+    });
+    // console.log('found='+found);  
 });
 
 module.exports = router;
