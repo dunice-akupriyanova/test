@@ -25,8 +25,12 @@ export class LoginComponent {
     onSubmit(): void {
         this.authService.postForm(this.username, this.password, 'http://localhost:3000/auth/token').subscribe(
             data => {
+                console.log('postForm');
+                console.log(data);
                 this.authService.setTokens(data);
-                this.authService.auth(data.accessToken).subscribe(user => {
+                this.authService.auth(data.accessToken).subscribe(data => {
+                    console.log('auth');
+                    console.log(data);
                     this.router.navigate(['/boards']);
                 });
             });

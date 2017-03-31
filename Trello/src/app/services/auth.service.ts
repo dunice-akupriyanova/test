@@ -6,9 +6,13 @@ import { JwtHelper } from 'angular2-jwt';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/map';
 
+// var JWTHelper = require('jwthelper');
+// var helper = JWTHelper.createJWTHelper();
+
 @Injectable()
 export class AuthService {
   jwtHelper: JwtHelper = new JwtHelper();
+  // helper = this.jwtHelper.createJWTHelper();
   static tokens=JSON.parse(localStorage.getItem('tokens')?localStorage.getItem('tokens'):'{}');
   private extractData(res: Response) {
     let body = res.json();
@@ -36,11 +40,16 @@ export class AuthService {
   setTokens(tokens): void {
     AuthService.tokens = tokens;
     localStorage.setItem('tokens', JSON.stringify(tokens));
-    console.log('set');
-    console.log('accessToken='+AuthService.tokens.accessToken);
   }
   getTokens(): any {
     return AuthService.tokens;
+  }
+  refreshTokens(refreshToken): Observable<any> {
+      let headers = new Headers({ 'Authorization': `${refreshToken}` });
+      let options = new RequestOptions({ headers: headers });
+      return this.http.get('http://localhost:3000/auth/refresh-token', options)
+        .map(this.extractData)
+        .catch(this.handleError);
   }
   logOut(): Observable<any> {
     console.log('logOut');

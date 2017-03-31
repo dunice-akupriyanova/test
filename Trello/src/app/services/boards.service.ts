@@ -4,11 +4,13 @@ import { Headers, RequestOptions } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 import { Board } from '../models/classes/board';
 import { AuthService } from './auth.service';
+import { JwtHelper } from 'angular2-jwt';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/map';
 
 @Injectable()
 export class BoardsService {
+  jwtHelper: JwtHelper = new JwtHelper();
   tokens = this.authService.getTokens();
   static boards: Array<Board> = [];
   constructor(private http: Http, private authService: AuthService) { }
@@ -31,6 +33,7 @@ export class BoardsService {
     return Observable.throw(errMsg);
   }
   getBoardsFromServer(): Observable<any> {
+    this.tokens = this.authService.getTokens();
     let headers = new Headers({ 'Authorization': `JWT ${this.tokens.accessToken}` });
     let options = new RequestOptions({ headers: headers });
     return this.http.get('http://localhost:3000/boards', options)

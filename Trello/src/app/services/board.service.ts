@@ -42,6 +42,7 @@ export class BoardService {
             .map(this.extractData);
     }
     getBoardFromServer(id): Observable<any> {
+        this.tokens = this.authService.getTokens();
         let headers = new Headers({ 'Authorization': `JWT ${this.tokens.accessToken}` });
         let options = new RequestOptions({ headers: headers });
         return this.http.get(`http://localhost:3000/boards/${id}`, options)

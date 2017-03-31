@@ -1,7 +1,7 @@
 var passport = require("passport");  
 var passportJWT = require("passport-jwt");  
 var User = require('../models/user');
-var cfg = require("../config/config.js");  
+var cfg = require("../config/config.js");
 var ExtractJwt = passportJWT.ExtractJwt;  
 var Strategy = passportJWT.Strategy;  
 var params = {  
@@ -11,6 +11,10 @@ var params = {
 
 module.exports = function() {  
     var strategy = new Strategy(params, function(payload, done) {
+        if (payload.exp < Date.now()) {
+            // return done(new Error("User not found"), null);
+            return done(new Error("Invalid token"), null);
+        }
         User.findOne({ _id : payload.id}, function(err,user){
             if (user) {
                 return done(null, {

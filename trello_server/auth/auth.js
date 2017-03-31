@@ -7,9 +7,11 @@ var JwtStrategy = require('passport-jwt').Strategy;
 var ExtractJwt = require('passport-jwt').ExtractJwt;
 var app = express();
 var session = require('express-session');
-var cfg = require('../config/config');  
+var cfg = require('../config/config'); 
+var crypto = require('crypto'); 
 var jwt = require("jwt-simple"); 
 var auth = require("./auth-strategy")();
+var accessTokenExpTime = 5*60*1000;
 
 router.use(bodyParser.json());
 router.use(bodyParser.urlencoded({ extended: false }));
@@ -37,14 +39,14 @@ router.post('/token', function(req, res, next) {
     console.log('auth token post ok');
     if (req.body.username && req.body.password) {
         var username = req.body.username;
-        var password = req.body.password;
+        var password = crypto.createHash('md5').update(req.body.password).digest('hex');
         User.findOne({ username : username },function(err,user){
           if (err) return next(err);
           if (!user) return res.send(false);
           if (password != user.password) return res.send(false);
           var accessTokenPayload = {
               id: user._id,
-              exp: Date.now()+10*60*1000
+              exp: Date.now()+2*1000
           };
           var refreshTokenPayload = {
               id: user._id,
@@ -67,13 +69,13 @@ router.get('/test', function (req, res, next) {
   console.log('test OK');
 });
 
-router.get("/user", auth.authenticate(), function(req, res) {  
+router.get("/user", auth.authenticate(), function(req, res) { 
+    console.log("???"); 
+    console.log(req.user);
     if (req.user) {
         res.json(req.user);
     }
 });
-
-
 
 router.get('/logout', function(req, res) {
   console.log('ok logout auth');
@@ -82,7 +84,8 @@ router.get('/logout', function(req, res) {
 
 router.post('/signup', function (req, res, next) {
     console.log('OK signup post auth');
-    var user = new User({ username: req.body.username, password: req.body.password});
+    var hash = crypto.createHash('md5').update(req.body.password).digest('hex');
+    var user = new User({ username: req.body.username, password: hash});
     // console.log('signup user='+user);
     User.findOne({ username : req.body.username }, function(err,founduser){
     // var found=false;
@@ -93,7 +96,7 @@ router.post('/signup', function (req, res, next) {
                 console.log(err);
                 var accessTokenPayload = {
                         id: user._id,
-                        exp: Date.now()+10*60*1000
+                        exp: Date.now()+accessTokenExpTime
                     };
                 var refreshTokenPayload = {
                     id: user._id,
@@ -116,6 +119,17 @@ router.post('/signup', function (req, res, next) {
         }
     });
     // console.log('found='+found);  
+});
+
+router.get("/refresh-token", function(req, res) { 
+    var refreshToken = req.headers['authorization'];
+    var refreshTokenPayload = jwt.decode(refreshToken, cfg.jwtSecret);
+    var accessTokenPayload = refreshTokenPayload;
+    accessTokenPayload.exp = Date.now()+accessTokenExpTime;
+    res.json({
+                accessToken: jwt.encode(accessTokenPayload, cfg.jwtSecret),
+                refreshToken: jwt.encode(refreshTokenPayload, cfg.jwtSecret)
+            });
 });
 
 module.exports = router;
