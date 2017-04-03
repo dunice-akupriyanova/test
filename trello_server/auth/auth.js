@@ -20,7 +20,7 @@ router.use(session({ secret: 'SECRET', resave: true, saveUninitialized: true }))
 
 var passport = require('passport');
 
-router.use(auth.initialize());
+router.use(passport.initialize());
 router.use(passport.session()); //???
 
 passport.serializeUser(function(user, done) {  //???
@@ -46,7 +46,7 @@ router.post('/token', function(req, res, next) {
           if (password != user.password) return res.send(false);
           var accessTokenPayload = {
               id: user._id,
-              exp: Date.now()+2*1000
+              exp: Date.now()+accessTokenExpTime
           };
           var refreshTokenPayload = {
               id: user._id,
@@ -54,6 +54,7 @@ router.post('/token', function(req, res, next) {
           };
           var accessToken = jwt.encode(accessTokenPayload, cfg.jwtSecret);
           var refreshToken = jwt.encode(refreshTokenPayload, cfg.jwtSecret);
+          console.log('login='+refreshTokenPayload.exp);
           res.json({
               accessToken: accessToken,
               refreshToken: refreshToken
@@ -124,7 +125,15 @@ router.post('/signup', function (req, res, next) {
 router.get("/refresh-token", function(req, res) { 
     var refreshToken = req.headers['authorization'];
     var refreshTokenPayload = jwt.decode(refreshToken, cfg.jwtSecret);
-    var accessTokenPayload = refreshTokenPayload;
+    var accessTokenPayload={};
+    if (refreshTokenPayload.exp<Date.now()) {
+        console.log('refreshTokenPayload.exp'+refreshTokenPayload.exp);
+        console.log('Date.now()'+Date.now());
+        console.log('refreshTokenPayload.exp<Date.now()');
+        res.sendStatus(401);
+        return;
+    }
+    accessTokenPayload.id = refreshTokenPayload.id;
     accessTokenPayload.exp = Date.now()+accessTokenExpTime;
     res.json({
                 accessToken: jwt.encode(accessTokenPayload, cfg.jwtSecret),

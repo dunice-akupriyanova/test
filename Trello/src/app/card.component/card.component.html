@@ -2,7 +2,7 @@
     <div class="card_date">
         {{card.date}}
     </div>
-    <div class="delete" (click)="removeCard(list, card)"></div>
+    <div *ngIf="(rights=='owner')||(rights=='write')" class="delete" (click)="removeCard(list, card)"></div>
     <div class="card_name">
         {{card.name}}
     </div>

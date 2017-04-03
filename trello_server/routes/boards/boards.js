@@ -2,8 +2,10 @@ var express = require('express');
 var router = express.Router();
 var Board = require('../../models/board');
 var auth = require("../../auth/auth-strategy")();
+var Right = require('../../models/right');
+var passport = require('passport');
 
-router.use(auth.initialize());
+router.use(passport.initialize());
 
 router.get('/', auth.authenticate(), function (req, res, next) {
     console.log(req.user);
@@ -29,6 +31,12 @@ router.delete('/:id', auth.authenticate(), function (req, res, next) {
     Board.findOne({ _id: req.params.id }, function(err, board) {
         if(board) {
             board.remove();
+            Right.find({boardID: req.params.id}, function(err, boards) {
+                if (err) throw err;
+                for (let i=0; i<boards.length; i++) {
+                    boards[i].remove();
+                }
+            });
         }
     })
         res.status(201);
@@ -62,5 +70,6 @@ router.get('/test', function (req, res, next) {
     console.log('OK test get', req.body);
     res.send('OK test get');
 });
+
 
 module.exports = router;

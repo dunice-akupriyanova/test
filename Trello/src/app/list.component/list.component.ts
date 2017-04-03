@@ -18,6 +18,8 @@ export class ListComponent {
     currentBoard: Board;
     @Input()
     index: number;
+    @Input()
+    rights: string;
     newCardName: string;
     constructor(
         private modalWindowService: ModalWindowService,
@@ -33,8 +35,8 @@ export class ListComponent {
         this.newCardName = '';
         this.boardService.updateBoard().subscribe();
     }
-    showDetails(card): void {
-        this.modalWindowService.openModal(card);
+    showDetails(card, rights): void {
+        this.modalWindowService.openModal(card, rights);
     }
     updateBoard(): void {
         this.boardService.updateBoard().subscribe();

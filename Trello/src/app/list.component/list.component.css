@@ -25,7 +25,7 @@ input[name="newCard"] {
     border-radius: 3px;
     border: 1px solid #AAAAAA;
 }
-textarea[name="list_name"] {
+textarea[name="list_name"], .list_name {
     overflow: hidden;
     padding-left: 8px;
     display: inline-block;

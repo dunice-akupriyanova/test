@@ -5,8 +5,9 @@ import { Card } from '../models/classes/card';
 
 @Injectable()
 export class ModalWindowService {  
-    open = new Subject<Card>();
-    openModal(card){
-        this.open.next(card);
+    open = new Subject<any>();
+    openModal(card, rights){
+        console.log('openModal rights='+rights);
+        this.open.next({card: card, rights: rights});
     }
 }

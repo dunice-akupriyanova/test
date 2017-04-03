@@ -12,8 +12,7 @@ var params = {
 module.exports = function() {  
     var strategy = new Strategy(params, function(payload, done) {
         if (payload.exp < Date.now()) {
-            // return done(new Error("User not found"), null);
-            return done(new Error("Invalid token"), null);
+        res.sendStatus(401);
         }
         User.findOne({ _id : payload.id}, function(err,user){
             if (user) {
@@ -28,9 +27,6 @@ module.exports = function() {
     });
     passport.use(strategy);
     return {
-        initialize: function() {
-            return passport.initialize();
-        },
         authenticate: function() {
             return passport.authenticate("jwt", cfg.jwtSession);
         }

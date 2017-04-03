@@ -1,12 +1,21 @@
 <div>
-    <div (onDropSuccess)="updateBoard()" class="header_list" dnd-sortable [sortableIndex]="index">
-        <textarea (focusout)='updateBoard()' rows=1 cols={{list.name.length}} name="list_name" [(ngModel)]="list.name" placeholder="List name"></textarea>
-        <div class="delete" (click)="removeList(list)">
+    <div *ngIf="(rights=='owner')||(rights=='write')">
+        <div (onDropSuccess)="updateBoard()" class="header_list" dnd-sortable [sortableIndex]="index">
+            <textarea (focusout)='updateBoard()' rows=1 cols={{list.name.length}} name="list_name" [(ngModel)]="list.name" placeholder="List name"></textarea>
+            <div class="delete" (click)="removeList(list)">
+            </div>
+        </div>
+    </div>
+    <div *ngIf="(rights=='none')||(rights=='read')">
+        <div class="header_list">
+            <div class="list_name">
+                {{list.name}}
+            </div>
         </div>
     </div>
     <div dnd-sortable-container [dropZones]="['drop-zone']" [sortableData]="list.cards">
-        <ul class="cards">
-            <li (onDropSuccess)="updateBoard()"  class="card" *ngFor="let card of list.cards; let i = index" dnd-sortable [sortableIndex]="i" (click)="showDetails(card)">
+        <ul *ngIf="(rights=='owner')||(rights=='write')" class="cards">
+            <li (onDropSuccess)="updateBoard()"  class="card" *ngFor="let card of list.cards; let i = index" dnd-sortable [sortableIndex]="i" (click)="showDetails(card, rights)">
                 <card [card]="card" [list]="list"></card>              
             </li>
             <li>
@@ -17,6 +26,11 @@
                     <input type="text" name="newCard" [(ngModel)]="newCardName" placeholder="New Card">
                     <input type="submit" value="Add" (click)="addCard()" class="add_button">
                 </form>
+            </li>
+        </ul>
+        <ul *ngIf="(rights=='none')||(rights=='read')" class="cards">
+            <li class="card" *ngFor="let card of list.cards" (click)="showDetails(card, rights)">
+                <card [card]="card" [list]="list" [rights]="rights"></card>              
             </li>
         </ul>
     </div>

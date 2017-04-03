@@ -20,7 +20,6 @@ import 'rxjs/add/operator/map';
 export class MainComponent {
     jwtHelper: JwtHelper = new JwtHelper();
     user: Object = {};
-    // username = MainComponent.username;
     users: Array<User>;
     tokens: any = this.authService.getTokens();
     rights: String;
@@ -34,21 +33,11 @@ export class MainComponent {
         this.authService.logOut().subscribe();
     }
     ngOnInit() {
-        // console.log(this.tokens);
         this.usersService.getUsersFromServer().subscribe(
             data => {
                 this.usersService.putUsers(data);
                 this.users = this.usersService.getUsers();
-                // MainComponent.user=this.usersService.getUserById(this.jwtHelper.decodeToken(this.tokens.accessToken).id);
                 this.user=this.usersService.getUserById(this.jwtHelper.decodeToken(this.tokens.accessToken).id);
-                let id = JSON.parse(localStorage.getItem('UserID')?localStorage.getItem('UserID'):'');
-                // this.usersService.getRights(id, this.currentBoard.id).subscribe(
-                //     data => {
-                //         this.rights = data.rights;
-                //         // console.log('getRights');
-                //         // console.log(this.rights);
-                //     }
-                // );
             });
     }
 }

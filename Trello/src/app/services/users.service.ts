@@ -23,9 +23,9 @@ export class UsersService {
         return body;
     }
     private handleError(error: Response | any) {
-        // In a real world app, you might use a remote logging infrastructure
         let errMsg: string;
         if (error instanceof Response) {
+            console.log(error);
             const body = error.json() || '';
             const err = body.error || JSON.stringify(body);
             errMsg = `${error.status} - ${error.statusText || ''} ${err}`;
@@ -51,7 +51,9 @@ export class UsersService {
             UsersService.users[i] = new User(data[i]._id, data[i].username);
         }
         UsersService.user = this.getUserById(this.jwtHelper.decodeToken(this.tokens.accessToken).id);
+        // console.log(UsersService.user);
         localStorage.setItem('UserID', JSON.stringify(UsersService.user.id));
+        localStorage.setItem('Username', JSON.stringify(UsersService.user.username));
     }
     getUsers(): Array<User> {
         return UsersService.users;
@@ -60,18 +62,13 @@ export class UsersService {
         let result = UsersService.users.find(element=>element.id==id);
         return result;
     }
-    getUser(): User {
-        return UsersService.user;
-    }
-    // putUser(): void {
-    //     console.log('before');
-    //     console.log(UsersService.user);
-    //     console.log('id='+this.jwtHelper.decodeToken(this.tokens.accessToken).id);
-    //     UsersService.user = this.getUserById(this.jwtHelper.decodeToken(this.tokens.accessToken).id);
-    //     console.log('after');
-    //     console.log(UsersService.user);
-    //     localStorage.setItem('UserID', JSON.stringify(UsersService.user.id));
-    // }
+    getUser(): string {
+        if (UsersService.user) {
+            return UsersService.user.username;
+        } else {
+            return JSON.parse(localStorage.getItem('Username'));
+        }
+    }    
     setRights(userID, boardID, rights): Observable<any> {
         // console.log('boardID='+boardID);
         // console.log('rights='+rights);
@@ -84,8 +81,15 @@ export class UsersService {
     getRights(userID, boardID): Observable<any> {
         let headers = new Headers({ 'Content-Type': 'application/json' });
         let options = new RequestOptions({ headers: headers });
-        return this.http.post(`http://localhost:3000/users/rights/user`, { userID, boardID }, options)
+        return this.http.get(`http://localhost:3000/users/rights/?userID=${userID}&boardID=${boardID}`, options)
             .map(this.extractData)
             .catch(this.handleError);
     }
+    // getAllRights(userID): Observable<any> {
+    //     let headers = new Headers({ 'Content-Type': 'application/json' });
+    //     let options = new RequestOptions({ headers: headers });
+    //     return this.http.get(`http://localhost:3000/users/rights/${userID}`, options)
+    //         .map(this.extractData)
+    //         .catch(this.handleError);
+    // }
 }

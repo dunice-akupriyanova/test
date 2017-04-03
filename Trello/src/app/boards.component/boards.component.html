@@ -2,7 +2,9 @@
     <div class="title">Boards</div>
     <ul>
         <li *ngFor="let board of boards" class="list">
-            <a class="board_name" routerLink="/board/{{board.id}}" routerLinkActive="active">{{board.name}}</a>
+            <div class="board_name" (click)="chooseBoard(board.id)">
+                {{board.name}}
+            </div>
             <div class="delete" (click)="removeBoard(board)">
             </div>
         </li>

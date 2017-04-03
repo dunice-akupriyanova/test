@@ -12,7 +12,7 @@ input[name="newList"] {
     border-radius: 3px;
     border: 1px solid #AAAAAA;
 }
-textarea[name="current_board_name"] {
+textarea[name="current_board_name"], .current_board_name {
     padding-left: 8px;
     display: inline-block;
     font: 18px Arial,Helvetica,sans-serif;

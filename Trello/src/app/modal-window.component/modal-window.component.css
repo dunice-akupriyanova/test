@@ -1,4 +1,4 @@
-textarea[name="current_card_name"], textarea[name="current_card_description"] {
+textarea[name="current_card_name"], textarea[name="current_card_description"], .current_card_name, .current_card_description {
     padding-left: 8px;
     display: inline-block;
     font: 18px Arial,Helvetica,sans-serif;

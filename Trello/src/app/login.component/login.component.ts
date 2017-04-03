@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
+import { JwtHelper } from 'angular2-jwt';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/map';
 
@@ -15,22 +16,22 @@ import 'rxjs/add/operator/map';
     providers: [AuthService]
 })
 export class LoginComponent {
+    jwtHelper: JwtHelper = new JwtHelper();
     username: string;
     password: string;
     user: any;
-    constructor(private http: Http, private authService: AuthService, private router: Router) { }
+    constructor(private http: Http,
+                private authService: AuthService,
+                private router: Router
+               ) { }
     goToBoatds(): void {
         this.router.navigate(['/boards']);
     }
     onSubmit(): void {
         this.authService.postForm(this.username, this.password, 'http://localhost:3000/auth/token').subscribe(
             data => {
-                console.log('postForm');
-                console.log(data);
                 this.authService.setTokens(data);
                 this.authService.auth(data.accessToken).subscribe(data => {
-                    console.log('auth');
-                    console.log(data);
                     this.router.navigate(['/boards']);
                 });
             });

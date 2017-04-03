@@ -11,12 +11,14 @@ import { BoardService } from '../services/board.service';
 })
 export class ModalWindowComponent {
     currentCard: Card;
+    rights: string;
     constructor(
         private modalWindowService: ModalWindowService,
         private boardService: BoardService
         ) {
         modalWindowService.open.subscribe(data => {
-            this.currentCard = <Card>data;
+            this.currentCard = <Card>data.card;
+            this.rights = data.rights;
         });
     }
     hideDetails(card: Card): void {

@@ -15,6 +15,8 @@ export class CardComponent {
     card: Card;
     @Input()
     list: List;
+    @Input()
+    rights: string;
     constructor(
         private boardService: BoardService
     ) { }

@@ -10,6 +10,7 @@ import { BoardService } from '../services/board.service';
 import { AuthService } from '../services/auth.service';
 import { UsersService } from '../services/users.service';
 import { User } from '../models/classes/user';
+import { JwtHelper } from 'angular2-jwt';
 
 @Component({
     selector: 'current-board',
@@ -18,11 +19,13 @@ import { User } from '../models/classes/user';
     providers: [BackendService, BoardsService, BoardService, AuthService, UsersService]
 })
 export class CurrentBoardComponent {
+    jwtHelper: JwtHelper = new JwtHelper();
     currentBoard: Board;
     newName: string;
     tokens: any = this.authService.getTokens();    
+    // users: Array<User>=this.usersService.getUsers().splice(this.usersService.getUsers().findIndex((element) => element.username == this.user.username), 1);
     users: Array<User>=this.usersService.getUsers();
-    user: any=this.usersService.getUser();
+    user: any=this.usersService.getUser()?this.usersService.getUser():JSON.parse(localStorage.getItem('Username'));
     rights: String;
     constructor(
         private backendService: BackendService,
@@ -43,13 +46,15 @@ export class CurrentBoardComponent {
                         this.usersService.getRights(id, this.currentBoard.id).subscribe(
                             data => {
                                 this.rights = data.rights;
-                                // console.log('getRights');
-                                // console.log(this.rights);
+                                this.users=this.usersService.getUsers();
+                                let index=this.users.findIndex((element) => element.username == this.user);
+                                if (index!=-1) {
+                                    this.users.splice(index, 1);
+                                }
                             }
                         );
                     },
                     err => {
-                        // console.log(err);
                         this.authService.refreshTokens(this.tokens.refreshToken).subscribe(
                             data => {
                                 this.authService.setTokens(data);
@@ -61,6 +66,11 @@ export class CurrentBoardComponent {
                                         this.usersService.getRights(id, this.currentBoard.id).subscribe(
                                             data => {
                                                 this.rights = data.rights;
+                                                this.users=this.usersService.getUsers();
+                                                let index=this.users.findIndex((element) => element.username == this.user);
+                                                if (index!=-1) {
+                                                    this.users.splice(index, 1);
+                                                }
                                             }
                                         );
                                     });
@@ -68,9 +78,13 @@ export class CurrentBoardComponent {
                         );
                     });
             });
-
     }
     addList(): void {
+        if (this.rights=='none'||this.rights=='read') { 
+            this.newName = '';
+            alert('No access rights!');
+            return 
+        }
         if (!this.newName) { return; }
         this.currentBoard.lists.push(new List(this.newName, []));
         this.newName = '';
@@ -80,10 +94,7 @@ export class CurrentBoardComponent {
         console.log('ok');
         this.boardService.updateBoard().subscribe();
     }
-    setValue(event, user) {
-        console.log(event.target.value);
-        console.log(user.id);
-        console.log(this.currentBoard.id);
+    setRights(event, user) {
         this.usersService.setRights(user.id, this.currentBoard.id, event.target.value).subscribe(
                     d => {console.log(d);}
                 );

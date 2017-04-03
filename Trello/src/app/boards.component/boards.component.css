@@ -6,6 +6,7 @@
     font-weight: 700;
 }
 .board_name {
+    cursor: pointer;
     padding: 10px;
     display: inline-block;
     margin-right: 5px;
