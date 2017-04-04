@@ -16,7 +16,7 @@
     <div dnd-sortable-container [dropZones]="['drop-zone']" [sortableData]="list.cards">
         <ul *ngIf="(rights=='owner')||(rights=='write')" class="cards">
             <li (onDropSuccess)="updateBoard()"  class="card" *ngFor="let card of list.cards; let i = index" dnd-sortable [sortableIndex]="i" (click)="showDetails(card, rights)">
-                <card [card]="card" [list]="list"></card>              
+                <card [card]="card" [list]="list" [rights]="rights"></card>              
             </li>
             <li>
                 <form class="add_card">
@@ -29,7 +29,7 @@
             </li>
         </ul>
         <ul *ngIf="(rights=='none')||(rights=='read')" class="cards">
-            <li class="card" *ngFor="let card of list.cards" (click)="showDetails(card, rights)">
+            <li class="card" *ngFor="let card of list.cards" (click)="showDetails(card)">
                 <card [card]="card" [list]="list" [rights]="rights"></card>              
             </li>
         </ul>

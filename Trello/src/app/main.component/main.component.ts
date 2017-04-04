@@ -30,7 +30,9 @@ export class MainComponent {
         private authService: AuthService
     ) { }
     logOut(): void {
-        this.authService.logOut().subscribe();
+        this.authService.logOut().subscribe(_ => {
+            console.trace();
+        });
     }
     ngOnInit() {
         this.usersService.getUsersFromServer().subscribe(

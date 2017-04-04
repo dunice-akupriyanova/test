@@ -37,7 +37,8 @@ router.post('/rights', function(req, res, next) {
     } else Right.findOne({ userID: userID, boardID: boardID }, function(err, rights) {
         if(rights) {
             rights.remove();
-            res.send({rights: rights});
+            res.sendStatus(204);
+            // res.send({rights: rights});
         }
      } );
     res.status(201);
@@ -54,9 +55,9 @@ router.get('/rights', function (req, res, next) {
         res.status(201);
 });
 
-router.get('/rights/:userID', function (req, res, next) {
-    // console.log('id='+req.params.userID);    
-    Right.find({ userID: req.params.userID }, function(err, rights) {
+router.get('/rights/:boardID', function (req, res, next) {
+    // console.log('id='+req.params.boardID);    
+    Right.find({ boardID: req.params.boardID }, function(err, rights) {
         if(rights) {
             res.send(rights);
         } else res.send(new Array);

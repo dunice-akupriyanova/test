@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Http, Response } from '@angular/http';
 import { Headers, RequestOptions } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
-import { JwtHelper } from 'angular2-jwt';
+// import { JwtHelper } from 'angular2-jwt';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/map';
 
@@ -11,9 +11,9 @@ import 'rxjs/add/operator/map';
 
 @Injectable()
 export class AuthService {
-  jwtHelper: JwtHelper = new JwtHelper();
+  // jwtHelper: JwtHelper = new JwtHelper();
   // helper = this.jwtHelper.createJWTHelper();
-  static tokens=JSON.parse(localStorage.getItem('tokens')?localStorage.getItem('tokens'):'{}');
+  static tokens = JSON.parse(localStorage.getItem('tokens') ? localStorage.getItem('tokens') : '{}');
   private extractData(res: Response) {
     let body = res.json();
     return body;
@@ -45,13 +45,13 @@ export class AuthService {
     return AuthService.tokens;
   }
   refreshTokens(refreshToken): Observable<any> {
-      let headers = new Headers({ 'Authorization': `${refreshToken}` });
-      let options = new RequestOptions({ headers: headers });
-      return this.http.get('http://localhost:3000/auth/refresh-token', options)
-        .map(this.extractData)
-        .catch(this.handleError);
+    let headers = new Headers({ 'Authorization': `${refreshToken}` });
+    let options = new RequestOptions({ headers: headers });
+    return this.http.get('http://localhost:3000/auth/refresh-token', options)
+      .map(this.extractData)
+      .catch(this.handleError);
   }
-  logOut(): Observable<any> {
+  logOut(): any {
     console.log('logOut');
     this.setTokens('');
     return this.http.get('http://localhost:3000/auth/logout')

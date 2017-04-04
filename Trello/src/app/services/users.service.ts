@@ -56,6 +56,8 @@ export class UsersService {
         localStorage.setItem('Username', JSON.stringify(UsersService.user.username));
     }
     getUsers(): Array<User> {
+        // console.log('getUsers');
+        //     console.log(UsersService.users);
         return UsersService.users;
     }
     getUserById(id): User {
@@ -85,11 +87,11 @@ export class UsersService {
             .map(this.extractData)
             .catch(this.handleError);
     }
-    // getAllRights(userID): Observable<any> {
-    //     let headers = new Headers({ 'Content-Type': 'application/json' });
-    //     let options = new RequestOptions({ headers: headers });
-    //     return this.http.get(`http://localhost:3000/users/rights/${userID}`, options)
-    //         .map(this.extractData)
-    //         .catch(this.handleError);
-    // }
+    getAllRights(boardrID): Observable<any> {
+        let headers = new Headers({ 'Content-Type': 'application/json' });
+        let options = new RequestOptions({ headers: headers });
+        return this.http.get(`http://localhost:3000/users/rights/${boardrID}`, options)
+            .map(this.extractData)
+            .catch(this.handleError);
+    }
 }

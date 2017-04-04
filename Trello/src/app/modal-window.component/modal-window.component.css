@@ -1,4 +1,4 @@
-textarea[name="current_card_name"], textarea[name="current_card_description"], .current_card_name, .current_card_description {
+textarea[name="current_card_name"], textarea[name="current_card_description"], .current_card_name, .current_card_description, textarea[name="new_comment"], textarea[name="comment_content"] {
     padding-left: 8px;
     display: inline-block;
     font: 18px Arial,Helvetica,sans-serif;
@@ -11,27 +11,41 @@ textarea[name="current_card_name"] {
 	display: block;
     overflow: hidden;
 }
-textarea[name="current_card_description"] {
+textarea[name="comment_content"] {
+    padding: 10px;
+    margin: 10px 0;
+    background-color: white;
+}
+textarea[name="current_card_description"], textarea[name="new_comment"] {
 	width: 430px;
+}
+textarea {
+    color: #4D4D4D;
 }
 textarea[name="current_card_name"]:focus, textarea[name="current_card_description"]:focus{
     background-color: white;
     overflow: auto;
+    color: #4D4D4D;
+}
+textarea[name="new_comment"] {
+    background-color: white;
 }
 .window_overlay {
     background-color: rgba(0,0,0,.6);
     top: 0;
     z-index: 20;
-    position: fixed;
-    height: 100%;
+    position: absolute;
+    top: -40px;
     width: 100%;
+    min-height: 100%;
 }
 .window {
+    color: #4D4D4D;
     position: relative;
     padding: 10px;
     border-radius: 3px;
     margin: 3pc auto 5pc;
-    background-color: white;
+    background-color: #EDEFF0;
     width: 730px;
     min-height: 40px;
 }
@@ -53,4 +67,38 @@ textarea[name="current_card_name"]:focus, textarea[name="current_card_descriptio
     margin-top: 3px;
     margin-right: 3px;
     border-radius: 2px;
+}
+.add_button{
+    display: block;
+    background-color: #61BD4F;
+    color: white;
+    padding: 5px;
+    font-weight: 700;
+    border: 0;
+    padding: 7px 20px;
+    border-radius: 2px;
+}
+.comments {
+    margin-top: 0px;
+    padding-left: 10px;
+}
+.comments li {
+    display: block;
+    margin-top: 20px;
+}
+.author {
+    font-weight: 700;
+}
+.content {
+    font: 18px Arial,Helvetica,sans-serif;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    border-radius: 2px;
+    display: inline-block;
+    background-color: white;
+    padding: 10px;
+}
+.comment_date {
+    color: #8D8D8D;
+    font: 12px Arial,Helvetica,sans-serif;
 }

@@ -24,8 +24,9 @@ export class CurrentBoardComponent {
     newName: string;
     tokens: any = this.authService.getTokens();    
     users: Array<User>=this.usersService.getUsers();
-    user: any=this.usersService.getUser()?this.usersService.getUser():JSON.parse(localStorage.getItem('Username'));
+    user: string=this.usersService.getUser()?this.usersService.getUser():JSON.parse(localStorage.getItem('Username'));
     rights: String;
+    allRights: Array<Object>;
     constructor(
         private backendService: BackendService,
         private boardsService: BoardsService,
@@ -39,19 +40,7 @@ export class CurrentBoardComponent {
             .subscribe((params) => {
                 this.boardService.getBoardFromServer(params['id']).subscribe(
                     data => {
-                        this.currentBoard = this.boardService.getBoard(data);
-                        this.boardService.setCurrentBoard(this.currentBoard);
-                        let id = JSON.parse(localStorage.getItem('UserID')?localStorage.getItem('UserID'):'');
-                        this.usersService.getRights(id, this.currentBoard.id).subscribe(
-                            data => {
-                                this.rights = data.rights;
-                                this.users=this.usersService.getUsers();
-                                let index=this.users.findIndex((element) => element.username == this.user);
-                                if (index!=-1) {
-                                    this.users.splice(index, 1);
-                                }
-                            }
-                        );
+                        this.initialization(data);
                     },
                     err => {
                         this.authService.refreshTokens(this.tokens.refreshToken).subscribe(
@@ -59,24 +48,30 @@ export class CurrentBoardComponent {
                                 this.authService.setTokens(data);
                                 this.boardService.getBoardFromServer(params['id']).subscribe(
                                     data => {
-                                        this.currentBoard = this.boardService.getBoard(data);
-                                        this.boardService.setCurrentBoard(this.currentBoard);
-                                        let id = JSON.parse(localStorage.getItem('UserID')?localStorage.getItem('UserID'):'');
-                                        this.usersService.getRights(id, this.currentBoard.id).subscribe(
-                                            data => {
-                                                this.rights = data.rights;
-                                                this.users=this.usersService.getUsers();
-                                                let index=this.users.findIndex((element) => element.username == this.user);
-                                                if (index!=-1) {
-                                                    this.users.splice(index, 1);
-                                                }
-                                            }
-                                        );
+                                        this.initialization(data);
                                     });
                             }
                         );
                     });
             });
+    }
+    initialization(data): void {
+        this.currentBoard = this.boardService.getBoard(data);
+        this.boardService.setCurrentBoard(this.currentBoard);
+        let id = JSON.parse(localStorage.getItem('UserID')?localStorage.getItem('UserID'):'');
+        this.usersService.getRights(id, this.currentBoard.id).subscribe(
+            data => {
+                this.rights = data.rights;
+                this.users=this.usersService.getUsers();
+                let index=this.users.findIndex((element) => element.username == this.user);
+                if (index!=-1) {
+                    this.users.splice(index, 1);
+                }
+            }
+        );
+        this.usersService.getAllRights(this.currentBoard.id).subscribe(data => {
+            console.log(data);
+        });
     }
     addList(): void {
         if (this.rights=='none'||this.rights=='read') { 

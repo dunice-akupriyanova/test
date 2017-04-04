@@ -1,13 +1,12 @@
 var mongoose = require('mongoose');
-var Comment = require('./comment');
 
-var CardSchema = new mongoose.Schema({
-    name: {
+var CommentSchema = new mongoose.Schema({
+    content: {
         type: String,
         unique: false,
-        required: true
+        required: false
     },
-    description: {
+    author: {
         type: String,
         required: false,
         unique: false,
@@ -16,12 +15,7 @@ var CardSchema = new mongoose.Schema({
         type: String,
         required: false,
         unique: false,
-    },
-    comments: {
-        type: [Comment],
-        required: false,
-        unique: false,
     }
 });
 
-module.exports = CardSchema;
+module.exports = CommentSchema;

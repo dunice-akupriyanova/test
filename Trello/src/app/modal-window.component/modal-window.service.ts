@@ -8,6 +8,6 @@ export class ModalWindowService {
     open = new Subject<any>();
     openModal(card, rights){
         console.log('openModal rights='+rights);
-        this.open.next({card: card, rights: rights});
+        this.open.next({card: card, rights: rights });
     }
 }
