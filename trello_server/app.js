@@ -22,7 +22,7 @@ db.once('open', function() {
 var index = require('./routes/index');
 var users = require('./routes/users');
 var auth = require('./auth/auth');
-var boards = require('./routes/boards/boards');
+var boards = require('./routes/boards');
 
 var app = express();
 // app.use(bodyParser());

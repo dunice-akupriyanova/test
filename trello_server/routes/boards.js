@@ -1,8 +1,8 @@
 var express = require('express');
 var router = express.Router();
-var Board = require('../../models/board');
-var auth = require("../../auth/auth-strategy")();
-var Right = require('../../models/right');
+var Board = require('../models/board');
+var auth = require("../auth/auth-strategy")();
+var Right = require('../models/right');
 var passport = require('passport');
 
 router.use(passport.initialize());
@@ -31,10 +31,10 @@ router.delete('/:id', auth.authenticate(), function (req, res, next) {
     Board.findOne({ _id: req.params.id }, function(err, board) {
         if(board) {
             board.remove();
-            Right.find({boardID: req.params.id}, function(err, boards) {
+            Right.find({boardID: req.params.id}, function(err, rights) {
                 if (err) throw err;
-                for (let i=0; i<boards.length; i++) {
-                    boards[i].remove();
+                for (let i=0; i<rights.length; i++) {
+                    rights[i].remove();
                 }
             });
         }

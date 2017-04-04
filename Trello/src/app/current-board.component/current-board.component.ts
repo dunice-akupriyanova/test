@@ -23,7 +23,6 @@ export class CurrentBoardComponent {
     currentBoard: Board;
     newName: string;
     tokens: any = this.authService.getTokens();    
-    // users: Array<User>=this.usersService.getUsers().splice(this.usersService.getUsers().findIndex((element) => element.username == this.user.username), 1);
     users: Array<User>=this.usersService.getUsers();
     user: any=this.usersService.getUser()?this.usersService.getUser():JSON.parse(localStorage.getItem('Username'));
     rights: String;
