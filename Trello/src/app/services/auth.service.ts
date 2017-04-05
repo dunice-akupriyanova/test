@@ -20,6 +20,7 @@ export class AuthService {
   }
   private handleError(error: Response | any) {
     let errMsg: string;
+    console.log(error);
     if (error instanceof Response) {
       const body = error.json() || '';
       const err = body.error || JSON.stringify(body);

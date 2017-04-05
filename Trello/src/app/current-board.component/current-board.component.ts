@@ -86,7 +86,10 @@ export class CurrentBoardComponent {
     }
     updateBoard(): void {
         console.log('ok');
-        this.boardService.updateBoard().subscribe();
+        this.boardService.updateBoard().subscribe(data=> {
+            console.log(data);
+        });
+        console.log('ok2');
     }
     setRights(event, user) {
         this.usersService.setRights(user.id, this.currentBoard.id, event.target.value).subscribe(

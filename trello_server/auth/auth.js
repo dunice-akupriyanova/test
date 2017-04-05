@@ -81,7 +81,7 @@ router.get("/user", auth.authenticate(), function(req, res) {
 router.get('/logout', function(req, res) {
   console.log('ok logout auth');
   req.logout();
-  res.send(201);
+  res.send('{}');
 });
 
 router.post('/signup', function (req, res, next) {

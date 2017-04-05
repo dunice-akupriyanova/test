@@ -102,3 +102,18 @@ textarea[name="new_comment"] {
     color: #8D8D8D;
     font: 12px Arial,Helvetica,sans-serif;
 }
+.search {
+    margin: 0;
+    padding: 0;
+    background-color: white;
+    width: 440px;
+    margin-bottom: 20px;
+}
+.search li {
+    padding-left: 20px;
+    cursor: pointer;
+    display: block;
+}
+.search li:hover {
+    background-color: #CDD2D4;
+}

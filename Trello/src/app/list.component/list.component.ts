@@ -27,24 +27,24 @@ export class ListComponent {
     ) { }
     removeList(list): void {
         this.currentBoard.lists.splice(this.currentBoard.lists.findIndex((element) => element == list), 1);
-        this.boardService.updateBoard().subscribe( _=> {
-            console.trace();
+        console.log('ok');
+        this.boardService.updateBoard().subscribe(data=>{
+            console.log('OK!');
         });
+        console.log('ok2');
     }
     addCard(): void {
         if (!this.newCardName) { return; }
         this.list.cards.push(new Card(this.newCardName, '', (new Date()).toLocaleString(), []));
         this.newCardName = '';
-        this.boardService.updateBoard().subscribe( _=> {
-            console.trace();
-        });
+        this.boardService.updateBoard().subscribe();
     }
     showDetails(card): void {
-        this.modalWindowService.openModal(card, this.rights);
+        this.modalWindowService.openModal(card, this.rights, this.currentBoard);
     }
     updateBoard(): void {
-        this.boardService.updateBoard().subscribe( _=> {
-            console.trace();
-        });
+        console.log('ok');
+        this.boardService.updateBoard().subscribe();
+        console.log('ok2');
     }
 }

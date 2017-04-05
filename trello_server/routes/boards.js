@@ -62,7 +62,7 @@ router.put('/:id', auth.authenticate(), function (req, res, next) {
         board.save(function(err) {
             if (err) throw err;
         });
-        res.send(201);
+        res.send(board);
     }); 
 });
 

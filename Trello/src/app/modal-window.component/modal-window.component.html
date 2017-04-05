@@ -49,7 +49,12 @@
 			</li>
 		</ul>
 		<form>
-			<textarea name="new_comment" [(ngModel)]="newComment" placeholder="Write a comment..."></textarea>
+			<textarea name="new_comment" [(ngModel)]="newComment" placeholder="Write a comment..." #comment id="new_comment" (keyup)="check(comment.value)"></textarea>
+			<ul *ngIf="searchResult.length" class="search">
+				<li *ngFor="let name of searchResult" (click)="choose(name)">
+					{{name}}
+				</li>
+			</ul>
 			<input (click)="addComment()" type="submit" name="add" value="Send" class="add_button">
 		</form>
 		<div class="delete window_close" (click)="hideDetails(currentCard)">

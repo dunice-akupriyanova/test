@@ -94,4 +94,19 @@ export class UsersService {
             .map(this.extractData)
             .catch(this.handleError);
     }
+    setNotification(username, card, board): Observable<any> {
+        let headers = new Headers({ 'Content-Type': 'application/json' });
+        let options = new RequestOptions({ headers: headers });
+        let boardID = board.id;
+        return this.http.post(`http://localhost:3000/users/notification`, {username, card, boardID}, options)
+            .map(this.extractData)
+            .catch(this.handleError);
+    }
+    getNotification(username): Observable<any> {
+        let headers = new Headers({ 'Content-Type': 'application/json' });
+        let options = new RequestOptions({ headers: headers });
+        return this.http.get(`http://localhost:3000/users/notification/?username=${username}`, options)
+            .map(this.extractData)
+            .catch(this.handleError);
+    }
 }

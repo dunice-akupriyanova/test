@@ -12,6 +12,19 @@
     <div *ngIf="user" class="user_name">
       {{user.username}}
     </div>
+    <div *ngIf="notifications.length" class="notifications">
+      <img src="../../assets/images/alarm3.png" class='notifications_icon'>
+      <ul>
+        <li *ngFor="let notification of notifications">
+          {{notification.boardID}}
+          <ul *ngIf="notification.cards">
+            <li *ngFor="let card of notification.cards">
+              {{card.name}}
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </div>
     <div class="login_button">
         <a (click)="logOut()" routerLink="/logged-out" routerLinkActive="active">
             Log out
