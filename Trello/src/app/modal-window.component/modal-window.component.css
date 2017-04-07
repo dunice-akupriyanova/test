@@ -35,7 +35,6 @@ textarea[name="new_comment"] {
     top: 0;
     z-index: 20;
     position: absolute;
-    top: -40px;
     width: 100%;
     min-height: 100%;
 }

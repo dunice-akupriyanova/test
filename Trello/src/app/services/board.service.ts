@@ -5,6 +5,7 @@ import { Observable } from 'rxjs/Observable';
 import { Board } from '../models/classes/board';
 import { AuthService } from './auth.service';
 import { BoardsService } from './boards.service';
+import { Card } from '../models/classes/card';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/map';
 
@@ -23,7 +24,6 @@ export class BoardService {
         return body;
     }
     private handleError(error: Response | any) {
-        // In a real world app, you might use a remote logging infrastructure
         let errMsg: string;
         if (error instanceof Response) {
             const body = error.json() || '';
@@ -67,5 +67,18 @@ export class BoardService {
     }
     setCurrentBoard(board): void {
         BoardService.currentBoard = board;
+    }
+    getCurrentBoard(): Board {
+        return BoardService.currentBoard;
+    }
+    getCardById(id): Card {
+        // console.log('BoardService.currentBoard getCardById', BoardService.currentBoard);
+        for (let j=0; j<BoardService.currentBoard.lists.length; j++) {
+            if (BoardService.currentBoard.lists[j].cards.find(element=>element.id==id)) {
+                let result = BoardService.currentBoard.lists[j].cards.find(element=>element.id==id);
+                console.log('return', result.name);
+                return result;
+            }
+        }
     }
 }

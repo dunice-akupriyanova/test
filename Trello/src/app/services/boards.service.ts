@@ -3,6 +3,7 @@ import { Http, Response } from '@angular/http';
 import { Headers, RequestOptions } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 import { Board } from '../models/classes/board';
+import { Card } from '../models/classes/card';
 import { AuthService } from './auth.service';
 import { JwtHelper } from 'angular2-jwt';
 import 'rxjs/add/operator/catch';
@@ -18,9 +19,7 @@ export class BoardsService {
     let body = res.json();
     return body;
   }
-  currentBoard: Board;
   private handleError(error: Response | any) {
-    // In a real world app, you might use a remote logging infrastructure
     let errMsg: string;
     if (error instanceof Response) {
       const body = error.json() || '';
@@ -56,19 +55,21 @@ export class BoardsService {
   addBoard(name): Observable<any> {
     let headers = new Headers({ 'Authorization': `JWT ${this.tokens.accessToken}` });
     let options = new RequestOptions({ headers: headers });
-
     return this.http.post('http://localhost:3000/boards', { name }, options)
       .map(this.extractData)
       .catch(this.handleError);
   }
-  setCurrentBoard(board: Board): void {
-    this.currentBoard=board;
-    console.log('setCurrentBoard');
-    console.log(this.currentBoard);
+  getBoardById(id): Board {
+      let result = BoardsService.boards.find(element=>element.id==id);
+      return result;
   }
-  getCurrentBoard(): Board {
-    console.log('getCurrentBoard');
-    console.log(this.currentBoard);
-    return this.currentBoard;
+  getCardById(id): Card {
+    for (let i=0; i<BoardsService.boards.length; i++) {
+      for (let j=0; j<BoardsService.boards[i].lists.length; j++) {
+          if (BoardsService.boards[i].lists[j].cards.find(element=>element.id==id)) {
+              return BoardsService.boards[i].lists[j].cards.find(element=>element.id==id);
+          }
+      }
+    }
   }
 }

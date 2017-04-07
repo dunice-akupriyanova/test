@@ -38,26 +38,30 @@ export class CurrentBoardComponent {
     ngOnInit() {
         this.route.params
             .subscribe((params) => {
-                this.boardService.getBoardFromServer(params['id']).subscribe(
-                    data => {
-                        this.initialization(data);
-                    },
-                    err => {
-                        this.authService.refreshTokens(this.tokens.refreshToken).subscribe(
-                            data => {
-                                this.authService.setTokens(data);
-                                this.boardService.getBoardFromServer(params['id']).subscribe(
-                                    data => {
-                                        this.initialization(data);
-                                    });
-                            }
-                        );
-                    });
+                    this.boardsService.getBoardsFromServer().subscribe(
+                        data => {
+                            this.boardsService.putBoards(data);
+                            this.initialization(params['id']);
+                        },
+                        err => {
+                            this.authService.refreshTokens(this.tokens.refreshToken).subscribe(
+                                data => {
+                                    this.authService.setTokens(data);
+                                    this.boardsService.getBoardsFromServer().subscribe(
+                                        data => {
+                                            this.boardsService.putBoards(data);
+                                            this.initialization(params['id']);
+                                        });
+                                }
+                            );
+                });
             });
     }
-    initialization(data): void {
-        this.currentBoard = this.boardService.getBoard(data);
-        this.boardService.setCurrentBoard(this.currentBoard);
+    initialization(boardID): void {
+        if (!BoardService.currentBoard) {
+            BoardService.currentBoard = this.boardsService.getBoardById(boardID);
+        }
+        this.currentBoard = BoardService.currentBoard;
         let id = JSON.parse(localStorage.getItem('UserID')?localStorage.getItem('UserID'):'');
         this.usersService.getRights(id, this.currentBoard.id).subscribe(
             data => {
@@ -70,7 +74,7 @@ export class CurrentBoardComponent {
             }
         );
         this.usersService.getAllRights(this.currentBoard.id).subscribe(data => {
-            console.log(data);
+            // console.log(data);
         });
     }
     addList(): void {

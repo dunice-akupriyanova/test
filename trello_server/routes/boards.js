@@ -60,6 +60,7 @@ router.put('/:id', auth.authenticate(), function (req, res, next) {
         board.name=req.body.name;
         board.lists=req.body.lists;
         board.save(function(err) {
+            if (err) console.log(err);
             if (err) throw err;
         });
         res.send(board);

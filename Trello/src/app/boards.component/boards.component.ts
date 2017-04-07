@@ -47,7 +47,7 @@ export class BoardsComponent {
     removeBoard(board): void {
         this.usersService.getRights(UsersService.user.id, board.id).subscribe(
             rights => {
-                console.log('got rights='+rights.rights);
+                // console.log('got rights='+rights.rights);
                 if (rights.rights!='owner') {
                    alert('No access rights!');
                    return;
@@ -79,8 +79,9 @@ export class BoardsComponent {
     chooseBoard(id): void {
         this.usersService.getRights(UsersService.user.id, id).subscribe(
             rights => {
-                console.log('got rights='+rights.rights);
+                // console.log('got rights='+rights.rights);
                 if (rights.rights!='none') {
+                   BoardService.currentBoard = this.boardsService.getBoardById(id);
                    this.router.navigate([`/board/${id}`]);
                 } else { alert('No access rights!'); }
             }

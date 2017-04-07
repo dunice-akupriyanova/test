@@ -75,14 +75,14 @@ router.post('/notification', function (req, res, next) {
             if (err) throw err;
             if (notification) {
                 for (let i=0; i<notification.cards.length; i++ ) {
-                    if (card._id==notification.cards[i]._id) {
-                        // console.log('found');
+                    if (card.id==notification.cards[i].id) {
+                        console.log('found');
                         res.send(notification);
                         return;
                     }
                 }
-                // console.log('push');
-                // console.log(notification.cards);
+                console.log('push');
+                console.log(notification.cards);
                 notification.cards.push(card);
                 notification.save(function(err) {
                     if (err) throw err;

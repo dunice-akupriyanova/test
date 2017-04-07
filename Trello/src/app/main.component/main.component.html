@@ -14,11 +14,11 @@
     </div>
     <div *ngIf="notifications.length" class="notifications">
       <img src="../../assets/images/alarm3.png" class='notifications_icon'>
-      <ul>
-        <li *ngFor="let notification of notifications">
-          {{notification.boardID}}
+      <ul class="notification_list">
+        <li *ngFor="let notification of notifications; let n = index">
+          {{notificationBoards[n]}}
           <ul *ngIf="notification.cards">
-            <li *ngFor="let card of notification.cards">
+            <li *ngFor="let card of notification.cards" class="notification_card" (click)="redirect(notification.boardID, card)">
               {{card.name}}
             </li>
           </ul>
@@ -32,5 +32,6 @@
     </div>
   </div>
 </div>
+<modal-window></modal-window>
 <router-outlet></router-outlet>
 <div class="content"></div>

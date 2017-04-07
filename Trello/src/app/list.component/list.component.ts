@@ -27,15 +27,15 @@ export class ListComponent {
     ) { }
     removeList(list): void {
         this.currentBoard.lists.splice(this.currentBoard.lists.findIndex((element) => element == list), 1);
-        console.log('ok');
+        // console.log('ok');
         this.boardService.updateBoard().subscribe(data=>{
-            console.log('OK!');
+            // console.log('OK!');
         });
-        console.log('ok2');
+        // console.log('ok2');
     }
     addCard(): void {
         if (!this.newCardName) { return; }
-        this.list.cards.push(new Card(this.newCardName, '', (new Date()).toLocaleString(), []));
+        this.list.cards.push(new Card(+(new Date()), this.newCardName, '', (new Date()).toLocaleString(), []));
         this.newCardName = '';
         this.boardService.updateBoard().subscribe();
     }
@@ -43,8 +43,8 @@ export class ListComponent {
         this.modalWindowService.openModal(card, this.rights, this.currentBoard);
     }
     updateBoard(): void {
-        console.log('ok');
+        // console.log('ok');
         this.boardService.updateBoard().subscribe();
-        console.log('ok2');
+        // console.log('ok2');
     }
 }

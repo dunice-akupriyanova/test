@@ -86,3 +86,22 @@
     width: 20px;
     padding: 5px;
 }
+.notification_list {
+    display: none;
+    min-width: 200px;
+    position: absolute;
+    right: 120px;
+    top: 15px;
+    padding: 10px;
+    border-radius: 3px;
+    background-color: #E2E4E6;
+}
+.notifications:hover .notification_list {
+    display: block;
+}
+.notifications li {
+    display: block;
+}
+.notification_card:hover {
+    background-color: #CCD1D3;
+}
