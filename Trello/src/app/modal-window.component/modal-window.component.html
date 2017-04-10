@@ -8,6 +8,26 @@
 			{{currentCard.name}}
 		</div>
 		<div class="window_text">
+				Members:
+		</div>
+		<div class="add_member">
+			+
+			<ul class="new_members">
+				<li *ngFor="let nextuser of users" class="new_member">
+				<div class="username">
+					{{nextuser.username}}
+				</div>
+				<input *ngIf="currentCard.members.indexOf(nextuser.username)==-1" type="checkbox" name="added" (click)="change(nextuser, $event)">
+				<input *ngIf="currentCard.members.indexOf(nextuser.username)!=-1" type="checkbox" name="added" (click)="change(nextuser, $event)" checked>
+				</li>
+			</ul>
+		</div>
+		<ul class="members">
+			<li *ngFor="let member of currentCard.members">
+				{{member}}
+			</li>
+		</ul>
+		<div class="window_text">
 				Description:
 		</div>
 		<textarea *ngIf="(rights=='owner')||(rights=='write')" (focusout)="changeCard()" rows=4 name="current_card_description" [(ngModel)]="currentCard.description" placeholder="Card desctiption"></textarea>
@@ -21,7 +41,8 @@
 				Comments:
 		</div>
 		<ul class="comments">
-			<li *ngFor="let comment of currentCard.comments">
+			<li *ngFor="let comment of currentCard.comments; let k = index">
+				<!--<comment  [comment]="comment" [user]="user"></comment>-->
 				<div class="author">
 					{{comment.author}}
 				</div>
@@ -31,7 +52,14 @@
 				<div *ngIf="!comment.isEditing" class="content">
 					{{comment.content}}
 				</div>
-				<textarea *ngIf="comment.isEditing" name="comment_content" [(ngModel)]="comment.content" #editingComment (keyup)="check(editingComment.value, comment, $eventt)"  id={{comment.date}}></textarea>
+				<textarea *ngIf="comment.isEditing" name="comment_content" [(ngModel)]="comment.content" #editingComment (keyup)="check(editingComment.value, $event)"></textarea>
+				<div *ngIf="comment.isEditing">
+					<ul *ngIf="searchResult.length" class="search">
+						<li *ngFor="let name of searchResult" (click)="choose(name, k)">
+							{{name}}
+						</li>
+					</ul>
+				</div>
 				<div class="buttons">
 					<button *ngIf="(comment.author==user)&&(!comment.isEditing)" (click)="editComment(comment)">
 						Edit
@@ -49,12 +77,14 @@
 			</li>
 		</ul>
 		<form>
-			<textarea name="new_comment" [(ngModel)]="newComment.comment" placeholder="Write a comment..." #comment id="new_comment" (keyup)="check(comment.value, $event)"></textarea>
-			<ul *ngIf="searchResult.length" class="search" id="search">
-				<li *ngFor="let name of searchResult" (click)="choose(name, target, newComment)">
-					{{name}}
-				</li>
-			</ul>
+			<textarea name="new_comment" [(ngModel)]="newComment.comment" placeholder="Write a comment..." #comment id="new_comment" (keyup)="check(comment.value, $event); newCommentIsEditing=true"></textarea>
+			<div *ngIf="newCommentIsEditing">
+					<ul *ngIf="searchResult.length" class="search">
+						<li *ngFor="let name of searchResult" (click)="choose(name, k)">
+							{{name}}
+						</li>
+					</ul>
+				</div>
 			<input (click)="addComment()" type="submit" name="add" value="Send" class="add_button">
 		</form>
 		<div class="delete window_close" (click)="hideDetails(currentCard)">

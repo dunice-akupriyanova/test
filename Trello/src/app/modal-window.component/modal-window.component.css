@@ -16,7 +16,7 @@ textarea[name="comment_content"] {
     margin: 10px 0;
     background-color: white;
 }
-textarea[name="current_card_description"], textarea[name="new_comment"] {
+textarea[name="current_card_description"], textarea[name="new_comment"], textarea[name="comment_content"]  {
 	width: 430px;
 }
 textarea {
@@ -102,6 +102,7 @@ textarea[name="new_comment"] {
     font: 12px Arial,Helvetica,sans-serif;
 }
 .search {
+    position: absolute;
     margin: 0;
     padding: 0;
     background-color: white;
@@ -109,10 +110,66 @@ textarea[name="new_comment"] {
     margin-bottom: 20px;
 }
 .search li {
+    margin-top: 5px;
     padding-left: 20px;
     cursor: pointer;
     display: block;
 }
 .search li:hover {
     background-color: #CDD2D4;
+}
+.add_member {
+    margin-left: 10px;
+    margin-top: 10px;
+    padding: 10px;
+    color: #4D4D4D;
+    font-weight: 800; 
+    text-align: center;
+    line-height: 20px;
+    box-sizing: border-box;
+    cursor: pointer;
+    display: inline-block;
+    width: 40px;
+    height: 40px;
+    border-radius: 2px;
+    background-color: #D6DADC;
+}
+.add_member:hover {
+    background-color: #c0c5c7;
+}
+.members {
+    padding-left: 10px;
+    display: inline-block;
+}
+.members li {
+    margin: 0 5px;
+    display: inline-block;
+}
+.new_members {
+    display: none;
+    margin-top: 10px;
+    /*margin-left: -10px;*/
+    padding: 0;
+    position: absolute;
+    border-radius: 2px;
+}
+.username {
+    display: inline-block;
+}
+.new_member {
+    display: block;
+    width: 100px;
+    padding: 5px;
+    font-size: 15px;
+    background-color: #E2E4E6;
+}
+.new_member:hover {
+    background-color: #CCD1D3;
+}
+.add_member:hover .new_members {
+    display: block;
+}
+input[name="added"] {
+    display: inline-block;
+    float: right;
 }

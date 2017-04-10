@@ -13,15 +13,20 @@
           <div class="username">
             {{nextuser.username}}
           </div>
-          <button name="read" class="rigths" value="read" (click)="setRights($event, nextuser)">
-            Read
-          </button>
-          <button name="write" class="rigths" value="write" (click)="setRights($event, nextuser)">
-            Write
-          </button>
-          <button name="write" class="rigths" value="none" (click)="setRights($event, nextuser)">
-            None
-          </button>
+          <div *ngIf="nextuser.username!=user">
+            <button name="read" class="rigths" value="read" (click)="setRights($event, nextuser)">
+              Read
+            </button>
+            <button name="write" class="rigths" value="write" (click)="setRights($event, nextuser)">
+              Write
+            </button>
+            <button name="none" class="rigths" value="none" (click)="setRights($event, nextuser)">
+              None
+            </button>
+          </div>
+          <div *ngIf="nextuser.username==user" class="owner">
+            You are the owner of this board
+          </div>
         </li>
       </ul>
     </div>

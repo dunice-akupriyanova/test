@@ -111,6 +111,10 @@ a {
     border-radius: 2px;
     background-color: #4F96BF;
 }
+.owner {
+    line-height: 20px;
+    font-size: 14px;
+}
 .users {
     display: none;
     position: absolute;

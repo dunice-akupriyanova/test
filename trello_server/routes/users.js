@@ -108,4 +108,31 @@ router.get('/notification', function (req, res, next){
     });
 });
 
+router.delete('/notification', function (req, res, next){
+    let cardID = req.query.cardID;
+    let boardID = req.query.boardID;
+    Notification.findOne({ boardID: boardID }, function(err, notification) {
+        if(notification) {
+           for (let i=0; i<notification.cards.length; i++) {
+                if (notification.cards[i].id==cardID) {
+                    res.send(notification.cards[i]);
+                    console.log('before');
+                    console.log(notification.cards);
+                    notification.cards[i].remove();
+                    console.log('after');
+                    console.log(notification.cards);
+                    if (!notification.cards.length) {
+                        notification.remove();
+                    } else {
+                        notification.save(function(err) {
+                            if (err) throw err;
+                        });
+                    }
+                    return;
+                }
+           }
+        }
+    })
+});
+
 module.exports = router;

@@ -1,0 +1,16 @@
+.author {
+    font-weight: 700;
+}
+.content {
+    font: 18px Arial,Helvetica,sans-serif;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    border-radius: 2px;
+    display: inline-block;
+    background-color: white;
+    padding: 10px;
+}
+.comment_date {
+    color: #8D8D8D;
+    font: 12px Arial,Helvetica,sans-serif;
+}

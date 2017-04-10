@@ -35,7 +35,7 @@ export class ListComponent {
     }
     addCard(): void {
         if (!this.newCardName) { return; }
-        this.list.cards.push(new Card(+(new Date()), this.newCardName, '', (new Date()).toLocaleString(), []));
+        this.list.cards.push(new Card(+(new Date()), this.newCardName, '', (new Date()).toLocaleString(), [], []));
         this.newCardName = '';
         this.boardService.updateBoard().subscribe();
     }

@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { BackendService } from '../services/backend.service';
-import { Http, Response } from '@angular/http';
 import { AuthService } from '../services/auth.service';
 import { UsersService } from '../services/users.service';
 import { BoardsService } from '../services/boards.service';
@@ -32,10 +31,8 @@ export class MainComponent {
     oldBoardID: string;
     notifications: Array<Notification>=[];
     notificationBoards: Array<String>=[];
-    notification: Object;
     constructor(
         private backendService: BackendService,
-        private http: Http,
         private usersService: UsersService,
         private boardsService: BoardsService,
         private boardService: BoardService,
@@ -61,8 +58,7 @@ export class MainComponent {
                             });
                     }
                 );
-            });
-        
+            });        
     }
     OnInit(data): void {
         this.boardsService.putBoards(data);
@@ -72,18 +68,12 @@ export class MainComponent {
                 this.users = this.usersService.getUsers();
                 this.user=this.usersService.getUserById(this.jwtHelper.decodeToken(this.tokens.accessToken).id);
                 this.usersService.getNotification(this.user.username).subscribe(data => {
-                    // console.log('getNotification');
-                    // console.log(data);
                     for (let i=0; i<data.length; i++) {
                         this.notifications[i] = new Notification(data[i].username, data[i].boardID, data[i].cards);
-                        // console.log(this.notifications[i].cards.length);
                         for (let j=0; j<this.notifications[i].cards.length; j++) {
-                            // console.log(this.boardsService.getCardById(this.notifications[i].cards[j].id));
                             this.notifications[i].cards[j] = this.boardsService.getCardById(this.notifications[i].cards[j].id);
                         }
                         this.notificationBoards.push(this.boardsService.getBoardById(this.notifications[i].boardID).name);
-                        // this.notificationCards.push(this.notifications[i].cards);
-                        // console.log(this.notifications[i].cards);
                     }
                 });
             });
@@ -101,11 +91,21 @@ export class MainComponent {
                     BoardService.currentBoard = this.boardsService.getBoardById(boardID);
                 }
                 this.router.navigate([`/board/${boardID}`]);
-                // this.boardsService.setCurrentBoard(this.boardsService.getBoardById(boardID));
-                // this.boardService.setCurrentBoard(this.boardsService.getBoardById(boardID));
                 let opencard = this.boardService.getCardById(card.id);
                 this.modalWindowService.openModal(opencard, this.rights, BoardService.currentBoard);
             }
         );
+    }
+    removeNotification(card, notification): void {
+        this.usersService.removeNotification(card.id, notification.boardID).subscribe(
+            data => {
+                console.log(data);
+            }
+        );
+        console.log(notification.cards.indexOf(card));
+        notification.cards.splice(notification.cards.indexOf(card), 1);
+        if (!notification.cards.length) {
+            this.notifications.splice(this.notifications.indexOf(notification), 1);
+        }
     }
 }

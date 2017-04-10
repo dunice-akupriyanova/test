@@ -67,10 +67,6 @@ export class CurrentBoardComponent {
             data => {
                 this.rights = data.rights;
                 this.users=this.usersService.getUsers();
-                let index=this.users.findIndex((element) => element.username == this.user);
-                if (index!=-1) {
-                    this.users.splice(index, 1);
-                }
             }
         );
         this.usersService.getAllRights(this.currentBoard.id).subscribe(data => {

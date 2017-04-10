@@ -26,6 +26,11 @@ var CardSchema = new mongoose.Schema({
         type: [Comment],
         required: false,
         unique: false,
+    },
+    members: {
+        type: [String],
+        required: false,
+        unique: false,
     }
 });
 

@@ -19,7 +19,11 @@
           {{notificationBoards[n]}}
           <ul *ngIf="notification.cards">
             <li *ngFor="let card of notification.cards" class="notification_card" (click)="redirect(notification.boardID, card)">
-              {{card.name}}
+              <div class="card_name">
+                {{card.name}}
+              </div>
+              <div class="delete" (click)="removeNotification(card, notification)">
+              </div>
             </li>
           </ul>
         </li>

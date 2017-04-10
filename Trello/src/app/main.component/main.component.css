@@ -105,3 +105,24 @@
 .notification_card:hover {
     background-color: #CCD1D3;
 }
+.card_name {
+    display: inline-block;
+}
+.delete {
+    margin-top: 3px;
+    float: right;
+    cursor: pointer;
+    vertical-align: middle;
+    height: 18px;
+    width: 18px;
+    background: #CDD2D4 url("../../assets/images/cross.png") no-repeat 50% 50%;
+    opacity: 0;
+    display: inline-block;
+    border-radius: 2px;
+}
+.delete:hover {
+    background-color: #c0c5c7;
+}
+.notification_card:hover .delete {
+    opacity: 1;
+}

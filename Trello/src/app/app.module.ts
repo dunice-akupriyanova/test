@@ -14,6 +14,7 @@ import { AppRoutingModule }     from './routing/app-routing.module'
 import { LoginComponent } from './login.component/login.component';
 import { MainComponent } from './main.component/main.component';
 import { BoardsComponent } from './boards.component/boards.component';
+import { CommentComponent } from './comment.component/comment.component';
 import { CurrentBoardComponent } from './current-board.component/current-board.component';
 import { LoggedOutComponent } from './logged-out.component/logged-out.component';
 import { SignupComponent } from './signup.component/signup.component';
@@ -29,6 +30,7 @@ import { SignupComponent } from './signup.component/signup.component';
         SignupComponent,
         MainComponent,
         BoardsComponent,
+        CommentComponent,
         CurrentBoardComponent
     ],
     imports: [

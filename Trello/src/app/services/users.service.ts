@@ -109,4 +109,11 @@ export class UsersService {
             .map(this.extractData)
             .catch(this.handleError);
     }
+    removeNotification(cardID, boardID): Observable<any> {
+        let headers = new Headers({ 'Content-Type': 'application/json' });
+        let options = new RequestOptions({ headers: headers });
+        return this.http.delete(`http://localhost:3000/users/notification?cardID=${cardID}&boardID=${boardID}`, options)
+            .map(this.extractData)
+            .catch(this.handleError);
+    }
 }

@@ -1,4 +1,6 @@
-import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnInit  } from '@angular/core';
+// import { ComponentRef, ComponentResolver, Type, ViewChild, ViewContainerRef } from "angular2/core";
+
 import { Card } from '../models/classes/card';
 import { Board } from '../models/classes/board';
 import { Comment } from '../models/classes/comment';
@@ -24,7 +26,7 @@ export class ModalWindowComponent {
     searchResult: Array<String>=[];
     currentBoard: Board;
     target: any;
-    object: any;
+    newCommentIsEditing: Boolean = false;
     constructor(
         private modalWindowService: ModalWindowService,
         private boardService: BoardService,
@@ -63,6 +65,7 @@ export class ModalWindowComponent {
         this.changeCard();
     }
     editComment(comment): void {
+        comment.oldContent = comment.content;
         comment.isEditing = true;
     }
     endEditing(comment): void {
@@ -77,19 +80,8 @@ export class ModalWindowComponent {
         comment.content = comment.oldContent;
         comment.oldContent = null;
     }
-    check(value: String, object: any): void {
+    check(value: String): void {
         this.target = event.target;
-        if (this.target.getAttribute('id')=='new_comment') {
-            console.log('ok');
-        };
-        
-        let search = document.getElementById(this.target.getAttribute('id'));
-        // console.log(search.parentNode);
-        let parent = search.parentNode;
-        // console.log(typeof parent);
-        // parent.insertBefore(document.getElementById('search'), search.nextSibling);
-        // console.log(this.target);
-        // console.log(this.target.getAttribute('id'));
         if (value[value.length-1]=='@') {
             this.searching = true;
             return;
@@ -116,7 +108,6 @@ export class ModalWindowComponent {
         this.searchResult=[];
         for (let i=0; i<this.users.length; i++){
             if (this.users[i].username==value) {
-                console.log('searchUser target=', target);
                 this.searchResult=[];
                 return;
             }
@@ -125,17 +116,20 @@ export class ModalWindowComponent {
             }
         }
     }
-    choose(name, target): void {
-        // console.log('choose target', target);
-        let replace = target.value.substring(target.value.lastIndexOf('@')+1);
-        let revers = target.value.split("").reverse().join("");
+    choose(name, k): void {
+        let revers = this.target.value.split("").reverse().join("");
         let reversName = name.split("").reverse().join("");
         revers = revers.replace(revers.substring(0, revers.indexOf('@')), reversName);
         revers = revers.split("").reverse().join("");
-        // this.newComment=this.newComment.replace(this.newComment.substring(this.newComment.lastIndexOf('@')+1), name);
-        target.value = revers;
+        if (this.target.getAttribute('id')=='new_comment') {
+            console.log('comment');
+            console.log('revers', revers);
+            this.newComment.comment = revers;
+        } else {
+            this.currentCard.comments[k].content = revers;
+        }
         this.searchResult=[];
-        target.focus();
+        this.target.focus();
     }
     searchNotifications(value): Array<string> {
         let result: Array<string>=[];
@@ -144,10 +138,9 @@ export class ModalWindowComponent {
         while ((value.indexOf('@', last)!=-1)&&(count<10)) {
             count++;
             last = value.indexOf('@', last)+1;
-            // console.log('last='+last);
             if (last!=-1) {
-                let newResult = value.substring(last,  (value.indexOf(' ', last)==-1)?value.length:value.indexOf(' ', last));
-                // console.log('newResult='+newResult);
+                let end = Math.min(((value.indexOf(' ', last)==-1)?999999:value.indexOf(' ', last)), ((value.indexOf('.', last)==-1)?999999:value.indexOf('.', last)), ((value.indexOf(',', last)==-1)?999999:value.indexOf(',', last)), ((value.indexOf(':', last)==-1)?999999:value.indexOf(':', last)), ((value.indexOf(';', last)==-1)?999999:value.indexOf(';', last)));
+                let newResult = value.substring(last,  (end==999999)?value.length:end);
                 if (this.userExist(newResult)&&(result.indexOf(newResult)==-1)) {
                     result.push(newResult);
                 }
@@ -171,5 +164,16 @@ export class ModalWindowComponent {
         this.usersService.setNotification(data[i], this.currentCard, this.currentBoard).subscribe(data => {
             console.log(data);
         });
+    }
+    change(user): void {
+        if (!event.srcElement.hasAttribute('checked')) {
+            this.currentCard.members.push(user.username);
+            this.changeCard();
+            event.srcElement.setAttribute('checked', '');
+        } else {
+            this.currentCard.members.splice(this.currentCard.members.indexOf(user.username), 1);
+            this.changeCard();
+            event.srcElement.removeAttribute('checked');
+        }
     }
 }
