@@ -71,6 +71,8 @@ router.post('/notification', function (req, res, next) {
     let username = req.body.username;
     let card = req.body.card;
     let boardID = req.body.boardID;
+    console.log('username=', username);
+    console.log('boardID=', boardID);
     Notification.findOne({username: username, boardID: boardID}, function (err, notification) {
             if (err) throw err;
             if (notification) {
@@ -90,6 +92,7 @@ router.post('/notification', function (req, res, next) {
                 res.send(notification);
                 return;
             } else {
+                console.log('notification not found');
                 let newNotification = new Notification({username: username, boardID: boardID, cards: [card]});
                  newNotification.save(function(err) {
                     if (err) throw err;
@@ -111,8 +114,11 @@ router.get('/notification', function (req, res, next){
 router.delete('/notification', function (req, res, next){
     let cardID = req.query.cardID;
     let boardID = req.query.boardID;
-    Notification.findOne({ boardID: boardID }, function(err, notification) {
+    let username = req.query.username;
+    console.log('username=', username);
+    Notification.findOne({ boardID: boardID, username: username }, function(err, notification) {
         if(notification) {
+            console.log('found=', notification);
            for (let i=0; i<notification.cards.length; i++) {
                 if (notification.cards[i].id==cardID) {
                     res.send(notification.cards[i]);

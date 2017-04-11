@@ -4,7 +4,7 @@ var Comment = require('./comment');
 var CardSchema = new mongoose.Schema({
     id: {
         type: Number,
-        unique: true,
+        unique: false,
         required: true
     },
     name: {

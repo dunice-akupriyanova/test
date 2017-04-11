@@ -7,7 +7,11 @@ var BoardSchema = new mongoose.Schema({
         unique: false,
         required: true
     },
-    lists: [List]
+    lists: {
+        type: [List],
+        unique: false,
+        required: false
+    }
 });
 
 module.exports = mongoose.model('Board', BoardSchema);

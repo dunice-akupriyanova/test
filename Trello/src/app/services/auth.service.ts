@@ -2,17 +2,14 @@ import { Injectable } from '@angular/core';
 import { Http, Response } from '@angular/http';
 import { Headers, RequestOptions } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
-// import { JwtHelper } from 'angular2-jwt';
+import { JwtHelper } from 'angular2-jwt';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/map';
 
-// var JWTHelper = require('jwthelper');
-// var helper = JWTHelper.createJWTHelper();
 
 @Injectable()
 export class AuthService {
-  // jwtHelper: JwtHelper = new JwtHelper();
-  // helper = this.jwtHelper.createJWTHelper();
+  jwtHelper: JwtHelper = new JwtHelper();
   static tokens = JSON.parse(localStorage.getItem('tokens') ? localStorage.getItem('tokens') : '{}');
   private extractData(res: Response) {
     let body = res.json();

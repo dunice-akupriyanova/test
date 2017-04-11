@@ -1,24 +1,28 @@
 import { Component, Input, Output, EventEmitter, OnInit  } from '@angular/core';
 // import { ComponentRef, ComponentResolver, Type, ViewChild, ViewContainerRef } from "angular2/core";
 
-import { Card } from '../models/classes/card';
-import { Board } from '../models/classes/board';
-import { Comment } from '../models/classes/comment';
+import { Card } from '../models/card';
+import { Board } from '../models/board';
+import { Comment } from '../models/comment';
 import { ModalWindowService } from './modal-window.service';
 import { BoardService } from '../services/board.service';
 import { UsersService } from '../services/users.service';
-import { User } from '../models/classes/user';
+import { AuthService } from '../services/auth.service';
+import { NotificationsService } from '../services/notifications.service';
+import { JwtHelper } from 'angular2-jwt';
+import { User } from '../models/user';
 
 @Component({
     selector: 'modal-window',
     templateUrl: './modal-window.component.html',
     styleUrls:['./modal-window.component.css'],
-    providers: [BoardService]
+    providers: [BoardService, AuthService, UsersService, NotificationsService]
 })
 export class ModalWindowComponent {
     currentCard: Card;
     rights: string;
-    newComment = {comment: ''};
+    jwtHelper: JwtHelper = new JwtHelper();
+    newComment = '';
     user: string;
     users: Array<User>;
     searching: Boolean = false;
@@ -26,11 +30,14 @@ export class ModalWindowComponent {
     searchResult: Array<String>=[];
     currentBoard: Board;
     target: any;
+    tokens: any = this.authService.getTokens();  
     newCommentIsEditing: Boolean = false;
     constructor(
         private modalWindowService: ModalWindowService,
         private boardService: BoardService,
-        private usersService: UsersService
+        private usersService: UsersService,
+        private authService: AuthService,
+        private notificationsService: NotificationsService
         ) {
         modalWindowService.open.subscribe(data => {
             this.currentCard = <Card>data.card;
@@ -45,20 +52,30 @@ export class ModalWindowComponent {
         });
     }
     hideDetails(card: Card): void {
-        this.newComment.comment = '';
+        this.newComment = '';
         this.currentCard=null;
     }
     changeCard(): void {
         this.currentCard.date=(new Date()).toLocaleString();
-        this.boardService.updateBoard().subscribe();
+        this.boardService.updateBoard().subscribe(
+            data => {},
+                    err => {
+                        this.authService.refreshTokens(this.tokens.refreshToken).subscribe(
+                            data => {
+                                        this.authService.setTokens(data);
+                                        console.log('after refresh');
+                                        this.boardService.updateBoard().subscribe();
+                                    });
+                    });
     }
     addComment(): void {
-        if (!this.newComment.comment) { return; }
-        console.log('this.newComment.comment=', this.newComment.comment);
-        this.currentCard.comments.push(new Comment(this.newComment.comment, this.user, (new Date()).toLocaleString()));
-        this.setNotification(this.searchNotifications(this.newComment.comment));
-        this.newComment.comment = '';
+        if (!this.newComment) { return; }
+        // console.log('this.newComment=', this.newComment);
+        this.currentCard.comments.push(new Comment(this.newComment, this.user, (new Date()).toLocaleString()));
+        this.setNotification(this.searchNotifications(this.newComment));
+        this.newComment = '';
         this.changeCard();
+        this.newCommentIsEditing = false;
     }
     removeComment(comment): void {
         this.currentCard.comments.splice(this.currentCard.comments.findIndex((element) => element == comment), 1);
@@ -82,6 +99,7 @@ export class ModalWindowComponent {
     }
     check(value: String): void {
         this.target = event.target;
+
         if (value[value.length-1]=='@') {
             this.searching = true;
             return;
@@ -121,10 +139,8 @@ export class ModalWindowComponent {
         let reversName = name.split("").reverse().join("");
         revers = revers.replace(revers.substring(0, revers.indexOf('@')), reversName);
         revers = revers.split("").reverse().join("");
-        if (this.target.getAttribute('id')=='new_comment') {
-            console.log('comment');
-            console.log('revers', revers);
-            this.newComment.comment = revers;
+        if (k===undefined) {
+            this.newComment = revers;
         } else {
             this.currentCard.comments[k].content = revers;
         }
@@ -161,7 +177,7 @@ export class ModalWindowComponent {
     setNotification(data): void {
         console.log('setNotification', data);
         for (let i=0; i<data.length; i++)
-        this.usersService.setNotification(data[i], this.currentCard, this.currentBoard).subscribe(data => {
+        this.notificationsService.setNotification(data[i], this.currentCard, this.currentBoard).subscribe(data => {
             console.log(data);
         });
     }

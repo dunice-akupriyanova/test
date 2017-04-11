@@ -1,13 +1,13 @@
 import { Component, OnInit } from '@angular/core';
-import { BackendService } from '../services/backend.service';
 import { AuthService } from '../services/auth.service';
 import { UsersService } from '../services/users.service';
 import { BoardsService } from '../services/boards.service';
 import { BoardService } from '../services/board.service';
+import { NotificationsService } from '../services/notifications.service';
 import { ModalWindowService } from '../modal-window.component/modal-window.service';
 import { JwtHelper } from 'angular2-jwt';
-import { User } from '../models/classes/user';
-import { Notification } from '../models/classes/notification';
+import { User } from '../models/user';
+import { Notification } from '../models/notification';
 import { Router } from '@angular/router';
 import { CurrentBoardComponent } from '../current-board.component/current-board.component';
 
@@ -20,7 +20,7 @@ import 'rxjs/add/operator/map';
     selector: 'main',
     templateUrl: './main.component.html',
     styleUrls: ['./main.component.css'],
-    providers: [BackendService, AuthService, UsersService, BoardsService, BoardService, ModalWindowService]
+    providers: [ AuthService, UsersService, BoardsService, BoardService, ModalWindowService, NotificationsService]
 })
 export class MainComponent {
     jwtHelper: JwtHelper = new JwtHelper();
@@ -29,14 +29,13 @@ export class MainComponent {
     tokens: any = this.authService.getTokens();
     rights: String;
     oldBoardID: string;
-    notifications: Array<Notification>=[];
-    notificationBoards: Array<String>=[];
+    notifications: Array<any>=[];
     constructor(
-        private backendService: BackendService,
         private usersService: UsersService,
         private boardsService: BoardsService,
         private boardService: BoardService,
         private authService: AuthService,
+        private notificationsService: NotificationsService,
         private modalWindowService: ModalWindowService,
         private router: Router
     ) { }
@@ -67,15 +66,7 @@ export class MainComponent {
                 this.usersService.putUsers(data);
                 this.users = this.usersService.getUsers();
                 this.user=this.usersService.getUserById(this.jwtHelper.decodeToken(this.tokens.accessToken).id);
-                this.usersService.getNotification(this.user.username).subscribe(data => {
-                    for (let i=0; i<data.length; i++) {
-                        this.notifications[i] = new Notification(data[i].username, data[i].boardID, data[i].cards);
-                        for (let j=0; j<this.notifications[i].cards.length; j++) {
-                            this.notifications[i].cards[j] = this.boardsService.getCardById(this.notifications[i].cards[j].id);
-                        }
-                        this.notificationBoards.push(this.boardsService.getBoardById(this.notifications[i].boardID).name);
-                    }
-                });
+                this.notifications = this.notificationsService.getNotifications(this.user);
             });
     }
     redirect(boardID, card): void {
@@ -97,7 +88,7 @@ export class MainComponent {
         );
     }
     removeNotification(card, notification): void {
-        this.usersService.removeNotification(card.id, notification.boardID).subscribe(
+        this.notificationsService.removeNotification(this.user.username, card.id, notification.boardID).subscribe(
             data => {
                 console.log(data);
             }

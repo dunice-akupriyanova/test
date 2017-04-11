@@ -16,7 +16,7 @@
       <img src="../../assets/images/alarm3.png" class='notifications_icon'>
       <ul class="notification_list">
         <li *ngFor="let notification of notifications; let n = index">
-          {{notificationBoards[n]}}
+          {{notification.boardName}}
           <ul *ngIf="notification.cards">
             <li *ngFor="let card of notification.cards" class="notification_card" (click)="redirect(notification.boardID, card)">
               <div class="card_name">

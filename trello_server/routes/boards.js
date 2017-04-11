@@ -20,6 +20,7 @@ router.post('/', auth.authenticate(), function (req, res, next) {
     console.log('OK boards post');
     console.log(req.user);
     var board = new Board({name: req.body.name, lists: req.body.lists?req.body.lists:[]});
+    console.log('board=', board);
     board.save(function(err) {
         if (err) throw err;
         res.status(201).send(JSON.stringify(board));

@@ -1,15 +1,16 @@
 import { Component, Input } from '@angular/core';
-import { Card } from '../models/classes/card';
-import { List } from '../models/classes/list';
-import { Board } from '../models/classes/board';
+import { Card } from '../models/card';
+import { List } from '../models/list';
+import { Board } from '../models/board';
 import { ModalWindowService } from '../modal-window.component/modal-window.service';
 import { BoardService } from '../services/board.service';
+import { AuthService } from '../services/auth.service';
 
 @Component({
     selector: 'list',
     templateUrl: './list.component.html',
     styleUrls: ['./list.component.css'],
-    providers: [BoardService]
+    providers: [BoardService, AuthService]
 })
 export class ListComponent {
     @Input()
@@ -20,31 +21,39 @@ export class ListComponent {
     index: number;
     @Input()
     rights: string;
+    tokens: any = this.authService.getTokens();  
     newCardName: string;
     constructor(
         private modalWindowService: ModalWindowService,
-        private boardService: BoardService
+        private boardService: BoardService,
+        private authService: AuthService
     ) { }
     removeList(list): void {
         this.currentBoard.lists.splice(this.currentBoard.lists.findIndex((element) => element == list), 1);
-        // console.log('ok');
-        this.boardService.updateBoard().subscribe(data=>{
-            // console.log('OK!');
-        });
-        // console.log('ok2');
+        this.updateBoard();
     }
     addCard(): void {
         if (!this.newCardName) { return; }
         this.list.cards.push(new Card(+(new Date()), this.newCardName, '', (new Date()).toLocaleString(), [], []));
         this.newCardName = '';
-        this.boardService.updateBoard().subscribe();
+        this.updateBoard();
     }
     showDetails(card): void {
         this.modalWindowService.openModal(card, this.rights, this.currentBoard);
     }
     updateBoard(): void {
         // console.log('ok');
-        this.boardService.updateBoard().subscribe();
+        this.boardService.updateBoard().subscribe(
+            data => {
+                        // console.log(data);
+                    },
+                    err => {
+                        this.authService.refreshTokens(this.tokens.refreshToken).subscribe(
+                            data => {
+                                        this.authService.setTokens(data);
+                                        this.boardService.updateBoard().subscribe();
+                                    });
+                    });
         // console.log('ok2');
     }
 }

@@ -2,8 +2,8 @@ import { Injectable } from '@angular/core';
 import { Http, Response } from '@angular/http';
 import { Headers, RequestOptions } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
-import { Board } from '../models/classes/board';
-import { Card } from '../models/classes/card';
+import { Board } from '../models/board';
+import { Card } from '../models/card';
 import { AuthService } from './auth.service';
 import { JwtHelper } from 'angular2-jwt';
 import 'rxjs/add/operator/catch';
@@ -53,6 +53,7 @@ export class BoardsService {
     return BoardsService.boards;
   }
   addBoard(name): Observable<any> {
+    this.tokens = this.authService.getTokens();
     let headers = new Headers({ 'Authorization': `JWT ${this.tokens.accessToken}` });
     let options = new RequestOptions({ headers: headers });
     return this.http.post('http://localhost:3000/boards', { name }, options)

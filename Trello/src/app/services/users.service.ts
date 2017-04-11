@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Http, Response } from '@angular/http';
 import { Headers, RequestOptions } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
-import { User } from '../models/classes/user';
+import { User } from '../models/user';
 import { AuthService } from './auth.service';
 import { JwtHelper } from 'angular2-jwt';
 import 'rxjs/add/operator/catch';
@@ -12,7 +12,7 @@ import 'rxjs/add/operator/map';
 export class UsersService {
     static users: Array<any> = [];
     jwtHelper: JwtHelper = new JwtHelper();
-    tokens = this.authService.getTokens(); //????????????/
+    tokens = this.authService.getTokens();
     static user: User;
     constructor(
         private http: Http,
@@ -51,13 +51,10 @@ export class UsersService {
             UsersService.users[i] = new User(data[i]._id, data[i].username);
         }
         UsersService.user = this.getUserById(this.jwtHelper.decodeToken(this.tokens.accessToken).id);
-        // console.log(UsersService.user);
         localStorage.setItem('UserID', JSON.stringify(UsersService.user.id));
         localStorage.setItem('Username', JSON.stringify(UsersService.user.username));
     }
     getUsers(): Array<User> {
-        // console.log('getUsers');
-        //     console.log(UsersService.users);
         return UsersService.users;
     }
     getUserById(id): User {
@@ -72,8 +69,6 @@ export class UsersService {
         }
     }    
     setRights(userID, boardID, rights): Observable<any> {
-        // console.log('boardID='+boardID);
-        // console.log('rights='+rights);
         let headers = new Headers({ 'Content-Type': 'application/json' });
         let options = new RequestOptions({ headers: headers });
         return this.http.post('http://localhost:3000/users/rights', { userID, boardID, rights }, options)
@@ -91,28 +86,6 @@ export class UsersService {
         let headers = new Headers({ 'Content-Type': 'application/json' });
         let options = new RequestOptions({ headers: headers });
         return this.http.get(`http://localhost:3000/users/rights/${boardrID}`, options)
-            .map(this.extractData)
-            .catch(this.handleError);
-    }
-    setNotification(username, card, board): Observable<any> {
-        let headers = new Headers({ 'Content-Type': 'application/json' });
-        let options = new RequestOptions({ headers: headers });
-        let boardID = board.id;
-        return this.http.post(`http://localhost:3000/users/notification`, {username, card, boardID}, options)
-            .map(this.extractData)
-            .catch(this.handleError);
-    }
-    getNotification(username): Observable<any> {
-        let headers = new Headers({ 'Content-Type': 'application/json' });
-        let options = new RequestOptions({ headers: headers });
-        return this.http.get(`http://localhost:3000/users/notification/?username=${username}`, options)
-            .map(this.extractData)
-            .catch(this.handleError);
-    }
-    removeNotification(cardID, boardID): Observable<any> {
-        let headers = new Headers({ 'Content-Type': 'application/json' });
-        let options = new RequestOptions({ headers: headers });
-        return this.http.delete(`http://localhost:3000/users/notification?cardID=${cardID}&boardID=${boardID}`, options)
             .map(this.extractData)
             .catch(this.handleError);
     }

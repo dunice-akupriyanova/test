@@ -1,14 +1,15 @@
 import { Component, Input } from '@angular/core';
-import { Card } from '../models/classes/card';
-import { List } from '../models/classes/list';
-import { Board } from '../models/classes/board';
+import { Card } from '../models/card';
+import { List } from '../models/list';
+import { Board } from '../models/board';
 import { BoardService } from '../services/board.service';
+import { AuthService } from '../services/auth.service';
 
 @Component({
     selector: 'card',
     templateUrl: './card.component.html',
     styleUrls: ['./card.component.css'],
-    providers: [BoardService]
+    providers: [BoardService, AuthService]
 })
 export class CardComponent {
     @Input()
@@ -17,11 +18,23 @@ export class CardComponent {
     list: List;
     @Input()
     rights: string;
+    tokens: any = this.authService.getTokens();   
     constructor(
-        private boardService: BoardService
+        private boardService: BoardService,
+        private authService: AuthService
     ) { }
     removeCard(list, card): void {
         this.list.cards.splice(this.list.cards.findIndex((element) => element == card), 1);
-        this.boardService.updateBoard().subscribe();
+        this.boardService.updateBoard().subscribe(
+            data => {
+                        // console.log(data);
+                    },
+                    err => {
+                        this.authService.refreshTokens(this.tokens.refreshToken).subscribe(
+                            data => {
+                                        this.authService.setTokens(data);
+                                        this.boardService.updateBoard().subscribe();
+                                    });
+                    });
     }
 }

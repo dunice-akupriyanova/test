@@ -1,6 +1,5 @@
 var express = require('express');
 var router = express.Router();
-var noteRoutes = require('./note_routes');
 var User = require('../models/user');
 
 

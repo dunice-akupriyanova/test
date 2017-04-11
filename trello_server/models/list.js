@@ -7,7 +7,11 @@ var ListSchema = new mongoose.Schema({
         unique: false,
         required: true
     },
-    cards: [Card]
+    cards: {
+        type: [Card],
+        unique: false,
+        required: false
+    }
 });
 
 module.exports = ListSchema;

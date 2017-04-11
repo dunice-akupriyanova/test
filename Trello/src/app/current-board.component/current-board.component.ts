@@ -1,22 +1,21 @@
 import 'rxjs/add/operator/switchMap';
 import { Component, OnInit } from '@angular/core';
-import { List } from '../models/classes/list';
-import { Board } from '../models/classes/board';
-import { BackendService } from '../services/backend.service';
+import { List } from '../models/list';
+import { Board } from '../models/board';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 import { BoardsService } from '../services/boards.service';
 import { MainComponent } from '../main.component/main.component';
 import { BoardService } from '../services/board.service';
 import { AuthService } from '../services/auth.service';
 import { UsersService } from '../services/users.service';
-import { User } from '../models/classes/user';
+import { User } from '../models/user';
 import { JwtHelper } from 'angular2-jwt';
 
 @Component({
     selector: 'current-board',
     templateUrl: './current-board.component.html',
     styleUrls: ['./current-board.component.css'],
-    providers: [BackendService, BoardsService, BoardService, AuthService, UsersService]
+    providers: [ BoardsService, BoardService, AuthService, UsersService]
 })
 export class CurrentBoardComponent {
     jwtHelper: JwtHelper = new JwtHelper();
@@ -28,7 +27,6 @@ export class CurrentBoardComponent {
     rights: String;
     allRights: Array<Object>;
     constructor(
-        private backendService: BackendService,
         private boardsService: BoardsService,
         private boardService: BoardService,
         private authService: AuthService,
@@ -38,6 +36,8 @@ export class CurrentBoardComponent {
     ngOnInit() {
         this.route.params
             .subscribe((params) => {
+
+                    console.log('current');
                     this.boardsService.getBoardsFromServer().subscribe(
                         data => {
                             this.boardsService.putBoards(data);
@@ -70,7 +70,7 @@ export class CurrentBoardComponent {
             }
         );
         this.usersService.getAllRights(this.currentBoard.id).subscribe(data => {
-            // console.log(data);
+            // console.log(data); //!!!
         });
     }
     addList(): void {
@@ -85,11 +85,17 @@ export class CurrentBoardComponent {
         this.updateBoard();
     }
     updateBoard(): void {
-        console.log('ok');
-        this.boardService.updateBoard().subscribe(data=> {
-            console.log(data);
-        });
-        console.log('ok2');
+        this.boardService.updateBoard().subscribe(
+            data => {
+                        // console.log(data);
+                    },
+                    err => {
+                        this.authService.refreshTokens(this.tokens.refreshToken).subscribe(
+                            data => {
+                                        this.authService.setTokens(data);
+                                        this.boardService.updateBoard().subscribe();
+                                    });
+                    });
     }
     setRights(event, user) {
         this.usersService.setRights(user.id, this.currentBoard.id, event.target.value).subscribe(
