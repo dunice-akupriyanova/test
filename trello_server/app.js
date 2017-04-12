@@ -24,7 +24,7 @@ var users = require('./routes/users');
 var auth = require('./auth/auth');
 var boards = require('./routes/boards');
 
-// require('./websockets');
+require('./websockets');
 
 var app = express();
 // app.use(bodyParser());

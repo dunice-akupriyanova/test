@@ -1,12 +1,14 @@
 import { Injectable } from '@angular/core';
+import { AuthService } from './auth.service';
 import * as Rx from 'rxjs/Rx';
  
 @Injectable()
 export class WebsocketService {
-  constructor() { }
+  constructor(
+    private authService: AuthService
+  ) { }
  
   private subject: Rx.Subject<MessageEvent>;
- 
   public connect(url): Rx.Subject<MessageEvent> {
     if (!this.subject) {
       this.subject = this.create(url);
@@ -23,7 +25,7 @@ export class WebsocketService {
         ws.onopen = function(a) {
           var msg = {
             type: 'authenticate',
-            payload: { token: 'XXX' }
+            payload: { tokens: AuthService.tokens }
           };
           ws.send(JSON.stringify(msg));
         }

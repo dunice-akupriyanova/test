@@ -5,63 +5,38 @@ var Right = require('../models/right');
 var Notification = require('../models/notification');
 var WebSocketServer = require('websocket').server;
 var http = require('http');
-// var io = require('socket.io').listen(8080); 
 
-// io.set('log level', 1);
-// // Навешиваем обработчик на подключение нового клиента
-// io.sockets.on('connection', function (socket) {
-//     console.log('connection successful');
-// 	// Т.к. чат простой - в качестве ников пока используем первые 5 символов от ID сокета
-// 	var ID = (socket.id).toString().substr(0, 5);
-// 	var time = (new Date).toLocaleTimeString();
-// 	// Посылаем клиенту сообщение о том, что он успешно подключился и его имя
-// 	socket.json.send({'event': 'connected', 'name': ID, 'time': time});
-// 	// Навешиваем обработчик на входящее сообщение
-// 	socket.on('message', function (msg) {
-// 		var time = (new Date).toLocaleTimeString();
-// 		// Уведомляем клиента, что его сообщение успешно дошло до сервера
-// 		socket.json.send({'event': 'messageSent', 'name': ID, 'text': msg, 'time': time});
-// 		// Отсылаем сообщение остальным участникам чата
-// 		socket.broadcast.json.send({'event': 'messageReceived', 'name': ID, 'text': msg, 'time': time})
-// 	});
-// 	// При отключении клиента - уведомляем остальных
-// 	socket.on('disconnect', function() {
-// 		var time = (new Date).toLocaleTimeString();
-// 		io.sockets.json.send({'event': 'userSplit', 'name': ID, 'time': time});
-// 	});
+// var server = http.createServer(function(request, response) {
+//     // process HTTP request. Since we're writing just WebSockets server
+//     // we don't have to implement anything.
+// });
+// server.listen(8080, function() { });
+
+// wsServer = new WebSocketServer({
+//     httpServer: server
 // });
 
-var server = http.createServer(function(request, response) {
-    // process HTTP request. Since we're writing just WebSockets server
-    // we don't have to implement anything.
-});
-server.listen(8080, function() { });
-
-wsServer = new WebSocketServer({
-    httpServer: server
-});
-
-// var clients = require('../websockets');
-var clients = [];
+var clients = require('../websockets');
+// var clients = [];
 
 
-wsServer.on('request', function(request) {
-    var connection = request.accept(null, request.origin);
-    clients.push(connection);
-    // connection.sendUTF(JSON.stringify('123'));
-    // This is the most important callback for us, we'll handle
-    // all messages from users here.
-    connection.on('message', function(message) {
-        if (message.type === 'utf8') {
-            // process WebSocket message
-        }
-        console.log(message);
-    });
+// wsServer.on('request', function(request) {
+//     var connection = request.accept(null, request.origin);
+//     clients.push(connection);
+//     // connection.sendUTF(JSON.stringify('123'));
+//     // This is the most important callback for us, we'll handle
+//     // all messages from users here.
+//     connection.on('message', function(message) {
+//         if (message.type === 'utf8') {
+//             // process WebSocket message
+//         }
+//         console.log(message);
+//     });
 
-    connection.on('close', function(connection) {
-        // close user connection
-    });
-});
+//     connection.on('close', function(connection) {
+//         // close user connection
+//     });
+// });
 
 
 router.get('/', function(req, res, next) {
@@ -211,7 +186,7 @@ router.delete('/notification', function (req, res, next){
     Notification.findOne({ type: type, boardID: boardID, username: username }, function(err, notification) {
         if (type=='card') {
             if(notification) {
-                console.log('found=', notification);
+                // console.log('found=', notification);
                 for (let i=0; i<notification.cards.length; i++) {
                     if (notification.cards[i].id==cardID) {
                         res.send(notification.cards[i]);

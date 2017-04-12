@@ -183,6 +183,7 @@ export class ModalWindowComponent {
         }
     }
     changeMember(user): void {
+        console.log(user);
         if (!event.srcElement.hasAttribute('checked')) {
             this.currentCard.members.push(user.username);
             this.notificationsService.setNotification('card', user.username, this.currentBoard, this.currentCard).subscribe(data => {

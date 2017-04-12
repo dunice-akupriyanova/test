@@ -45,7 +45,7 @@ export class ListComponent {
         // console.log('ok');
         this.boardService.updateBoard().subscribe(
             data => {
-                        console.log(data);
+                        // console.log(data);
                     },
                     err => {
                         this.authService.refreshTokens(this.tokens.refreshToken).subscribe(
