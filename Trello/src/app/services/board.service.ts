@@ -79,9 +79,9 @@ export class BoardService {
     getCardById(id): Card {
         // console.log('BoardService.currentBoard getCardById', BoardService.currentBoard);
         for (let j=0; j<BoardService.currentBoard.lists.length; j++) {
-            if (BoardService.currentBoard.lists[j].cards.find(element=>element.id==id)) {
-                let result = BoardService.currentBoard.lists[j].cards.find(element=>element.id==id);
-                console.log('return', result.name);
+            let result = BoardService.currentBoard.lists[j].cards.find(element=>element.id==id);
+            if (result) {
+                // console.log('return', result.name);
                 return result;
             }
         }

@@ -67,8 +67,10 @@ export class BoardsService {
   getCardById(id): Card {
     for (let i=0; i<BoardsService.boards.length; i++) {
       for (let j=0; j<BoardsService.boards[i].lists.length; j++) {
-          if (BoardsService.boards[i].lists[j].cards.find(element=>element.id==id)) {
-              return BoardsService.boards[i].lists[j].cards.find(element=>element.id==id);
+        // console.log('board', i, 'list', j, 'cards', BoardsService.boards[i].lists[j].cards);
+        let found = BoardsService.boards[i].lists[j].cards.find(element=>element.id==id);
+          if (found) {
+              return found;
           }
       }
     }

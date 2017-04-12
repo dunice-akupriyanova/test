@@ -4,6 +4,7 @@ import { Headers, RequestOptions } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 import { Notification } from '../models/notification';
 import { BoardsService } from '../services/boards.service';
+import { BoardService } from '../services/board.service';
 import { NotificationWebsocketService } from '../services/notification-websocket.service';
 
 @Injectable()
@@ -12,6 +13,7 @@ export class NotificationsService {
     constructor(
         private http: Http,
         private boardsService: BoardsService,
+        private boardService: BoardService,
         private notificationWebsocketService: NotificationWebsocketService
     ) { }
     private extractData(res: Response) {
@@ -61,11 +63,12 @@ export class NotificationsService {
                         this.notifications[i] = new Notification(data[i].type, data[i].username, data[i].boardID, data[i].cards);
                         let cardsLength = this.notifications[i].cards.length;
                         for (let j=0; j<cardsLength; j++) {
-                            let newCard = this.boardsService.getCardById(this.notifications[i].cards[j].id);
+                            let newCard = this.boardsService.getCardById(this.notifications[i].cards[j].id)||this.boardService.getCardById(this.notifications[i].cards[j].id);
                             if (newCard) {
                                 this.notifications[i].cards[j] = newCard;
                             } else {
-                                this.removeNotification(this.notifications[i].type, user.username, this.notifications[i].cards[j].id, data[i].boardID).subscribe(
+                                console.log('not found');
+                                this.removeNotification(this.notifications[i].type, user.username, data[i].boardID, this.notifications[i].cards[j].id).subscribe(
                                     data => {
                                         console.log(data);
                                     }
