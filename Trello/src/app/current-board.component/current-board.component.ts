@@ -8,6 +8,7 @@ import { MainComponent } from '../main.component/main.component';
 import { BoardService } from '../services/board.service';
 import { AuthService } from '../services/auth.service';
 import { UsersService } from '../services/users.service';
+import { NotificationsService } from '../services/notifications.service';
 import { User } from '../models/user';
 import { JwtHelper } from 'angular2-jwt';
 
@@ -15,7 +16,7 @@ import { JwtHelper } from 'angular2-jwt';
     selector: 'current-board',
     templateUrl: './current-board.component.html',
     styleUrls: ['./current-board.component.css'],
-    providers: [ BoardsService, BoardService, AuthService, UsersService]
+    providers: [ BoardsService, BoardService, AuthService, UsersService, NotificationsService]
 })
 export class CurrentBoardComponent {
     jwtHelper: JwtHelper = new JwtHelper();
@@ -31,13 +32,12 @@ export class CurrentBoardComponent {
         private boardService: BoardService,
         private authService: AuthService,
         private usersService: UsersService,
-        private route: ActivatedRoute
+        private route: ActivatedRoute,
+        private notificationsService: NotificationsService
     ) { }
     ngOnInit() {
         this.route.params
             .subscribe((params) => {
-
-                    console.log('current');
                     this.boardsService.getBoardsFromServer().subscribe(
                         data => {
                             this.boardsService.putBoards(data);
@@ -101,5 +101,10 @@ export class CurrentBoardComponent {
         this.usersService.setRights(user.id, this.currentBoard.id, event.target.value).subscribe(
                     d => {console.log(d);}
                 );
+                // console.log(user);
+                console.log('this.currentBoard.id=', this.currentBoard.id);
+        this.notificationsService.setNotification('board', user.username, this.currentBoard).subscribe(
+            d => {console.log(d);}
+        )
     }
 }

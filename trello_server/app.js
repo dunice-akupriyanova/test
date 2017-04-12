@@ -24,6 +24,8 @@ var users = require('./routes/users');
 var auth = require('./auth/auth');
 var boards = require('./routes/boards');
 
+// require('./websockets');
+
 var app = express();
 // app.use(bodyParser());
 app.use(session({ secret: 'SECRET', resave: true, saveUninitialized: true }));

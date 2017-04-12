@@ -17,8 +17,8 @@
 				<div class="username">
 					{{nextuser.username}}
 				</div>
-				<input *ngIf="currentCard.members.indexOf(nextuser.username)==-1" type="checkbox" name="added" (click)="change(nextuser, $event)">
-				<input *ngIf="currentCard.members.indexOf(nextuser.username)!=-1" type="checkbox" name="added" (click)="change(nextuser, $event)" checked>
+				<input *ngIf="currentCard.members.indexOf(nextuser.username)==-1" type="checkbox" name="added" (click)="changeMember(nextuser, $event)">
+				<input *ngIf="currentCard.members.indexOf(nextuser.username)!=-1" type="checkbox" name="added" (click)="changeMember(nextuser, $event)" checked>
 				</li>
 			</ul>
 		</div>

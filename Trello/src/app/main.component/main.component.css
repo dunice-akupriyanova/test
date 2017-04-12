@@ -108,6 +108,15 @@
 .card_name {
     display: inline-block;
 }
+.rights_message {
+    display: inline-block;
+}
+.notification_rights {
+    margin-left: 40px;
+}
+.notification_rights:hover {
+    background-color: #CCD1D3;
+}
 .delete {
     margin-top: 3px;
     float: right;
@@ -124,5 +133,8 @@
     background-color: #c0c5c7;
 }
 .notification_card:hover .delete {
+    opacity: 1;
+}
+.notification_rights:hover .delete {
     opacity: 1;
 }

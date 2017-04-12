@@ -72,7 +72,7 @@ export class ModalWindowComponent {
         if (!this.newComment) { return; }
         // console.log('this.newComment=', this.newComment);
         this.currentCard.comments.push(new Comment(this.newComment, this.user, (new Date()).toLocaleString()));
-        this.setNotification(this.searchNotifications(this.newComment));
+        this.setNotification('card', this.searchNotifications(this.newComment));
         this.newComment = '';
         this.changeCard();
         this.newCommentIsEditing = false;
@@ -89,7 +89,7 @@ export class ModalWindowComponent {
         comment.oldContent = comment.content;
         comment.isEditing = null;
         comment.date = (new Date()).toLocaleString();
-        this.setNotification(this.searchNotifications(comment.content));
+        this.setNotification('card', this.searchNotifications(comment.content));
         this.changeCard();
     }
     cancelEditing(comment): void {
@@ -174,20 +174,27 @@ export class ModalWindowComponent {
         }
         return false;
     }
-    setNotification(data): void {
+    setNotification(type, data): void {
         console.log('setNotification', data);
-        for (let i=0; i<data.length; i++)
-        this.notificationsService.setNotification(data[i], this.currentCard, this.currentBoard).subscribe(data => {
-            console.log(data);
-        });
+        for (let i=0; i<data.length; i++) {
+            this.notificationsService.setNotification(type, data[i], this.currentBoard, this.currentCard).subscribe(data => {
+                console.log('from server', data);
+            });
+        }
     }
-    change(user): void {
+    changeMember(user): void {
         if (!event.srcElement.hasAttribute('checked')) {
             this.currentCard.members.push(user.username);
+            this.notificationsService.setNotification('card', user.username, this.currentBoard, this.currentCard).subscribe(data => {
+                console.log('from server', data);
+            });
             this.changeCard();
             event.srcElement.setAttribute('checked', '');
         } else {
             this.currentCard.members.splice(this.currentCard.members.indexOf(user.username), 1);
+            this.notificationsService.setNotification('card', user.username, this.currentBoard, this.currentCard).subscribe(data => {
+                console.log('from server', data);
+            });
             this.changeCard();
             event.srcElement.removeAttribute('checked');
         }

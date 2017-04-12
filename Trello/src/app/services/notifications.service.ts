@@ -4,13 +4,15 @@ import { Headers, RequestOptions } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 import { Notification } from '../models/notification';
 import { BoardsService } from '../services/boards.service';
+import { NotificationWebsocketService } from '../services/notification-websocket.service';
 
 @Injectable()
 export class NotificationsService {
     notifications: Array<any>=[];
     constructor(
         private http: Http,
-        private boardsService: BoardsService
+        private boardsService: BoardsService,
+        private notificationWebsocketService: NotificationWebsocketService
     ) { }
     private extractData(res: Response) {
         let body = res.json();
@@ -29,11 +31,11 @@ export class NotificationsService {
         console.error(errMsg);
         return Observable.throw(errMsg);
     }
-    setNotification(username, card, board): Observable<any> {
+    setNotification(type, username, board, card?): Observable<any> {
         let headers = new Headers({ 'Content-Type': 'application/json' });
         let options = new RequestOptions({ headers: headers });
         let boardID = board.id;
-        return this.http.post(`http://localhost:3000/users/notification`, {username, card, boardID}, options)
+        return this.http.post(`http://localhost:3000/users/notification`, {type, username, card, boardID}, options)
             .map(this.extractData)
             .catch(this.handleError);
     }
@@ -44,10 +46,11 @@ export class NotificationsService {
             .map(this.extractData)
             .catch(this.handleError);
     }
-    removeNotification(username, cardID, boardID): Observable<any> {
+    removeNotification(type, username, boardID, cardID?): Observable<any> {
+        console.log('removeNotification');
         let headers = new Headers({ 'Content-Type': 'application/json' });
         let options = new RequestOptions({ headers: headers });
-        return this.http.delete(`http://localhost:3000/users/notification?cardID=${cardID}&boardID=${boardID}&username=${username}`, options)
+        return this.http.delete(`http://localhost:3000/users/notification?type=${type}&cardID=${cardID}&boardID=${boardID}&username=${username}`, options)
             .map(this.extractData)
             .catch(this.handleError);
     }
@@ -55,14 +58,14 @@ export class NotificationsService {
         this.getNotification(user.username).subscribe(data => {
                     let dataLength = data.length;
                     for (let i=0; i<dataLength; i++) {
-                        this.notifications[i] = new Notification(data[i].username, data[i].boardID, data[i].cards);
+                        this.notifications[i] = new Notification(data[i].type, data[i].username, data[i].boardID, data[i].cards);
                         let cardsLength = this.notifications[i].cards.length;
                         for (let j=0; j<cardsLength; j++) {
                             let newCard = this.boardsService.getCardById(this.notifications[i].cards[j].id);
                             if (newCard) {
                                 this.notifications[i].cards[j] = newCard;
                             } else {
-                                this.removeNotification(user.username, this.notifications[i].cards[j].id, data[i].boardID).subscribe(
+                                this.removeNotification(this.notifications[i].type, user.username, this.notifications[i].cards[j].id, data[i].boardID).subscribe(
                                     data => {
                                         console.log(data);
                                     }
@@ -77,7 +80,7 @@ export class NotificationsService {
                                 cardsLength--;
                             }
                         }
-                        this.notifications[i].boardName = this.boardsService.getBoardById(this.notifications[i].boardID).name;
+                        this.notifications[i].boardName = this.boardsService.getBoardById(this.notifications[i].boardID).name;                        
                     }
                 });
         return this.notifications;

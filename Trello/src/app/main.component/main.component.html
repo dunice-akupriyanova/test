@@ -1,4 +1,4 @@
-<div class="header">
+<div class="header" (click)="check()">
   <a routerLink="/boards" routerLinkActive="active">
     <div class="boards_button">
       <div class="boards_button_icon">
@@ -17,12 +17,19 @@
       <ul class="notification_list">
         <li *ngFor="let notification of notifications; let n = index">
           {{notification.boardName}}
+          <div *ngIf="notification.type=='board'" class="notification_rights">
+            <div class="rights_message" (click)="redirectToBoard(notification.boardID)">
+              Changed rights
+            </div>
+            <div class="delete" (click)="removeNotification(notification.type, notification)">
+            </div>
+          </div>
           <ul *ngIf="notification.cards">
             <li *ngFor="let card of notification.cards" class="notification_card" (click)="redirect(notification.boardID, card)">
               <div class="card_name">
                 {{card.name}}
               </div>
-              <div class="delete" (click)="removeNotification(card, notification)">
+              <div class="delete" (click)="removeNotification(notification.type, notification, card)">
               </div>
             </li>
           </ul>

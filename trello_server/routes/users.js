@@ -3,6 +3,66 @@ var router = express.Router();
 var User = require('../models/user');
 var Right = require('../models/right');
 var Notification = require('../models/notification');
+var WebSocketServer = require('websocket').server;
+var http = require('http');
+// var io = require('socket.io').listen(8080); 
+
+// io.set('log level', 1);
+// // Навешиваем обработчик на подключение нового клиента
+// io.sockets.on('connection', function (socket) {
+//     console.log('connection successful');
+// 	// Т.к. чат простой - в качестве ников пока используем первые 5 символов от ID сокета
+// 	var ID = (socket.id).toString().substr(0, 5);
+// 	var time = (new Date).toLocaleTimeString();
+// 	// Посылаем клиенту сообщение о том, что он успешно подключился и его имя
+// 	socket.json.send({'event': 'connected', 'name': ID, 'time': time});
+// 	// Навешиваем обработчик на входящее сообщение
+// 	socket.on('message', function (msg) {
+// 		var time = (new Date).toLocaleTimeString();
+// 		// Уведомляем клиента, что его сообщение успешно дошло до сервера
+// 		socket.json.send({'event': 'messageSent', 'name': ID, 'text': msg, 'time': time});
+// 		// Отсылаем сообщение остальным участникам чата
+// 		socket.broadcast.json.send({'event': 'messageReceived', 'name': ID, 'text': msg, 'time': time})
+// 	});
+// 	// При отключении клиента - уведомляем остальных
+// 	socket.on('disconnect', function() {
+// 		var time = (new Date).toLocaleTimeString();
+// 		io.sockets.json.send({'event': 'userSplit', 'name': ID, 'time': time});
+// 	});
+// });
+
+var server = http.createServer(function(request, response) {
+    // process HTTP request. Since we're writing just WebSockets server
+    // we don't have to implement anything.
+});
+server.listen(8080, function() { });
+
+wsServer = new WebSocketServer({
+    httpServer: server
+});
+
+// var clients = require('../websockets');
+var clients = [];
+
+
+wsServer.on('request', function(request) {
+    var connection = request.accept(null, request.origin);
+    clients.push(connection);
+    // connection.sendUTF(JSON.stringify('123'));
+    // This is the most important callback for us, we'll handle
+    // all messages from users here.
+    connection.on('message', function(message) {
+        if (message.type === 'utf8') {
+            // process WebSocket message
+        }
+        console.log(message);
+    });
+
+    connection.on('close', function(connection) {
+        // close user connection
+    });
+});
+
 
 router.get('/', function(req, res, next) {
     User.find({}, function(err, users) {
@@ -68,37 +128,68 @@ router.get('/rights/:boardID', function (req, res, next) {
 });
 
 router.post('/notification', function (req, res, next) {
+    let type = req.body.type;
     let username = req.body.username;
-    let card = req.body.card;
+    let card;
+    if (req.body.card) {
+        card = req.body.card;
+    }
     let boardID = req.body.boardID;
     console.log('username=', username);
     console.log('boardID=', boardID);
-    Notification.findOne({username: username, boardID: boardID}, function (err, notification) {
+    Notification.findOne({username: username, boardID: boardID, type: type}, function (err, notification) {
             if (err) throw err;
-            if (notification) {
-                for (let i=0; i<notification.cards.length; i++ ) {
-                    if (card.id==notification.cards[i].id) {
-                        console.log('found');
-                        res.send(notification);
-                        return;
+            if (type=='card') {
+                if (notification) {
+                    for (let i=0; i<notification.cards.length; i++ ) {
+                        if (card.id==notification.cards[i].id) {
+                            console.log('found');
+                            for (let c of clients) {
+                                c.sendUTF(JSON.stringify(notification));
+                            }
+                            return;
+                        }
                     }
+                    console.log('push');
+                    // console.log(notification.cards);
+                    notification.cards.push(card);
+                    notification.save(function(err) {
+                        if (err) throw err;
+                    });
+                    for (let c of clients) {
+                        c.sendUTF(JSON.stringify(notification));
+                    }
+                    return;
+                } else {
+                    console.log('notification not found');
+                    let newNotification = new Notification({type: type, username: username, boardID: boardID, cards: [card]});
+                    newNotification.save(function(err) {
+                        if (err) throw err;
+                    });
+                    for (let c of clients) {
+                        c.sendUTF(JSON.stringify(newNotification));
+                    }
+                    // res.sendStatus(200);
                 }
-                console.log('push');
-                console.log(notification.cards);
-                notification.cards.push(card);
-                notification.save(function(err) {
-                    if (err) throw err;
-                });
-                res.send(notification);
-                return;
             } else {
-                console.log('notification not found');
-                let newNotification = new Notification({username: username, boardID: boardID, cards: [card]});
-                 newNotification.save(function(err) {
-                    if (err) throw err;
-                });
-                res.send(newNotification);
-            }                        
+                if (notification) {
+                    for (let c of clients) {
+                        c.sendUTF(JSON.stringify(notification));
+                    }
+                    return;
+                } else {
+                    console.log('new');
+                    let newNotification = new Notification({type: type, username: username, boardID: boardID});
+                    console.log('newNotification=', newNotification);
+                    newNotification.save(function(err) {
+                        if (err) throw err;
+                    });
+                    for (let c of clients) {
+                        c.sendUTF(JSON.stringify(newNotification));
+                    }
+                    // res.sendStaнtus(200);
+                }
+            }          
         });
  });
 
@@ -112,31 +203,39 @@ router.get('/notification', function (req, res, next){
 });
 
 router.delete('/notification', function (req, res, next){
+    let type = req.query.type;
     let cardID = req.query.cardID;
     let boardID = req.query.boardID;
     let username = req.query.username;
     console.log('username=', username);
-    Notification.findOne({ boardID: boardID, username: username }, function(err, notification) {
-        if(notification) {
-            console.log('found=', notification);
-           for (let i=0; i<notification.cards.length; i++) {
-                if (notification.cards[i].id==cardID) {
-                    res.send(notification.cards[i]);
-                    console.log('before');
-                    console.log(notification.cards);
-                    notification.cards[i].remove();
-                    console.log('after');
-                    console.log(notification.cards);
-                    if (!notification.cards.length) {
-                        notification.remove();
-                    } else {
-                        notification.save(function(err) {
-                            if (err) throw err;
-                        });
+    Notification.findOne({ type: type, boardID: boardID, username: username }, function(err, notification) {
+        if (type=='card') {
+            if(notification) {
+                console.log('found=', notification);
+                for (let i=0; i<notification.cards.length; i++) {
+                    if (notification.cards[i].id==cardID) {
+                        res.send(notification.cards[i]);
+                        console.log('before');
+                        console.log(notification.cards);
+                        notification.cards[i].remove();
+                        console.log('after');
+                        console.log(notification.cards);
+                        if (!notification.cards.length) {
+                            notification.remove();
+                        } else {
+                            notification.save(function(err) {
+                                if (err) throw err;
+                            });
+                        }
+                        return;
                     }
-                    return;
                 }
-           }
+            }
+        } else {
+            if(notification) {
+                res.send(notification);
+                notification.remove();
+            }
         }
     })
 });

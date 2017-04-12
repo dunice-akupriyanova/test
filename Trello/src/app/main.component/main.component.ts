@@ -4,6 +4,8 @@ import { UsersService } from '../services/users.service';
 import { BoardsService } from '../services/boards.service';
 import { BoardService } from '../services/board.service';
 import { NotificationsService } from '../services/notifications.service';
+import { WebsocketService } from '../services/websocket.service';
+import { NotificationWebsocketService } from '../services/notification-websocket.service';
 import { ModalWindowService } from '../modal-window.component/modal-window.service';
 import { JwtHelper } from 'angular2-jwt';
 import { User } from '../models/user';
@@ -16,11 +18,12 @@ import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/map';
 
+
 @Component({
     selector: 'main',
     templateUrl: './main.component.html',
     styleUrls: ['./main.component.css'],
-    providers: [ AuthService, UsersService, BoardsService, BoardService, ModalWindowService, NotificationsService]
+    providers: [ AuthService, UsersService, BoardsService, BoardService, ModalWindowService, NotificationsService, NotificationWebsocketService, WebsocketService]
 })
 export class MainComponent {
     jwtHelper: JwtHelper = new JwtHelper();
@@ -28,7 +31,6 @@ export class MainComponent {
     users: Array<User>;
     tokens: any = this.authService.getTokens();
     rights: String;
-    oldBoardID: string;
     notifications: Array<any>=[];
     constructor(
         private usersService: UsersService,
@@ -37,8 +39,15 @@ export class MainComponent {
         private authService: AuthService,
         private notificationsService: NotificationsService,
         private modalWindowService: ModalWindowService,
+        private notificationWebsocketService: NotificationWebsocketService,
         private router: Router
-    ) { }
+    ) {
+        
+        notificationWebsocketService.notifications.subscribe(msg => {			
+            console.log("Response from websocket: ", msg);
+            this.notifications = this.notificationsService.getNotifications(this.user);
+		});
+    }
     logOut(): void {
         this.authService.logOut().subscribe();
     }
@@ -69,8 +78,22 @@ export class MainComponent {
                 this.notifications = this.notificationsService.getNotifications(this.user);
             });
     }
+    redirectToBoard(boardID): void {
+        let id = JSON.parse(localStorage.getItem('UserID')?localStorage.getItem('UserID'):'');
+        this.usersService.getRights(id, boardID).subscribe(
+            data => {
+                this.rights = data.rights;
+                if (!BoardService.currentBoard) {
+                    BoardService.currentBoard = this.boardsService.getBoardById(boardID);
+                }
+                if ((BoardService.currentBoard.id!=boardID)) {
+                    BoardService.currentBoard = this.boardsService.getBoardById(boardID);
+                }
+                this.router.navigate([`/board/${boardID}`]);
+            }
+        );
+    }
     redirect(boardID, card): void {
-        this.oldBoardID = boardID;
         let id = JSON.parse(localStorage.getItem('UserID')?localStorage.getItem('UserID'):'');
         this.usersService.getRights(id, boardID).subscribe(
             data => {
@@ -87,16 +110,30 @@ export class MainComponent {
             }
         );
     }
-    removeNotification(card, notification): void {
-        this.notificationsService.removeNotification(this.user.username, card.id, notification.boardID).subscribe(
-            data => {
-                console.log(data);
+    removeNotification(type, notification, card?): void {
+        console.log('remove');
+        if (type=='card') {
+            this.notificationsService.removeNotification(type, this.user.username, notification.boardID, card.id).subscribe(
+                data => {
+                    console.log(data);
+                }
+            );
+            console.log(notification.cards.indexOf(card));
+            notification.cards.splice(notification.cards.indexOf(card), 1);
+            if (!notification.cards.length) {
+                this.notifications.splice(this.notifications.indexOf(notification), 1);
             }
-        );
-        console.log(notification.cards.indexOf(card));
-        notification.cards.splice(notification.cards.indexOf(card), 1);
-        if (!notification.cards.length) {
+        } else {
+            this.notificationsService.removeNotification(type, this.user.username, notification.boardID).subscribe(
+                data => {
+                    console.log(data);
+                }
+            );
             this.notifications.splice(this.notifications.indexOf(notification), 1);
         }
+    }
+    check(): void {
+
+        // this.notificationWebsocketService.notifications.next(this.notifications[0]);
     }
 }
