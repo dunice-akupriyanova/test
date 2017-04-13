@@ -88,6 +88,7 @@ export class BoardsComponent {
                 }); 
     }
     ngOnInit() {
+        BoardService.currentBoard=null;
         this.boardsService.getBoardsFromServer().subscribe(
             data => {
                 this.boardsService.putBoards(data);

@@ -50,7 +50,7 @@ export class MainComponent {
             this.boardsService.getBoardsFromServer().subscribe(
             data => {
                  this.boardsService.putBoards(data);
-                 console.log('update');
+                //  console.log('update');
                  this.notifications = this.notificationsService.getNotifications(this.user);
             
             },
