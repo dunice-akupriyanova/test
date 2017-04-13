@@ -10,6 +10,7 @@ import { NotificationWebsocketService } from '../services/notification-websocket
 @Injectable()
 export class NotificationsService {
     notifications: Array<any>=[];
+    static count = {count: 0};
     constructor(
         private http: Http,
         private boardsService: BoardsService,
@@ -33,42 +34,42 @@ export class NotificationsService {
         console.error(errMsg);
         return Observable.throw(errMsg);
     }
-    setNotification(type, username, board, card?): Observable<any> {
+    setNotification(type, userID, board, card?): Observable<any> {
         let headers = new Headers({ 'Content-Type': 'application/json' });
         let options = new RequestOptions({ headers: headers });
         let boardID = board.id;
-        return this.http.post(`http://localhost:3000/users/notification`, {type, username, card, boardID}, options)
+        return this.http.post(`http://localhost:3000/users/notification`, {type, userID, card, boardID}, options)
             .map(this.extractData)
             .catch(this.handleError);
     }
-    getNotification(username): Observable<any> {
+    getNotification(userID): Observable<any> {
         let headers = new Headers({ 'Content-Type': 'application/json' });
         let options = new RequestOptions({ headers: headers });
-        return this.http.get(`http://localhost:3000/users/notification/?username=${username}`, options)
+        return this.http.get(`http://localhost:3000/users/notification/?userID=${userID}`, options)
             .map(this.extractData)
             .catch(this.handleError);
     }
-    removeNotification(type, username, boardID, cardID?): Observable<any> {
+    removeNotification(type, userID, boardID, cardID?): Observable<any> {
         console.log('removeNotification');
         let headers = new Headers({ 'Content-Type': 'application/json' });
         let options = new RequestOptions({ headers: headers });
-        return this.http.delete(`http://localhost:3000/users/notification?type=${type}&cardID=${cardID}&boardID=${boardID}&username=${username}`, options)
+        return this.http.delete(`http://localhost:3000/users/notification?type=${type}&cardID=${cardID}&boardID=${boardID}&userID=${userID}`, options)
             .map(this.extractData)
             .catch(this.handleError);
     }
     getNotifications(user): Array<any> {
-        this.getNotification(user.username).subscribe(data => {
+        this.getNotification(user.id).subscribe(data => {
                     let dataLength = data.length;
                     for (let i=0; i<dataLength; i++) {
-                        this.notifications[i] = new Notification(data[i].type, data[i].username, data[i].boardID, data[i].cards);
+                        this.notifications[i] = new Notification(data[i].type, data[i].userID, data[i].boardID, data[i].cards);
                         let cardsLength = this.notifications[i].cards.length;
                         for (let j=0; j<cardsLength; j++) {
                             let newCard = this.boardsService.getCardById(this.notifications[i].cards[j].id)||this.boardService.getCardById(this.notifications[i].cards[j].id);
                             if (newCard) {
                                 this.notifications[i].cards[j] = newCard;
                             } else {
-                                console.log('not found');
-                                this.removeNotification(this.notifications[i].type, user.username, data[i].boardID, this.notifications[i].cards[j].id).subscribe(
+                                console.log('not found!');
+                                this.removeNotification(this.notifications[i].type, user.id, data[i].boardID, this.notifications[i].cards[j].id).subscribe(
                                     data => {
                                         console.log(data);
                                     }
@@ -83,8 +84,10 @@ export class NotificationsService {
                                 cardsLength--;
                             }
                         }
+                        NotificationsService.count.count+=cardsLength;
                         this.notifications[i].boardName = this.boardsService.getBoardById(this.notifications[i].boardID).name;                        
                     }
+                    // NotificationsService.count.count = dataLength;
                 });
         return this.notifications;
     }

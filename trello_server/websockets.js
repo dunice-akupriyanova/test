@@ -1,11 +1,10 @@
 var WebSocketServer = require('websocket').server;
+var User = require('./models/user');
 var jwt = require("jwt-simple");
 var cfg = require('./config/config'); 
 var http = require('http');
 
 var server = http.createServer(function(request, response) {
-    // process HTTP request. Since we're writing just WebSockets server
-    // we don't have to implement anything.
 });
 server.listen(8080, function() { });
 
@@ -13,22 +12,30 @@ wsServer = new WebSocketServer({
     httpServer: server
 });
 
-var clients = [];
+// var clients = [];
+var clients = {};
 
 wsServer.on('request', function(request) {
     var connection = request.accept(null, request.origin);
-    clients.push(connection);
-    // connection.sendUTF(JSON.stringify('123456'));
-
-    // This is the most important callback for us, we'll handle
-    // all messages from users here.
+    // clients.push(connection);
     connection.on('message', function(message) {
-        if (message.type === 'utf8') {
-            // process WebSocket message
-        }
+        // if (message.type === 'utf8') {
+        //     // process WebSocket message
+        // }
         if (JSON.parse(message.utf8Data).type=='authenticate'){
-            console.log(cfg.jwtSecret);
-            console.log('message', jwt.decode(JSON.parse(message.utf8Data).payload.tokens.accessToken, cfg.jwtSecret));
+            let id = jwt.decode(JSON.parse(message.utf8Data).payload.tokens.accessToken, cfg.jwtSecret).id;
+            console.log('id=', id);
+            User.findOne({_id: id}, function(err,user){
+                if (err) return next(err);
+                if (user) {
+                    console.log('user=', user);
+                    if (!clients[user._id]) {
+                        clients[user._id] = [];
+                    }
+                    clients[user._id].push(connection);
+                    // console.log(clients);
+                }
+            });
         }
     });
 

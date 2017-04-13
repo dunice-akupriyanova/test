@@ -104,24 +104,26 @@ router.get('/rights/:boardID', function (req, res, next) {
 
 router.post('/notification', function (req, res, next) {
     let type = req.body.type;
-    let username = req.body.username;
+    let userID = req.body.userID;
     let card;
     if (req.body.card) {
         card = req.body.card;
     }
     let boardID = req.body.boardID;
-    console.log('username=', username);
+    console.log('userID=', userID);
     console.log('boardID=', boardID);
-    Notification.findOne({username: username, boardID: boardID, type: type}, function (err, notification) {
+    Notification.findOne({userID: userID, boardID: boardID, type: type}, function (err, notification) {
             if (err) throw err;
             if (type=='card') {
                 if (notification) {
                     for (let i=0; i<notification.cards.length; i++ ) {
                         if (card.id==notification.cards[i].id) {
-                            console.log('found');
-                            for (let c of clients) {
-                                c.sendUTF(JSON.stringify(notification));
-                            }
+                            // console.log('found');
+                            // if (clients[notification.userID]) {
+                            //     for (let client of clients[notification.userID]) {
+                            //         client.sendUTF(JSON.stringify(notification));
+                            //     }
+                            // }
                             return;
                         }
                     }
@@ -131,46 +133,60 @@ router.post('/notification', function (req, res, next) {
                     notification.save(function(err) {
                         if (err) throw err;
                     });
-                    for (let c of clients) {
-                        c.sendUTF(JSON.stringify(notification));
+                    console.log('clients=', clients);
+                    if (clients[notification.userID]) {
+                        console.log('send');
+                        for (let client of clients[notification.userID]) {
+                            client.sendUTF(JSON.stringify(notification));
+                        }
                     }
                     return;
                 } else {
                     console.log('notification not found');
-                    let newNotification = new Notification({type: type, username: username, boardID: boardID, cards: [card]});
+                    let newNotification = new Notification({type: type, userID: userID, boardID: boardID, cards: [card]});
                     newNotification.save(function(err) {
                         if (err) throw err;
                     });
-                    for (let c of clients) {
-                        c.sendUTF(JSON.stringify(newNotification));
+                    console.log('clients=', clients);
+                    if (clients[newNotification.userID]) {
+                        console.log('send');
+                        for (let client of clients[newNotification.userID]) {
+                            client.sendUTF(JSON.stringify(newNotification));
+                        }
                     }
                     // res.sendStatus(200);
                 }
             } else {
                 if (notification) {
-                    for (let c of clients) {
-                        c.sendUTF(JSON.stringify(notification));
-                    }
+                    // if (clients[notification.userID]) {
+                    //     for (let client of clients[notification.userID]) {
+                    //         client.sendUTF(JSON.stringify(notification));
+                    //     }
+                    // }
                     return;
                 } else {
                     console.log('new');
-                    let newNotification = new Notification({type: type, username: username, boardID: boardID});
+                    let newNotification = new Notification({type: type, userID: userID, boardID: boardID});
                     console.log('newNotification=', newNotification);
                     newNotification.save(function(err) {
                         if (err) throw err;
                     });
-                    for (let c of clients) {
-                        c.sendUTF(JSON.stringify(newNotification));
+                    console.log('clients=', clients);
+                    if (clients[newNotification.userID]) {
+                        console.log('send');
+                        for (let client of clients[newNotification.userID]) {
+                            client.sendUTF(JSON.stringify(newNotification));
+                        }
                     }
-                    // res.sendStaнtus(200);
+                    // res.sendStatus(200);
                 }
             }          
         });
  });
 
 router.get('/notification', function (req, res, next){
-    let username = req.query.username;
-    Notification.find({ username: username }, function(err, notifications) {
+    let userID = req.query.userID;
+    Notification.find({ userID: userID }, function(err, notifications) {
         if(notifications) {
             res.send(notifications);
         } else res.send(new Array);
@@ -181,9 +197,9 @@ router.delete('/notification', function (req, res, next){
     let type = req.query.type;
     let cardID = req.query.cardID;
     let boardID = req.query.boardID;
-    let username = req.query.username;
-    console.log('username=', username);
-    Notification.findOne({ type: type, boardID: boardID, username: username }, function(err, notification) {
+    let userID = req.query.userID;
+    console.log('userID=', userID);
+    Notification.findOne({ type: type, boardID: boardID, userID: userID }, function(err, notification) {
         if (type=='card') {
             if(notification) {
                 // console.log('found=', notification);

@@ -7,7 +7,7 @@ var NotificationSchema = new mongoose.Schema({
         unique: false,
         required: true
     },
-    username: {
+    userID: {
         type: String,
         unique: false,
         required: true

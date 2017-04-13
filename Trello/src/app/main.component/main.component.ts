@@ -32,6 +32,7 @@ export class MainComponent {
     tokens: any = this.authService.getTokens();
     rights: String;
     notifications: Array<any>=[];
+    new: any={};
     constructor(
         private usersService: UsersService,
         private boardsService: BoardsService,
@@ -45,7 +46,32 @@ export class MainComponent {
         
         notificationWebsocketService.notifications.subscribe(msg => {			
             console.log("Response from websocket: ", msg);
-            this.notifications = this.notificationsService.getNotifications(this.user);
+            // this.notifications = this.notificationsService.getNotifications(this.user);
+            this.boardsService.getBoardsFromServer().subscribe(
+            data => {
+                 this.boardsService.putBoards(data);
+                 console.log('update');
+                 this.notifications = this.notificationsService.getNotifications(this.user);
+            
+            },
+            err => {
+                this.authService.refreshTokens(this.tokens.refreshToken).subscribe(
+                    data => {
+                        this.authService.setTokens(data);
+                        this.boardsService.getBoardsFromServer().subscribe(
+                            data => {
+                                 this.boardsService.putBoards(data);
+                                 console.log('update');
+                                 this.notifications = this.notificationsService.getNotifications(this.user);
+            
+                            });
+                    }
+                );
+            });
+            let k = this.new.count+1;
+            this.new = {};
+            this.new.count = k;
+            // console.log('new=', this.new);
 		});
     }
     logOut(): void {
@@ -66,7 +92,7 @@ export class MainComponent {
                             });
                     }
                 );
-            });        
+            });    
     }
     OnInit(data): void {
         this.boardsService.putBoards(data);
@@ -75,8 +101,9 @@ export class MainComponent {
                 this.usersService.putUsers(data);
                 this.users = this.usersService.getUsers();
                 this.user=this.usersService.getUserById(this.jwtHelper.decodeToken(this.tokens.accessToken).id);
-                this.notifications = this.notificationsService.getNotifications(this.user);
+                this.notifications = this.notificationsService.getNotifications(this.user);                
             });
+        this.new = NotificationsService.count;
     }
     redirectToBoard(boardID): void {
         let id = JSON.parse(localStorage.getItem('UserID')?localStorage.getItem('UserID'):'');
@@ -113,7 +140,7 @@ export class MainComponent {
     removeNotification(type, notification, card?): void {
         console.log('remove');
         if (type=='card') {
-            this.notificationsService.removeNotification(type, this.user.username, notification.boardID, card.id).subscribe(
+            this.notificationsService.removeNotification(type, this.user.id, notification.boardID, card.id).subscribe(
                 data => {
                     console.log(data);
                 }
@@ -124,7 +151,7 @@ export class MainComponent {
                 this.notifications.splice(this.notifications.indexOf(notification), 1);
             }
         } else {
-            this.notificationsService.removeNotification(type, this.user.username, notification.boardID).subscribe(
+            this.notificationsService.removeNotification(type, this.user.id, notification.boardID).subscribe(
                 data => {
                     console.log(data);
                 }
@@ -135,5 +162,8 @@ export class MainComponent {
     check(): void {
 
         // this.notificationWebsocketService.notifications.next(this.notifications[0]);
+    }
+    reset(): void {
+        this.new.count=0;
     }
 }

@@ -62,6 +62,7 @@ export class CurrentBoardComponent {
             BoardService.currentBoard = this.boardsService.getBoardById(boardID);
         }
         this.currentBoard = BoardService.currentBoard;
+        console.log('BoardService.currentBoard=', BoardService.currentBoard);
         let id = JSON.parse(localStorage.getItem('UserID')?localStorage.getItem('UserID'):'');
         this.usersService.getRights(id, this.currentBoard.id).subscribe(
             data => {
@@ -98,12 +99,13 @@ export class CurrentBoardComponent {
                     });
     }
     setRights(event, user) {
+        // console.log(user);
         this.usersService.setRights(user.id, this.currentBoard.id, event.target.value).subscribe(
                     d => {console.log(d);}
                 );
                 // console.log(user);
                 console.log('this.currentBoard.id=', this.currentBoard.id);
-        this.notificationsService.setNotification('board', user.username, this.currentBoard).subscribe(
+        this.notificationsService.setNotification('board', user.id, this.currentBoard).subscribe(
             d => {console.log(d);}
         )
     }

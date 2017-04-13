@@ -97,7 +97,7 @@ export class ModalWindowComponent {
         comment.content = comment.oldContent;
         comment.oldContent = null;
     }
-    check(value: String): void {
+    check(value: String, event): void {
         this.target = event.target;
 
         if (value[value.length-1]=='@') {
@@ -157,22 +157,24 @@ export class ModalWindowComponent {
             if (last!=-1) {
                 let end = Math.min(((value.indexOf(' ', last)==-1)?999999:value.indexOf(' ', last)), ((value.indexOf('.', last)==-1)?999999:value.indexOf('.', last)), ((value.indexOf(',', last)==-1)?999999:value.indexOf(',', last)), ((value.indexOf(':', last)==-1)?999999:value.indexOf(':', last)), ((value.indexOf(';', last)==-1)?999999:value.indexOf(';', last)));
                 let newResult = value.substring(last,  (end==999999)?value.length:end);
-                if (this.userExist(newResult)&&(result.indexOf(newResult)==-1)) {
+                newResult = this.getUser(newResult);
+                if (newResult&&(result.indexOf(newResult)==-1)) {
                     result.push(newResult);
                 }
             }
         }
+        // console.log('result=', result);
         // console.log('searchNotification');
         // console.log(result);
         return result;
     }
-    userExist(username): Boolean {
+    getUser(username): string {
         for (let i=0; i< this.users.length; i++) {
             if (this.users[i].username==username) {
-                return true;
+                return <string>this.users[i].id;
             }
         }
-        return false;
+        return '';
     }
     setNotification(type, data): void {
         console.log('setNotification', data);
@@ -182,22 +184,21 @@ export class ModalWindowComponent {
             });
         }
     }
-    changeMember(user): void {
-        console.log(user);
-        if (!event.srcElement.hasAttribute('checked')) {
+    changeMember(user, event): void {
+        if (!event.target.hasAttribute('checked')) {
             this.currentCard.members.push(user.username);
-            this.notificationsService.setNotification('card', user.username, this.currentBoard, this.currentCard).subscribe(data => {
+            this.notificationsService.setNotification('card', user.id, this.currentBoard, this.currentCard).subscribe(data => {
                 console.log('from server', data);
             });
             this.changeCard();
-            event.srcElement.setAttribute('checked', '');
+            event.target.setAttribute('checked', '');
         } else {
             this.currentCard.members.splice(this.currentCard.members.indexOf(user.username), 1);
-            this.notificationsService.setNotification('card', user.username, this.currentBoard, this.currentCard).subscribe(data => {
+            this.notificationsService.setNotification('card', user.id, this.currentBoard, this.currentCard).subscribe(data => {
                 console.log('from server', data);
             });
             this.changeCard();
-            event.srcElement.removeAttribute('checked');
+            event.target.removeAttribute('checked');
         }
     }
 }

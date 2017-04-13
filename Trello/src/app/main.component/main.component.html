@@ -12,7 +12,10 @@
     <div *ngIf="user" class="user_name">
       {{user.username}}
     </div>
-    <div *ngIf="notifications.length" class="notifications">
+    <div *ngIf="notifications.length" class="notifications" (mouseover)="reset()">
+      <div *ngIf="new.count" class="new">
+        {{new.count}}
+      </div>
       <img src="../../assets/images/alarm3.png" class='notifications_icon'>
       <ul class="notification_list">
         <li *ngFor="let notification of notifications; let n = index">
