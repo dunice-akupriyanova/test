@@ -50,11 +50,10 @@ export class MainComponent {
     }
     ngOnInit() {
         this.notificationWebsocketService.notifications.subscribe(msg => {
-            console.log("main, Response from websocket: ", msg);
             if (<string>msg.title == 'updated') {
                 return;
             }
-            console.log('type=', msg.type);
+            console.log("main, Response from websocket: ", msg);
             this.notifications = this.notificationsService.getNotifications(this.user);
             let newCount = this.new.count + 1;
             this.new = {};

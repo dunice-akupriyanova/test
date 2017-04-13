@@ -39,10 +39,10 @@ export class CurrentBoardComponent {
     ) { }
     ngOnInit() {
         this.notificationWebsocketService.notifications.subscribe(msg => {
-            console.log("current board, Response from websocket: ", msg);
             if (<string>msg.title != 'updated') {
                 return;
             }
+            console.log("current board, Response from websocket: ", msg);
             let boardID = msg.payload._id;
             this.boardsService.getBoardsFromServer().subscribe(
                 data => {
@@ -60,12 +60,9 @@ export class CurrentBoardComponent {
                             this.boardsService.getBoardsFromServer().subscribe(
                                 data => {
                                     this.boardsService.putBoards(data);
-                                    if (BoardService.currentBoard) {
-                                        if (BoardService.currentBoard.id == boardID) {
-                                            BoardService.currentBoard = this.boardsService.getBoardById(boardID);
-                                            this.currentBoard = BoardService.currentBoard;
-                                        }
-                                    }
+                                    if (!BoardService.currentBoard || BoardService.currentBoard.id != boardID) { return; }
+                                    BoardService.currentBoard = this.boardsService.getBoardById(boardID);
+                                    this.currentBoard = BoardService.currentBoard;                                        
                                 });
                         }
                     );
