@@ -19,7 +19,8 @@ export class BoardService {
     constructor(
         private http: Http,
         private authService: AuthService,
-        private boardsService: BoardsService
+        private boardsService: BoardsService,
+        
     ) { }
     private extractData(res: Response) {
         // console.log(res);
@@ -63,6 +64,9 @@ export class BoardService {
         // console.log(BoardsService.boards);
     }
     updateBoard(): Observable<any> {
+        // let ws2 = new WebSocket('ws://localhost:8088/');
+        // console.log('ws2=', ws2);
+        // ws2.send('updated');
         this.tokens = this.authService.getTokens();
         let headers = new Headers({ 'Authorization': `JWT ${this.tokens.accessToken}` });
         let options = new RequestOptions({ headers: headers });

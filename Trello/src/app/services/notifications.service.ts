@@ -85,7 +85,11 @@ export class NotificationsService {
                             }
                         }
                         NotificationsService.count.count+=cardsLength;
-                        this.notifications[i].boardName = this.boardsService.getBoardById(this.notifications[i].boardID).name;                        
+                        let board = this.boardsService.getBoardById(this.notifications[i].boardID);
+                        // console.log('found=', this.boardsService.getBoardById(this.notifications[i].boardID));
+                        if (board) {
+                            this.notifications[i].boardName = this.boardsService.getBoardById(this.notifications[i].boardID).name;               
+                        }         
                     }
                     // NotificationsService.count.count = dataLength;
                 });

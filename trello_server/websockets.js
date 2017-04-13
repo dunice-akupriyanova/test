@@ -12,6 +12,17 @@ wsServer = new WebSocketServer({
     httpServer: server
 });
 
+
+var server2 = http.createServer(function(request, response) {
+});
+server.listen(8088, function() { });
+
+wsServer2 = new WebSocketServer({
+    httpServer: server2
+});
+
+
+
 // var clients = [];
 var clients = {};
 
@@ -22,6 +33,7 @@ wsServer.on('request', function(request) {
         // if (message.type === 'utf8') {
         //     // process WebSocket message
         // }
+        console.log('message=', message);
         if (JSON.parse(message.utf8Data).type=='authenticate'){
             let id = jwt.decode(JSON.parse(message.utf8Data).payload.tokens.accessToken, cfg.jwtSecret).id;
             console.log('id=', id);
@@ -32,6 +44,8 @@ wsServer.on('request', function(request) {
                     if (!clients[user._id]) {
                         clients[user._id] = [];
                     }
+                    // console.log('connection=', connection);
+                    // connection.sendUTF(JSON.stringify(connection));
                     clients[user._id].push(connection);
                     // console.log(clients);
                 }

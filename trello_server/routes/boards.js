@@ -4,6 +4,7 @@ var Board = require('../models/board');
 var auth = require("../auth/auth-strategy")();
 var Right = require('../models/right');
 var passport = require('passport');
+var clients = require('../websockets');
 
 router.use(passport.initialize());
 
@@ -55,7 +56,8 @@ router.get('/:id', auth.authenticate(), function (req, res, next) {
 });
 router.put('/:id', auth.authenticate(), function (req, res, next) {
     // console.log(req.params.id);
-    console.log(req.user);
+    console.log('req.user=', req.user);
+    // console.log('clients=', clients);
     var newBoard = new Board({name: req.body.name, lists: req.body.lists?req.body.lists:[]});            
     Board.findOne({ _id: req.params.id }, function(err, board) {
         board.name=req.body.name;
@@ -64,6 +66,18 @@ router.put('/:id', auth.authenticate(), function (req, res, next) {
             if (err) console.log(err);
             if (err) throw err;
         });
+        for (key in clients) {
+            console.log('key=', key);
+            if (key!=req.user.id) {
+                for (let client of clients[key]) {
+                    let response = {
+                        title: 'updated',
+                        payload: board
+                    }
+                    client.sendUTF(JSON.stringify(response));
+                }
+            }
+        }
         res.send(board);
     }); 
 });

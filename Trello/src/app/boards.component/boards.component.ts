@@ -113,6 +113,7 @@ export class BoardsComponent {
                 // console.log('got rights='+rights.rights);
                 if (rights.rights!='none') {
                    BoardService.currentBoard = this.boardsService.getBoardById(id);
+                   console.log('BoardService.currentBoard ==', BoardService.currentBoard);
                    this.router.navigate([`/board/${id}`]);
                 } else { alert('No access rights!'); }
             }

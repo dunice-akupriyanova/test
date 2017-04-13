@@ -10,13 +10,19 @@ import { ListComponent } from './list.component/list.component';
 import { CardComponent } from './card.component/card.component';
 import { ModalWindowComponent } from './modal-window.component/modal-window.component';
 import { ModalWindowService } from './modal-window.component/modal-window.service';
-import { AppRoutingModule }     from './routing/app-routing.module'
+import { AppRoutingModule } from './routing/app-routing.module'
 import { LoginComponent } from './login.component/login.component';
 import { MainComponent } from './main.component/main.component';
 import { BoardsComponent } from './boards.component/boards.component';
 import { CurrentBoardComponent } from './current-board.component/current-board.component';
 import { LoggedOutComponent } from './logged-out.component/logged-out.component';
 import { SignupComponent } from './signup.component/signup.component';
+import { NotificationWebsocketService } from './services/notification-websocket.service';
+import { NotificationsService } from './services/notifications.service';
+import { BoardsService } from './services/boards.service';
+import { BoardService } from './services/board.service';
+import { AuthService } from './services/auth.service';
+import { WebsocketService } from './services/websocket.service'
 
 @NgModule({
     declarations: [
@@ -38,9 +44,17 @@ import { SignupComponent } from './signup.component/signup.component';
         DndModule.forRoot(),
         AppRoutingModule
     ],
-    providers: [ModalWindowService],
+    providers: [
+        ModalWindowService,
+        NotificationWebsocketService,
+        NotificationsService,
+        BoardsService,
+        BoardService,
+        AuthService,
+        WebsocketService
+        ],
     bootstrap: [AppComponent]
 })
-export class AppModule { 
-    constructor(router: Router) {}
+export class AppModule {
+    constructor(router: Router) { }
 }

@@ -5,6 +5,7 @@ import { Observable } from 'rxjs/Observable';
 import { Board } from '../models/board';
 import { Card } from '../models/card';
 import { AuthService } from './auth.service';
+import { BoardService } from './board.service';
 import { JwtHelper } from 'angular2-jwt';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/map';
