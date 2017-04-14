@@ -6,7 +6,12 @@ import { Card } from '../models/card';
 @Injectable()
 export class ModalWindowService {  
     open = new Subject<any>();
+    refresh = new Subject<any>();
     openModal(card, rights, board){
         this.open.next({card: card, rights: rights, board: board });
+    }
+    refreshBoard(board) {
+        console.log('refresh');
+        this.refresh.next(board);
     }
 }
