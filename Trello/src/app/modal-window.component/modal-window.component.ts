@@ -57,10 +57,10 @@ export class ModalWindowComponent {
             // console.log('ok');
         });
         this.notificationWebsocketService.notifications.subscribe(msg => {
-            console.log('response: ', msg);
             if (<string>msg.title != 'updated') {
                 return;
             }
+            console.log('Modal Window, response: ', msg);
             let boardID = msg.payload._id;
             this.boardsService.getBoardsFromServer().subscribe(
                 data => {

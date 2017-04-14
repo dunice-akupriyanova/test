@@ -9,8 +9,8 @@ import { NotificationWebsocketService } from '../services/notification-websocket
 
 @Injectable()
 export class NotificationsService {
-    notifications: Array<any>=[];
-    static count = {count: 0};
+    notifications: Array<any> = [];
+    static count = { count: 0 };
     constructor(
         private http: Http,
         private boardsService: BoardsService,
@@ -38,7 +38,7 @@ export class NotificationsService {
         let headers = new Headers({ 'Content-Type': 'application/json' });
         let options = new RequestOptions({ headers: headers });
         let boardID = board.id;
-        return this.http.post(`http://localhost:3000/users/notification`, {type, userID, card, boardID}, options)
+        return this.http.post(`http://localhost:3000/users/notification`, { type, userID, card, boardID }, options)
             .map(this.extractData)
             .catch(this.handleError);
     }
@@ -57,42 +57,73 @@ export class NotificationsService {
             .map(this.extractData)
             .catch(this.handleError);
     }
+    overlookNotification(type, userID, boardID, cardID?): Observable<any> {
+        console.log('overlookNotification');
+        let headers = new Headers({ 'Content-Type': 'application/json' });
+        let options = new RequestOptions({ headers: headers });
+        return this.http.put(`http://localhost:3000/users/notification`, { type, userID, cardID, boardID }, options)
+            .map(this.extractData)
+            .catch(this.handleError);
+    }
     getNotifications(user): Array<any> {
         this.getNotification(user.id).subscribe(data => {
-                    let dataLength = data.length;
-                    for (let i=0; i<dataLength; i++) {
-                        this.notifications[i] = new Notification(data[i].type, data[i].userID, data[i].boardID, data[i].cards);
-                        let cardsLength = this.notifications[i].cards.length;
-                        for (let j=0; j<cardsLength; j++) {
-                            let newCard = this.boardsService.getCardById(this.notifications[i].cards[j].id)||this.boardService.getCardById(this.notifications[i].cards[j].id);
-                            if (newCard) {
-                                this.notifications[i].cards[j] = newCard;
-                            } else {
-                                console.log('not found!');
-                                this.removeNotification(this.notifications[i].type, user.id, data[i].boardID, this.notifications[i].cards[j].id).subscribe(
-                                    data => {
-                                        console.log(data);
-                                    }
-                                );
-                                this.notifications[i].cards.splice(j, 1);
-                                if (!this.notifications[i].cards.length) {
-                                    this.notifications.splice(i, 1);
-                                    dataLength--;
-                                    i--;
-                                }
-                                j--;
-                                cardsLength--;
-                            }
-                        }
-                        NotificationsService.count.count+=cardsLength;
-                        let board = this.boardsService.getBoardById(this.notifications[i].boardID);
-                        // console.log('found=', this.boardsService.getBoardById(this.notifications[i].boardID));
-                        if (board) {
-                            this.notifications[i].boardName = this.boardsService.getBoardById(this.notifications[i].boardID).name;               
-                        }         
+            let dataLength = data.length;
+            for (let i = 0; i < dataLength; i++) {
+                if (data[i].overlooked) {
+                    dataLength--;
+                    data.splice(i, 1);
+                    i--;
+                    continue;
+                }
+                for (let j = 0; j < data[i].cards.length; j++) {
+                    if (data[i].cards[j].overlooked) {
+                        data[i].cards.splice(j, 1);
                     }
-                    // NotificationsService.count.count = dataLength;
-                });
+                }
+                this.notifications[i] = new Notification(data[i].type, data[i].userID, data[i].boardID, data[i].cards);
+                let cardsLength = this.notifications[i].cards.length;
+                for (let j = 0; j < cardsLength; j++) {
+                    let newCard = this.boardsService.getCardById(this.notifications[i].cards[j].id) || this.boardService.getCardById(this.notifications[i].cards[j].id);
+                    if (newCard) {
+                        this.notifications[i].cards[j] = newCard;
+                        this.notifications[i].cards[j].overlooked = false;
+                    } else {
+                        console.log('not found!');
+                        this.removeNotification(this.notifications[i].type, user.id, data[i].boardID, this.notifications[i].cards[j].id).subscribe(
+                            data => {
+                                console.log(data);
+                            }
+                        );
+                        this.notifications[i].cards.splice(j, 1);
+                        j--;
+                        cardsLength--;
+                    }
+                }
+                if ((this.notifications[i].type == 'card') && (!this.notifications[i].cards.length)) {
+                    this.notifications.splice(i, 1);
+                    dataLength--;
+                    i--;
+                    continue;
+                }
+                let board = this.boardsService.getBoardById(this.notifications[i].boardID);
+                if (board) {
+                    this.notifications[i].boardName = this.boardsService.getBoardById(this.notifications[i].boardID).name;
+                    if (this.notifications[i].type == 'board') {
+                        NotificationsService.count.count += 1;
+                    }
+                } else {
+                    console.log('board nor found');
+                    this.removeNotification('board', user.id, data[i].boardID).subscribe(
+                        data => {
+                            console.log(data);
+                            this.notifications.splice(i, 1);
+                            dataLength--;
+                            i--;
+                        }
+                    );
+                }
+            }
+        });
         return this.notifications;
     }
 }

@@ -4,6 +4,7 @@ import { AuthService } from '../services/auth.service';
 import { BoardsService } from '../services/boards.service';
 import { BoardService } from '../services/board.service';
 import { UsersService } from '../services/users.service';
+import { NotificationWebsocketService } from '../services/notification-websocket.service';
 import { JwtHelper } from 'angular2-jwt';
 import { Router } from '@angular/router';
 
@@ -24,8 +25,34 @@ export class BoardsComponent {
         private boardsService: BoardsService,
         private usersService: UsersService,
         private boardService: BoardService,
+        private notificationWebsocketService: NotificationWebsocketService,
         private router: Router
-    ) { }
+    ) {
+        this.notificationWebsocketService.notifications.subscribe(msg => {
+            if (<string>msg.title != 'boardsAreUpdated') {
+                return;
+            }
+            this.boardsService.getBoardsFromServer().subscribe(
+            data => {
+                this.boardsService.putBoards(data);
+                this.boards = this.boardsService.getBoards();
+                // console.log(this.boards);
+            },
+            err => {
+                this.authService.refreshTokens(this.tokens.refreshToken).subscribe(
+                    data => {
+                        this.authService.setTokens(data);
+                        this.boardsService.getBoardsFromServer().subscribe(
+                            data => {
+                                this.boardsService.putBoards(data);
+                                this.boards = this.boardsService.getBoards();
+                                // console.log(this.boards);
+                            });
+                    }
+                );
+            });
+        });
+    }
     addBoard(): void {
         if (!this.newBoardName) { return; }
         this.boardsService.addBoard(this.newBoardName).subscribe(
@@ -113,7 +140,7 @@ export class BoardsComponent {
                 // console.log('got rights='+rights.rights);
                 if (rights.rights!='none') {
                    BoardService.currentBoard = this.boardsService.getBoardById(id);
-                   console.log('BoardService.currentBoard ==', BoardService.currentBoard);
+                //    console.log('BoardService.currentBoard ==', BoardService.currentBoard);
                    this.router.navigate([`/board/${id}`]);
                 } else { alert('No access rights!'); }
             }

@@ -31,6 +31,11 @@ var CardSchema = new mongoose.Schema({
         type: [String],
         required: false,
         unique: false,
+    },
+    overlooked: {
+        type: Boolean,
+        required: false,
+        unique: false,
     }
 });
 

@@ -50,7 +50,7 @@ export class MainComponent {
     }
     ngOnInit() {
         this.notificationWebsocketService.notifications.subscribe(msg => {
-            if (<string>msg.title == 'updated') {
+            if ((<string>msg.title == 'updated')||(<string>msg.title == 'boardsAreUpdated')) {
                 return;
             }
             console.log("main, Response from websocket: ", msg);
@@ -127,13 +127,35 @@ export class MainComponent {
                     console.log(data);
                 }
             );
-            console.log(notification.cards.indexOf(card));
+            // console.log(notification.cards.indexOf(card));
             notification.cards.splice(notification.cards.indexOf(card), 1);
             if (!notification.cards.length) {
                 this.notifications.splice(this.notifications.indexOf(notification), 1);
             }
         } else {
             this.notificationsService.removeNotification(type, this.user.id, notification.boardID).subscribe(
+                data => {
+                    console.log(data);
+                }
+            );
+            this.notifications.splice(this.notifications.indexOf(notification), 1);
+        }
+    }
+    overlook(type, notification, card?): void {
+        console.log('overlook');
+        if (type == 'card') {
+            this.notificationsService.overlookNotification(type, this.user.id, notification.boardID, card.id).subscribe(
+                data => {
+                    console.log(data);
+                }
+            );
+            // console.log(notification.cards.indexOf(card));
+            notification.cards.splice(notification.cards.indexOf(card), 1);
+            if (!notification.cards.length) {
+                this.notifications.splice(this.notifications.indexOf(notification), 1);
+            }
+        } else {
+            this.notificationsService.overlookNotification(type, this.user.id, notification.boardID).subscribe(
                 data => {
                     console.log(data);
                 }

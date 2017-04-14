@@ -1,92 +1,92 @@
 <div class="window_overlay" id="window_overlay" *ngIf="currentCard">
-	<div class="window">
-		<div class="window_text">
-				Name:
-		</div>
-		<textarea *ngIf="(rights=='owner')||(rights=='write')" (focusout)="changeCard()" rows=1 cols={{currentCard.name.length+1}} name="current_card_name" [(ngModel)]="currentCard.name" placeholder="Card name"></textarea>	
-		<div *ngIf="(rights=='read')||(rights=='none')" class="current_card_name">
-			{{currentCard.name}}
-		</div>
-		<div class="window_text">
-				Members:
-		</div>
-		<div class="add_member" *ngIf="(rights=='owner')||(rights=='write')">
-			+
-			<ul class="new_members">
-				<li *ngFor="let nextuser of users" class="new_member">
-				<div class="username">
-					{{nextuser.username}}
-				</div>
-				<input *ngIf="currentCard.members.indexOf(nextuser.username)==-1" type="checkbox" name="added" (click)="changeMember(nextuser, $event)">
-				<input *ngIf="currentCard.members.indexOf(nextuser.username)!=-1" type="checkbox" name="added" (click)="changeMember(nextuser, $event)" checked>
-				</li>
-			</ul>
-		</div>
-		<ul class="members">
-			<li *ngFor="let member of currentCard.members">
-				{{member}}
-			</li>
-		</ul>
-		<div class="window_text">
-				Description:
-		</div>
-		<textarea *ngIf="(rights=='owner')||(rights=='write')" (focusout)="changeCard()" rows=4 name="current_card_description" [(ngModel)]="currentCard.description" placeholder="Card desctiption"></textarea>
-		<div class="current_card_description" *ngIf="((rights=='read')||(rights=='none'))&&currentCard.description">
-			{{currentCard.description}}
-		</div>
-		<div class="current_card_description" *ngIf="((rights=='read')||(rights=='none'))&&(!currentCard.description)">
-			No description
-		</div>
-		<div class="window_text">
-				Comments:
-		</div>
-		<ul class="comments">
-			<li *ngFor="let comment of currentCard.comments; let k = index">
-				<div class="author">
-					{{comment.author}}
-				</div>
-				<div class="comment_date">
-					{{comment.date}}
-				</div>
-				<div *ngIf="!comment.isEditing" class="content">
-					{{comment.content}}
-				</div>
-				<textarea *ngIf="comment.isEditing" name="comment_content" [(ngModel)]="comment.content" #editingComment (keyup)="check(editingComment.value, $event)"></textarea>
-				<div *ngIf="comment.isEditing">
-					<ul *ngIf="searchResult.length" class="search">
-						<li *ngFor="let name of searchResult" (click)="choose(name, k)">
-							{{name}}
-						</li>
-					</ul>
-				</div>
-				<div class="buttons">
-					<button *ngIf="(comment.author==user)&&(!comment.isEditing)" (click)="editComment(comment)">
+    <div class="window">
+        <div class="window_text">
+            Name:
+        </div>
+        <textarea *ngIf="(rights=='owner')||(rights=='write')" (blur)="changeCard()" rows=1 cols={{currentCard.name.length+1}} name="current_card_name" [(ngModel)]="currentCard.name" placeholder="Card name"></textarea>
+        <div *ngIf="(rights=='read')||(rights=='none')" class="current_card_name">
+            {{currentCard.name}}
+        </div>
+        <div class="window_text">
+            Members:
+        </div>
+        <div class="add_member" *ngIf="(rights=='owner')||(rights=='write')">
+            +
+            <ul class="new_members">
+                <li *ngFor="let nextuser of users" class="new_member">
+                    <div class="username">
+                        {{nextuser.username}}
+                    </div>
+                    <input *ngIf="currentCard.members.indexOf(nextuser.username)==-1" type="checkbox" name="added" (click)="changeMember(nextuser, $event)">
+                    <input *ngIf="currentCard.members.indexOf(nextuser.username)!=-1" type="checkbox" name="added" (click)="changeMember(nextuser, $event)" checked>
+                </li>
+            </ul>
+        </div>
+        <ul class="members">
+            <li *ngFor="let member of currentCard.members">
+                {{member}}
+            </li>
+        </ul>
+        <div class="window_text">
+            Description:
+        </div>
+        <textarea *ngIf="(rights=='owner')||(rights=='write')" (blur)="changeCard()" rows=4 name="current_card_description" [(ngModel)]="currentCard.description" placeholder="Card desctiption"></textarea>
+        <div class="current_card_description" *ngIf="((rights=='read')||(rights=='none'))&&currentCard.description">
+            {{currentCard.description}}
+        </div>
+        <div class="current_card_description" *ngIf="((rights=='read')||(rights=='none'))&&(!currentCard.description)">
+            No description
+        </div>
+        <div class="window_text">
+            Comments:
+        </div>
+        <ul class="comments">
+            <li *ngFor="let comment of currentCard.comments; let k = index">
+                <div class="author">
+                    {{comment.author}}
+                </div>
+                <div class="comment_date">
+                    {{comment.date}}
+                </div>
+                <div *ngIf="!comment.isEditing" class="content">
+                    {{comment.content}}
+                </div>
+                <textarea *ngIf="comment.isEditing" name="comment_content" [(ngModel)]="comment.content" #editingComment (keyup)="check(editingComment.value, $event)"></textarea>
+                <div *ngIf="comment.isEditing">
+                    <ul *ngIf="searchResult.length" class="search">
+                        <li *ngFor="let name of searchResult" (click)="choose(name, k)">
+                            {{name}}
+                        </li>
+                    </ul>
+                </div>
+                <div class="buttons">
+                    <button *ngIf="(comment.author==user)&&(!comment.isEditing)" (click)="editComment(comment)">
 						Edit
 					</button>
-					<button *ngIf="(comment.author==user)&&(comment.isEditing)" (click)="endEditing(comment)">
+                    <button *ngIf="(comment.author==user)&&(comment.isEditing)" (click)="endEditing(comment)">
 						Save
 					</button>
-					<button *ngIf="((comment.author==user)||(rights=='owner'))&&(!comment.isEditing)" (click)="removeComment(comment)">
+                    <button *ngIf="((comment.author==user)||(rights=='owner'))&&(!comment.isEditing)" (click)="removeComment(comment)">
 						Delete
 					</button>
-					<button *ngIf="((comment.author==user)||(rights=='owner'))&&(comment.isEditing)" (click)="cancelEditing(comment)">
+                    <button *ngIf="((comment.author==user)||(rights=='owner'))&&(comment.isEditing)" (click)="cancelEditing(comment)">
 						Cancel
 					</button>
-				</div>
-			</li>
-		</ul>
-		<form>
-			<textarea name="new_comment" [(ngModel)]="newComment" placeholder="Write a comment..." (keyup)="check(newComment, $event); newCommentIsEditing=true"></textarea>
-			<div *ngIf="newCommentIsEditing">
-					<ul *ngIf="searchResult.length" class="search">
-						<li *ngFor="let name of searchResult" (click)="choose(name)">
-							{{name}}
-						</li>
-					</ul>
-				</div>
-			<input (click)="addComment()" type="submit" name="add" value="Send" class="add_button">
-		</form>
-		<div class="delete window_close" (click)="hideDetails(currentCard)">
-		</div>
-	</div>
+                </div>
+            </li>
+        </ul>
+        <form>
+            <textarea name="new_comment" [(ngModel)]="newComment" placeholder="Write a comment..." (keyup)="check(newComment, $event); newCommentIsEditing=true"></textarea>
+            <div *ngIf="newCommentIsEditing">
+                <ul *ngIf="searchResult.length" class="search">
+                    <li *ngFor="let name of searchResult" (click)="choose(name)">
+                        {{name}}
+                    </li>
+                </ul>
+            </div>
+            <input (click)="addComment()" type="submit" name="add" value="Send" class="add_button">
+        </form>
+        <div class="delete window_close" (click)="hideDetails(currentCard)">
+        </div>
+    </div>
 </div>

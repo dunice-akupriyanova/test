@@ -41,14 +41,15 @@ export class BoardsService {
       .catch(this.handleError);
   }
   putBoards(data): void {
+    // console.log('put, data.length=', data.length);
     if (!data) {
       console.log('no data');
       return;
     }
+    BoardsService.boards=[];
     for (let i = 0; i < data.length; i++) {
       BoardsService.boards[i] = new Board(data[i]._id, data[i].name, data[i].lists);
     }
-    // console.log(BoardsService.boards);
   }
   getBoards(): Array<Board> {
     return BoardsService.boards;

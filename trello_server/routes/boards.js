@@ -24,21 +24,37 @@ router.post('/', auth.authenticate(), function(req, res, next) {
     console.log('board=', board);
     board.save(function(err) {
         if (err) throw err;
+        for (key in clients) {
+            for (let client of clients[key]) {
+                let response = {
+                    title: 'boardsAreUpdated'
+                }
+                client.sendUTF(JSON.stringify(response));
+            }
+        }
         res.status(201).send(JSON.stringify(board));
     });
 });
 
 router.delete('/:id', auth.authenticate(), function(req, res, next) {
+    console.log('delete');
     console.log(req.user);
     Board.findOne({ _id: req.params.id }, function(err, board) {
-        if (board) {
-            board.remove();
-            Right.find({ boardID: req.params.id }, function(err, rights) {
-                if (err) throw err;
-                for (let i = 0; i < rights.length; i++) {
-                    rights[i].remove();
+        if (!board) { return; }
+        board.remove();
+        Right.find({ boardID: req.params.id }, function(err, rights) {
+            if (err) throw err;
+            for (let i = 0; i < rights.length; i++) {
+                rights[i].remove();
+            }
+        });
+        for (key in clients) {
+            for (let client of clients[key]) {
+                let response = {
+                    title: 'boardsAreUpdated',
                 }
-            });
+                client.sendUTF(JSON.stringify(response));
+            }
         }
     })
     res.status(201);

@@ -1,7 +1,7 @@
 <div>
     <div *ngIf="(rights=='owner')||(rights=='write')">
         <div (onDropSuccess)="updateBoard()" class="header_list" dnd-sortable [sortableIndex]="index">
-            <textarea (focusout)='updateBoard()' rows=1 cols={{list.name.length}} name="list_name" [(ngModel)]="list.name" placeholder="List name"></textarea>
+            <textarea (blur)='updateBoard()' rows=1 cols={{list.name.length}} name="list_name" [(ngModel)]="list.name" placeholder="List name"></textarea>
             <div class="delete" (click)="removeList(list)">
             </div>
         </div>
@@ -15,8 +15,8 @@
     </div>
     <div dnd-sortable-container [dropZones]="['drop-zone']" [sortableData]="list.cards">
         <ul *ngIf="(rights=='owner')||(rights=='write')" class="cards">
-            <li (onDropSuccess)="updateBoard()"  class="card" *ngFor="let card of list.cards; let i = index" dnd-sortable [sortableIndex]="i" (click)="showDetails(card, rights)">
-                <card [card]="card" [list]="list" [rights]="rights"></card>              
+            <li (onDropSuccess)="updateBoard()" class="card" *ngFor="let card of list.cards; let i = index" dnd-sortable [sortableIndex]="i" (click)="showDetails(card, rights)">
+                <card [card]="card" [list]="list" [rights]="rights"></card>
             </li>
             <li>
                 <form class="add_card">
@@ -30,7 +30,7 @@
         </ul>
         <ul *ngIf="(rights=='none')||(rights=='read')" class="cards">
             <li class="card" *ngFor="let card of list.cards" (click)="showDetails(card)">
-                <card [card]="card" [list]="list" [rights]="rights"></card>              
+                <card [card]="card" [list]="list" [rights]="rights"></card>
             </li>
         </ul>
     </div>

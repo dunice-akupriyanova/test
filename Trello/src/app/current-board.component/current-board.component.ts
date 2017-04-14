@@ -78,7 +78,7 @@ export class CurrentBoardComponent {
         //             );
         //         });
         // });
-        this.route.params  
+        this.route.params
             .subscribe((params) => {
                 this.boardsService.getBoardsFromServer().subscribe(
                     data => {

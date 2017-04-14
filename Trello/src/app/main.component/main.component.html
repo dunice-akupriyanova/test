@@ -1,50 +1,50 @@
 <div class="header" (click)="check()">
-  <a routerLink="/boards" routerLinkActive="active">
-    <div class="boards_button">
-      <div class="boards_button_icon">
-      </div>
-        <div class="boards_button_text">
-          Boards
+    <a routerLink="/boards" routerLinkActive="active">
+        <div class="boards_button">
+            <div class="boards_button_icon">
+            </div>
+            <div class="boards_button_text">
+                Boards
+            </div>
         </div>
-    </div>
-  </a>
-  <div class="login">
-    <div *ngIf="user" class="user_name">
-      {{user.username}}
-    </div>
-    <div *ngIf="notifications.length" class="notifications" (mouseover)="reset()">
-      <div *ngIf="new.count" class="new">
-        {{new.count}}
-      </div>
-      <img src="../../assets/images/alarm3.png" class='notifications_icon'>
-      <ul class="notification_list">
-        <li *ngFor="let notification of notifications; let n = index">
-          {{notification.boardName}}
-          <div *ngIf="notification.type=='board'" class="notification_rights">
-            <div class="rights_message" (click)="redirectToBoard(notification.boardID)">
-              Changed rights
+    </a>
+    <div class="login">
+        <div *ngIf="user" class="user_name">
+            {{user.username}}
+        </div>
+        <div *ngIf="notifications.length" class="notifications" (mouseover)="reset()">
+            <div *ngIf="new.count" class="new">
+                {{new.count}}
             </div>
-            <div class="delete" (click)="removeNotification(notification.type, notification)">
-            </div>
-          </div>
-          <ul *ngIf="notification.cards">
-            <li *ngFor="let card of notification.cards" class="notification_card" (click)="redirect(notification.boardID, card)">
-              <div class="card_name">
-                {{card.name}}
-              </div>
-              <div class="delete" (click)="removeNotification(notification.type, notification, card)">
-              </div>
-            </li>
-          </ul>
-        </li>
-      </ul>
-    </div>
-    <div class="login_button">
-        <a (click)="logOut()" routerLink="/logged-out" routerLinkActive="active">
+            <img src="../../assets/images/alarm3.png" class='notifications_icon'>
+            <ul class="notification_list">
+                <li *ngFor="let notification of notifications; let n = index">
+                    {{notification.boardName}}
+                    <div *ngIf="notification.type=='board'" class="notification_rights">
+                        <div class="rights_message" (click)="redirectToBoard(notification.boardID); overlook(notification.type, notification)">
+                            Changed rights
+                        </div>
+                        <div class="delete" (click)="overlook(notification.type, notification)">
+                        </div>
+                    </div>
+                    <ul *ngIf="notification.cards">
+                        <li *ngFor="let card of notification.cards" class="notification_card" (click)="redirect(notification.boardID, card); overlook(notification.type, notification, card)">
+                            <div class="card_name">
+                                {{card.name}}
+                            </div>
+                            <div class="delete" (click)="overlook(notification.type, notification, card)">
+                            </div>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+        <div class="login_button">
+            <a (click)="logOut()" routerLink="/logged-out" routerLinkActive="active">
             Log out
         </a>
+        </div>
     </div>
-  </div>
 </div>
 <modal-window></modal-window>
 <router-outlet></router-outlet>
