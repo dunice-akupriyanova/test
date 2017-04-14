@@ -118,12 +118,13 @@ router.post('/notification', function(req, res, next) {
             if (notification) {
                 for (let i = 0; i < notification.cards.length; i++) {
                     if (card.id == notification.cards[i].id) {
-                        // console.log('found');
-                        // if (clients[notification.userID]) {
-                        //     for (let client of clients[notification.userID]) {
-                        //         client.sendUTF(JSON.stringify(notification));
-                        //     }
-                        // }
+                        notification.cards[i].overlooked = false;
+                        notification.save(function(err) {
+                            if (err) throw err;
+                        });
+                        for (let client of clients[notification.userID]) {
+                            client.sendUTF(JSON.stringify(notification));
+                        }
                         return;
                     }
                 }
@@ -158,11 +159,6 @@ router.post('/notification', function(req, res, next) {
             }
         } else {
             if (notification) {
-                // if (clients[notification.userID]) {
-                //     for (let client of clients[notification.userID]) {
-                //         client.sendUTF(JSON.stringify(notification));
-                //     }
-                // }
                 notification.overlooked = false;
                 notification.save(function(err) {
                     if (err) throw err;
