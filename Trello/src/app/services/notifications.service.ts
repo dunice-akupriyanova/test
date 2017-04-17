@@ -11,6 +11,8 @@ import { NotificationWebsocketService } from '../services/notification-websocket
 export class NotificationsService {
     notifications: Array<any> = [];
     static count = { count: 0 };
+    static oldCount = { count: 0 };
+    static oldNotifications: Array<Notification> = [];
     constructor(
         private http: Http,
         private boardsService: BoardsService,
@@ -38,7 +40,11 @@ export class NotificationsService {
         let headers = new Headers({ 'Content-Type': 'application/json' });
         let options = new RequestOptions({ headers: headers });
         let boardID = board.id;
-        return this.http.post(`http://localhost:3000/users/notification`, { type, userID, card, boardID }, options)
+        let cardID;
+        if (card) {
+            cardID = card.id;
+        }
+        return this.http.post(`http://localhost:3000/users/notification`, { type, userID, cardID, boardID }, options)
             .map(this.extractData)
             .catch(this.handleError);
     }
@@ -67,7 +73,8 @@ export class NotificationsService {
     }
     getNotifications(user): Array<any> {
         this.getNotification(user.id).subscribe(data => {
-            console.log('getNotifications data=', data);
+            // console.log('getNotifications data=');
+            // console.log(data);
             let dataLength = data.length;
             for (let i = 0; i < dataLength; i++) {
                 if (data[i].overlooked) {
@@ -76,54 +83,66 @@ export class NotificationsService {
                     i--;
                     continue;
                 }
-                for (let j = 0; j < data[i].cards.length; j++) {
-                    if (data[i].cards[j].overlooked) {
-                        data[i].cards.splice(j, 1);
-                    }
-                }
-                this.notifications[i] = new Notification(data[i].type, data[i].userID, data[i].boardID, data[i].cards);
-                let cardsLength = this.notifications[i].cards.length;
-                for (let j = 0; j < cardsLength; j++) {
-                    let newCard = this.boardsService.getCardById(this.notifications[i].cards[j].id) || this.boardService.getCardById(this.notifications[i].cards[j].id);
-                    if (newCard) {
-                        this.notifications[i].cards[j] = newCard;
-                        this.notifications[i].cards[j].overlooked = false;
-                    } else {
-                        console.log('not found!');
-                        this.removeNotification(this.notifications[i].type, user.id, data[i].boardID, this.notifications[i].cards[j].id).subscribe(
-                            data => {
-                                console.log(data);
-                            }
-                        );
-                        this.notifications[i].cards.splice(j, 1);
-                        j--;
-                        cardsLength--;
-                    }
-                }
-                if ((this.notifications[i].type == 'card') && (!this.notifications[i].cards.length)) {
-                    this.notifications.splice(i, 1);
-                    dataLength--;
-                    i--;
-                    continue;
-                }
+                this.notifications[i] = new Notification(data[i].type, data[i].userID, data[i].boardID, data[i].cardID, data[i].overlooked);
                 let board = this.boardsService.getBoardById(this.notifications[i].boardID);
-                if (board) {
-                    this.notifications[i].boardName = this.boardsService.getBoardById(this.notifications[i].boardID).name;
-                    if (this.notifications[i].type == 'board') {
-                        NotificationsService.count.count += 1;
-                    }
-                } else {
-                    console.log('board nor found');
+                this.notifications[i].boardName = board?board.name:'';
+                if (!this.notifications[i].boardName) {
+                    console.log('board is not found');
                     this.removeNotification('board', user.id, data[i].boardID).subscribe(
                         data => {
                             console.log(data);
                             this.notifications.splice(i, 1);
+                            data.splice(i, 1);
                             dataLength--;
                             i--;
-                        }
-                    );
+                        });
+                }
+                if (data[i].type == 'board') {
+                    continue;
+                }
+                this.notifications[i].card = this.boardsService.getCardById(data[i].cardID) || this.boardService.getCardById(data[i].cardID);
+                if (!this.notifications[i].card) {
+                    console.log('card is not found');
+                    this.removeNotification(data[i].type, user.id, data[i].boardID, data[i].cardID).subscribe(
+                        data => {
+                            console.log(data);
+                        });
+                    data.splice(i, 1);
+                    this.notifications.splice(i, 1);
+                    dataLength--;
+                    i--;
                 }
             }
+            // console.log(' service NotificationsService.oldNotifications=', NotificationsService.oldNotifications);
+            // console.log(' service this.notifications=', this.notifications);
+            if (!NotificationsService.oldNotifications.length) {
+                // console.log('new');
+                NotificationsService.count.count = this.notifications.length;
+                return this.notifications;
+            }
+            let equal = true;
+            if (this.notifications.length != NotificationsService.oldNotifications.length) {
+                // console.log("length, ++");
+                NotificationsService.count.count++;
+                return this.notifications;
+            }
+            for (let i = 0; i < this.notifications.length; i++) {
+                if ((this.notifications[i].boardID != NotificationsService.oldNotifications[i].boardID) || (this.notifications[i].overlooked != NotificationsService.oldNotifications[i].overlooked)) {
+                    equal = false;
+                }
+                if (!this.notifications[i].cardID) {
+                    continue;
+                }
+                if (this.notifications[i].cardID != NotificationsService.oldNotifications[i].cardID) {
+                    equal = false;
+                }
+            }
+            // console.log('equal=', equal);
+            if (!equal) {
+                // console.log("++");
+                NotificationsService.count.count++;
+            }
+            return this.notifications;
         });
         return this.notifications;
     }

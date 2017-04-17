@@ -28,13 +28,13 @@ export class CardComponent {
         this.boardService.updateBoard().subscribe(
             data => {
                         // console.log(data);
-                    },
-                    err => {
-                        this.authService.refreshTokens(this.tokens.refreshToken).subscribe(
-                            data => {
-                                        this.authService.setTokens(data);
-                                        this.boardService.updateBoard().subscribe();
-                                    });
-                    });
+            },
+            err => {
+                this.authService.refreshTokens(this.tokens.refreshToken).subscribe(
+                    data => {
+                                this.authService.setTokens(data);
+                                this.boardService.updateBoard().subscribe();
+                            });
+            });
     }
 }

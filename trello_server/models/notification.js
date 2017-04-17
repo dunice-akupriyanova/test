@@ -1,5 +1,4 @@
 var mongoose = require('mongoose');
-var Card = require('./card');
 
 var NotificationSchema = new mongoose.Schema({
     type: {
@@ -17,8 +16,8 @@ var NotificationSchema = new mongoose.Schema({
         unique: false,
         required: true
     },
-    cards: {
-        type: [Card],
+    cardID: {
+        type: String,
         unique: false,
         required: false
     },

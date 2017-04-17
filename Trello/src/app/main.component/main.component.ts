@@ -32,6 +32,7 @@ export class MainComponent {
     rights: String;
     notifications: Array<any> = [];
     new: any = {};
+    static count: any = {};
     constructor(
         private usersService: UsersService,
         private boardsService: BoardsService,
@@ -50,14 +51,16 @@ export class MainComponent {
     }
     ngOnInit() {
         this.notificationWebsocketService.notifications.subscribe(msg => {
-            if ((<string>msg.title == 'updated')||(<string>msg.title == 'boardsAreUpdated')) {
+            if ((<string>msg.title == 'updated') || (<string>msg.title == 'boardsAreUpdated')) {
                 return;
             }
             console.log("main, Response from websocket: ", msg);
             this.notifications = this.notificationsService.getNotifications(this.user);
-            let newCount = this.new.count + 1;
-            this.new = {};
-            this.new.count = newCount;
+            console.log('ngOnInit, this.notifications=', this.notifications);
+            for (let i = 0; i < this.notifications.length; i++) {
+                NotificationsService.oldNotifications[i] = new Notification(this.notifications[i].type, this.notifications[i].userID, this.notifications[i].boardID, this.notifications[i].cardID, this.notifications[i].overlooked);
+            }
+            console.log('subscribe=', NotificationsService.oldNotifications);
         });
 
         this.boardsService.getBoardsFromServer().subscribe(
@@ -84,12 +87,13 @@ export class MainComponent {
                 this.users = this.usersService.getUsers();
                 this.user = this.usersService.getUserById(this.jwtHelper.decodeToken(this.tokens.accessToken).id);
                 this.notifications = this.notificationsService.getNotifications(this.user);
+                this.usersService.refreshUser(this.user);
             });
-        this.new = NotificationsService.count;
+        MainComponent.count = NotificationsService.count;
+        this.new = MainComponent.count;
     }
-    redirectToBoard(boardID): void {
-        let id = JSON.parse(localStorage.getItem('UserID') ? localStorage.getItem('UserID') : '');
-        this.usersService.getRights(id, boardID).subscribe(
+    redirect(boardID, card?): void {
+        this.usersService.getRights(this.user.id, boardID).subscribe(
             data => {
                 this.rights = data.rights;
                 if (!BoardService.currentBoard) {
@@ -99,21 +103,9 @@ export class MainComponent {
                     BoardService.currentBoard = this.boardsService.getBoardById(boardID);
                 }
                 this.router.navigate([`/board/${boardID}`]);
-            }
-        );
-    }
-    redirect(boardID, card): void {
-        let id = JSON.parse(localStorage.getItem('UserID') ? localStorage.getItem('UserID') : '');
-        this.usersService.getRights(id, boardID).subscribe(
-            data => {
-                this.rights = data.rights;
-                if (!BoardService.currentBoard) {
-                    BoardService.currentBoard = this.boardsService.getBoardById(boardID);
+                if (!card) {
+                    return;
                 }
-                if ((BoardService.currentBoard.id != boardID)) {
-                    BoardService.currentBoard = this.boardsService.getBoardById(boardID);
-                }
-                this.router.navigate([`/board/${boardID}`]);
                 let opencard = this.boardService.getCardById(card.id);
                 this.modalWindowService.openModal(opencard, this.rights, BoardService.currentBoard);
             }
@@ -121,53 +113,28 @@ export class MainComponent {
     }
     removeNotification(type, notification, card?): void {
         console.log('remove');
-        if (type == 'card') {
-            this.notificationsService.removeNotification(type, this.user.id, notification.boardID, card.id).subscribe(
-                data => {
-                    console.log(data);
-                }
-            );
-            // console.log(notification.cards.indexOf(card));
-            notification.cards.splice(notification.cards.indexOf(card), 1);
-            if (!notification.cards.length) {
-                this.notifications.splice(this.notifications.indexOf(notification), 1);
+        this.notificationsService.removeNotification(type, this.user.id, notification.boardID).subscribe(
+            data => {
+                console.log(data);
             }
-        } else {
-            this.notificationsService.removeNotification(type, this.user.id, notification.boardID).subscribe(
-                data => {
-                    console.log(data);
-                }
-            );
-            this.notifications.splice(this.notifications.indexOf(notification), 1);
-        }
+        );
+        this.notifications.splice(this.notifications.indexOf(notification), 1);
+
     }
     overlook(type, notification, card?): void {
         console.log('overlook');
-        if (type == 'card') {
-            this.notificationsService.overlookNotification(type, this.user.id, notification.boardID, card.id).subscribe(
-                data => {
-                    console.log(data);
-                }
-            );
-            // console.log(notification.cards.indexOf(card));
-            notification.cards.splice(notification.cards.indexOf(card), 1);
-            if (!notification.cards.length) {
-                this.notifications.splice(this.notifications.indexOf(notification), 1);
+        this.notificationsService.overlookNotification(type, this.user.id, notification.boardID).subscribe(
+            data => {
+                console.log(data);
             }
-        } else {
-            this.notificationsService.overlookNotification(type, this.user.id, notification.boardID).subscribe(
-                data => {
-                    console.log(data);
-                }
-            );
-            this.notifications.splice(this.notifications.indexOf(notification), 1);
+        );
+        this.notifications.splice(this.notifications.indexOf(notification), 1);
+        for (let i = 0; i < this.notifications.length; i++) {
+            NotificationsService.oldNotifications[i] = new Notification(this.notifications[i].type, this.notifications[i].userID, this.notifications[i].boardID, this.notifications[i].cardID, this.notifications[i].overlooked);
         }
-    }
-    check(): void {
-
-        // this.notificationWebsocketService.notifications.next(this.notifications[0]);
+        console.log('main NotificationsService.oldNotifications=', NotificationsService.oldNotifications);
     }
     reset(): void {
-        this.new.count = 0;
+        MainComponent.count.count = 0;
     }
 }

@@ -22,6 +22,7 @@ import { NotificationsService } from './services/notifications.service';
 import { BoardsService } from './services/boards.service';
 import { BoardService } from './services/board.service';
 import { AuthService } from './services/auth.service';
+import { UsersService } from './services/users.service';
 import { WebsocketService } from './services/websocket.service'
 
 @NgModule({
@@ -51,7 +52,8 @@ import { WebsocketService } from './services/websocket.service'
         BoardsService,
         BoardService,
         AuthService,
-        WebsocketService
+        WebsocketService,
+        UsersService
         ],
     bootstrap: [AppComponent]
 })

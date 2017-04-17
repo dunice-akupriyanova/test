@@ -18,7 +18,7 @@ import { JwtHelper } from 'angular2-jwt';
     selector: 'current-board',
     templateUrl: './current-board.component.html',
     styleUrls: ['./current-board.component.css'],
-    providers: [UsersService]
+    providers: []
 })
 export class CurrentBoardComponent {
     jwtHelper: JwtHelper = new JwtHelper();
@@ -26,7 +26,7 @@ export class CurrentBoardComponent {
     newName: string;
     tokens: any = this.authService.getTokens();
     users: Array<User> = this.usersService.getUsers();
-    user: string = this.usersService.getUser() ? this.usersService.getUser() : JSON.parse(localStorage.getItem('Username'));
+    user: User = UsersService.user;
     rights: String;
     allRights: Array<Object>;
     constructor(
@@ -38,46 +38,21 @@ export class CurrentBoardComponent {
         private route: ActivatedRoute,
         private notificationsService: NotificationsService,
         private notificationWebsocketService: NotificationWebsocketService,
-    ) {        
-        this.modalWindowService.refresh.subscribe(data=> {
-            // console.log('data=', data);
+    ) {
+        this.modalWindowService.refresh.subscribe(data => {
+            console.log('data=', data);
             this.currentBoard = data;
+        });
+        this.usersService.refresh.subscribe(data => {
+            this.user = UsersService.user;
+            this.usersService.getRights(this.user.id, this.currentBoard.id).subscribe(
+                data => {
+                    this.rights = data.rights;
+                    this.users = this.usersService.getUsers();
+                });
         });
     }
     ngOnInit() {
-        // this.notificationWebsocketService.notifications.subscribe(msg => {
-        //     if (<string>msg.title != 'updated') {
-        //         return;
-        //     }
-        //     console.log("current board, Response from websocket: ", msg);
-        //     let boardID = msg.payload._id;
-            
-        //     this.boardsService.getBoardsFromServer().subscribe(
-        //         data => {
-        //             // this.boardsService.putBoards(data);
-        //             if (!BoardService.currentBoard || BoardService.currentBoard.id != boardID) { return; }
-
-        //             // BoardService.currentBoard = this.boardsService.getBoardById(boardID);
-        //             console.log('this.current');
-        //             this.currentBoard = BoardService.currentBoard;
-        //             // console.log('BoardService.currentBoard=', BoardService.currentBoard);                                   
-        //         },
-        //         err => {
-        //             this.authService.refreshTokens(this.tokens.refreshToken).subscribe(
-        //                 data => {
-        //                     this.authService.setTokens(data);
-        //                     this.boardsService.getBoardsFromServer().subscribe(
-        //                         data => {
-        //                             // this.boardsService.putBoards(data);
-        //                             if (!BoardService.currentBoard || BoardService.currentBoard.id != boardID) { return; }
-        //                             // BoardService.currentBoard = this.boardsService.getBoardById(boardID);
-        //                             console.log('this.current');
-        //                             this.currentBoard = BoardService.currentBoard;                                        
-        //                         });
-        //                 }
-        //             );
-        //         });
-        // });
         this.route.params
             .subscribe((params) => {
                 this.boardsService.getBoardsFromServer().subscribe(
@@ -94,8 +69,7 @@ export class CurrentBoardComponent {
                                         this.boardsService.putBoards(data);
                                         this.initialization(params['id']);
                                     });
-                            }
-                        );
+                            });
                     });
             });
     }
@@ -104,17 +78,14 @@ export class CurrentBoardComponent {
             BoardService.currentBoard = this.boardsService.getBoardById(boardID);
         }
         this.currentBoard = BoardService.currentBoard;
-        // console.log('BoardService.currentBoard=', BoardService.currentBoard);
-        let id = JSON.parse(localStorage.getItem('UserID') ? localStorage.getItem('UserID') : '');
-        this.usersService.getRights(id, this.currentBoard.id).subscribe(
+        if (!this.user) {
+            return;
+        }
+        this.usersService.getRights(this.user.id, this.currentBoard.id).subscribe(
             data => {
                 this.rights = data.rights;
                 this.users = this.usersService.getUsers();
-            }
-        );
-        this.usersService.getAllRights(this.currentBoard.id).subscribe(data => {
-            // console.log(data); //!!!
-        });
+            });
     }
     addList(): void {
         if (this.rights == 'none' || this.rights == 'read') {
@@ -141,17 +112,12 @@ export class CurrentBoardComponent {
             });
     }
     setRights(event, user) {
-        // console.log(user);
         this.usersService.setRights(user.id, this.currentBoard.id, event.target.value).subscribe(
             d => { console.log(d); }
         );
-        // console.log(user);
         console.log('this.currentBoard.id=', this.currentBoard.id);
         this.notificationsService.setNotification('board', user.id, this.currentBoard).subscribe(
             d => { console.log(d); }
         )
-    }
-    check(): void {
-        console.log('this.currentBoard=', this.currentBoard);
     }
 }

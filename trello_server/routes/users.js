@@ -5,38 +5,7 @@ var Right = require('../models/right');
 var Notification = require('../models/notification');
 var WebSocketServer = require('websocket').server;
 var http = require('http');
-
-// var server = http.createServer(function(request, response) {
-//     // process HTTP request. Since we're writing just WebSockets server
-//     // we don't have to implement anything.
-// });
-// server.listen(8080, function() { });
-
-// wsServer = new WebSocketServer({
-//     httpServer: server
-// });
-
 var clients = require('../websockets');
-// var clients = [];
-
-
-// wsServer.on('request', function(request) {
-//     var connection = request.accept(null, request.origin);
-//     clients.push(connection);
-//     // connection.sendUTF(JSON.stringify('123'));
-//     // This is the most important callback for us, we'll handle
-//     // all messages from users here.
-//     connection.on('message', function(message) {
-//         if (message.type === 'utf8') {
-//             // process WebSocket message
-//         }
-//         console.log(message);
-//     });
-
-//     connection.on('close', function(connection) {
-//         // close user connection
-//     });
-// });
 
 
 router.get('/', function(req, res, next) {
@@ -105,33 +74,37 @@ router.get('/rights/:boardID', function(req, res, next) {
 router.post('/notification', function(req, res, next) {
     let type = req.body.type;
     let userID = req.body.userID;
-    let card;
-    if (req.body.card) {
-        card = req.body.card;
+    let cardID;
+    if (req.body.cardID) {
+        cardID = req.body.cardID;
     }
     let boardID = req.body.boardID;
     console.log('userID=', userID);
     console.log('boardID=', boardID);
-    Notification.findOne({ userID: userID, boardID: boardID, type: type }, function(err, notification) {
-        if (err) throw err;
+    console.log('type=', type);
+    Notification.findOne({ userID: userID, boardID: boardID, type: type, cardID: cardID }, function(err, notification) {
+        // if (err) throw err;
+        console.log('err=', err);
         if (type == 'card') {
+            console.log('type is card');
             if (notification) {
-                for (let i = 0; i < notification.cards.length; i++) {
-                    if (card.id == notification.cards[i].id) {
-                        notification.cards[i].overlooked = false;
-                        notification.save(function(err) {
-                            if (err) throw err;
-                        });
-                        for (let client of clients[notification.userID]) {
-                            client.sendUTF(JSON.stringify(notification));
-                        }
-                        return;
-                    }
-                }
-                console.log('push');
+                console.log('found');
+                // for (let i = 0; i < notification.cards.length; i++) {
+                //     if (card.id == notification.cards[i].id) {
+                //         notification.cards[i].overlooked = false;
+                //         notification.save(function(err) {
+                //             if (err) throw err;
+                //         });
+                //         for (let client of clients[notification.userID]) {
+                //             client.sendUTF(JSON.stringify(notification));
+                //         }
+                //         return;
+                //     }
+                // }
+                // console.log('push');
                 // console.log(notification.cards);
-                card.overlooked = false;
-                notification.cards.push(card);
+                notification.overlooked = false;
+                // notification.cards.push(card);
                 notification.save(function(err) {
                     if (err) throw err;
                 });
@@ -144,12 +117,12 @@ router.post('/notification', function(req, res, next) {
                 return;
             } else {
                 console.log('notification not found');
-                card.overlooked = false;
-                let newNotification = new Notification({ type: type, userID: userID, boardID: boardID, cards: [card] });
+                // card.overlooked = false;
+                let newNotification = new Notification({ type: type, userID: userID, boardID: boardID, cardID: cardID, overlooked: false });
                 newNotification.save(function(err) {
                     if (err) throw err;
                 });
-                console.log('notification=', notification);
+                console.log('newNotification=', newNotification);
                 if (clients[newNotification.userID]) {
                     for (let client of clients[newNotification.userID]) {
                         client.sendUTF(JSON.stringify(newNotification));
@@ -158,6 +131,7 @@ router.post('/notification', function(req, res, next) {
                 // res.sendStatus(200);
             }
         } else {
+            console.log('type is not card');
             if (notification) {
                 notification.overlooked = false;
                 notification.save(function(err) {
@@ -203,29 +177,10 @@ router.delete('/notification', function(req, res, next) {
     let boardID = req.query.boardID;
     let userID = req.query.userID;
     console.log('userID=', userID);
-    Notification.findOne({ type: type, boardID: boardID, userID: userID }, function(err, notification) {
-        if (type == 'card') {
-            if (notification) {
-                for (let i = 0; i < notification.cards.length; i++) {
-                    if (notification.cards[i].id == cardID) {
-                        res.send(notification.cards[i]);
-                        notification.cards[i].remove();
-                        if (!notification.cards.length) {
-                            notification.remove();
-                        } else {
-                            notification.save(function(err) {
-                                if (err) throw err;
-                            });
-                        }
-                        return;
-                    }
-                }
-            }
-        } else {
-            if (notification) {
-                res.send(notification);
-                notification.remove();
-            }
+    Notification.findOne({ type: type, boardID: boardID, userID: userID, cardID: cardID }, function(err, notification) {
+        if (notification) {
+            res.send(notification);
+            notification.remove();
         }
     })
 });
@@ -237,27 +192,12 @@ router.put('/notification', function(req, res, next) {
     let userID = req.body.userID;
     console.log('userID=', userID);
     Notification.findOne({ type: type, boardID: boardID, userID: userID }, function(err, notification) {
-        if (type == 'card') {
-            if (!notification) { return; }
-            for (let i = 0; i < notification.cards.length; i++) {
-                if (notification.cards[i].id == cardID) {
-                    notification.cards[i].overlooked = true;
-                    notification.save(function(err) {
-                        if (err) throw err;
-                    });
-                    console.log('notification=', notification);
-                    res.send(notification.cards[i]);
-                    return;
-                }
-            }
-        } else {
-            if (notification) {
-                notification.overlooked = true;
-                notification.save(function(err) {
-                    if (err) throw err;
-                });
-                res.send(notification);
-            }
+        if (notification) {
+            notification.overlooked = true;
+            notification.save(function(err) {
+                if (err) throw err;
+            });
+            res.send(notification);
         }
     })
 });

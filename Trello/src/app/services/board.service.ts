@@ -47,14 +47,14 @@ export class BoardService {
         return this.http.delete(`http://localhost:3000/boards/${id}`, options)
             .map(this.extractData);
     }
-    getBoardFromServer(id): Observable<any> {
-        this.tokens = this.authService.getTokens();
-        let headers = new Headers({ 'Authorization': `JWT ${this.tokens.accessToken}` });
-        let options = new RequestOptions({ headers: headers });
-        return this.http.get(`http://localhost:3000/boards/${id}`, options)
-            .map(this.extractData)
-            .catch(this.handleError);
-    }
+    // getBoardFromServer(id): Observable<any> {
+    //     this.tokens = this.authService.getTokens();
+    //     let headers = new Headers({ 'Authorization': `JWT ${this.tokens.accessToken}` });
+    //     let options = new RequestOptions({ headers: headers });
+    //     return this.http.get(`http://localhost:3000/boards/${id}`, options)
+    //         .map(this.extractData)
+    //         .catch(this.handleError);
+    // }
     getBoard(data): Board {
         if (!data) {
             console.log('no data');

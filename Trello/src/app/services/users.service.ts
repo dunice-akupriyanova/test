@@ -5,6 +5,7 @@ import { Observable } from 'rxjs/Observable';
 import { User } from '../models/user';
 import { AuthService } from './auth.service';
 import { JwtHelper } from 'angular2-jwt';
+import { Subject }    from 'rxjs/Subject';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/map';
 
@@ -14,6 +15,7 @@ export class UsersService {
     jwtHelper: JwtHelper = new JwtHelper();
     tokens = this.authService.getTokens();
     static user: User;
+    refresh = new Subject<any>();
     constructor(
         private http: Http,
         private authService: AuthService,
@@ -43,31 +45,21 @@ export class UsersService {
             .catch(this.handleError);
     }
     putUsers(data): void {
-        if (!data) {
-            console.log('no data');
-            return;
-        }
         for (let i = 0; i < data.length; i++) {
             UsersService.users[i] = new User(data[i]._id, data[i].username);
         }
         UsersService.user = this.getUserById(this.jwtHelper.decodeToken(this.tokens.accessToken).id);
-        localStorage.setItem('UserID', JSON.stringify(UsersService.user.id));
-        localStorage.setItem('Username', JSON.stringify(UsersService.user.username));
     }
     getUsers(): Array<User> {
         return UsersService.users;
     }
     getUserById(id): User {
-        let result = UsersService.users.find(element=>element.id==id);
+        let result = UsersService.users.find(element => element.id == id);
         return result;
     }
-    getUser(): string {
-        if (UsersService.user) {
-            return UsersService.user.username;
-        } else {
-            return JSON.parse(localStorage.getItem('Username'));
-        }
-    }    
+    getUser(): User {
+        return UsersService.user;
+    }
     setRights(userID, boardID, rights): Observable<any> {
         let headers = new Headers({ 'Content-Type': 'application/json' });
         let options = new RequestOptions({ headers: headers });
@@ -82,11 +74,14 @@ export class UsersService {
             .map(this.extractData)
             .catch(this.handleError);
     }
-    getAllRights(boardrID): Observable<any> {
-        let headers = new Headers({ 'Content-Type': 'application/json' });
-        let options = new RequestOptions({ headers: headers });
-        return this.http.get(`http://localhost:3000/users/rights/${boardrID}`, options)
-            .map(this.extractData)
-            .catch(this.handleError);
+    refreshUser(data) {
+        this.refresh.next(data);
     }
+    // getAllRights(boardrID): Observable<any> {
+    //     let headers = new Headers({ 'Content-Type': 'application/json' });
+    //     let options = new RequestOptions({ headers: headers });
+    //     return this.http.get(`http://localhost:3000/users/rights/${boardrID}`, options)
+    //         .map(this.extractData)
+    //         .catch(this.handleError);
+    // }
 }

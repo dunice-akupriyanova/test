@@ -11,7 +11,6 @@ export class ModalWindowService {
         this.open.next({card: card, rights: rights, board: board });
     }
     refreshBoard(board) {
-        // console.log('refresh');
         this.refresh.next(board);
     }
 }
