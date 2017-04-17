@@ -47,26 +47,14 @@ export class BoardService {
         return this.http.delete(`http://localhost:3000/boards/${id}`, options)
             .map(this.extractData);
     }
-    // getBoardFromServer(id): Observable<any> {
-    //     this.tokens = this.authService.getTokens();
-    //     let headers = new Headers({ 'Authorization': `JWT ${this.tokens.accessToken}` });
-    //     let options = new RequestOptions({ headers: headers });
-    //     return this.http.get(`http://localhost:3000/boards/${id}`, options)
-    //         .map(this.extractData)
-    //         .catch(this.handleError);
-    // }
     getBoard(data): Board {
         if (!data) {
             console.log('no data');
             return;
         }
         return new Board(data._id, data.name, data.lists);
-        // console.log(BoardsService.boards);
     }
     updateBoard(): Observable<any> {
-        // let ws2 = new WebSocket('ws://localhost:8088/');
-        // console.log('ws2=', ws2);
-        // ws2.send('updated');
         this.tokens = this.authService.getTokens();
         let headers = new Headers({ 'Authorization': `JWT ${this.tokens.accessToken}` });
         let options = new RequestOptions({ headers: headers });
@@ -84,11 +72,9 @@ export class BoardService {
         if (!BoardService.currentBoard) {
             return;
         }
-        // console.log('BoardService.currentBoard getCardById', BoardService.currentBoard);
         for (let j=0; j<BoardService.currentBoard.lists.length; j++) {
             let result = BoardService.currentBoard.lists[j].cards.find(element=>element.id==id);
             if (result) {
-                // console.log('return', result.name);
                 return result;
             }
         }

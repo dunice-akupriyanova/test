@@ -18,11 +18,11 @@ wsServer.on('request', function(request) {
     connection.on('message', function(message) {
         console.log('message=', message);
         if (JSON.parse(message.utf8Data).type == 'authenticate') {
+            if (!JSON.parse(message.utf8Data).payload.tokens) return;
             let id = jwt.decode(JSON.parse(message.utf8Data).payload.tokens.accessToken, cfg.jwtSecret).id;
             console.log('id=', id);
             User.findOne({ _id: id }, function(err, user) {
-                if (err) return next(err);
-                if (!user) { return; }
+                if (err || !user) return res.status(404).send(err);
                 console.log('user=', user);
                 if (!clients[user._id]) {
                     clients[user._id] = [];

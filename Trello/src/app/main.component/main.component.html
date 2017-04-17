@@ -28,11 +28,11 @@
                         </div>
                     </div>
                     <ul *ngIf="notification.card">
-                        <li class="notification_card" (click)="redirect(notification.boardID, notification.card); overlook(notification.type, notification, notification.card)">
+                        <li class="notification_card" (click)="redirect(notification.boardID, notification.card); overlook(notification.type, notification, notification.card.id)">
                             <div class="card_name">
                                 {{notification.card.name}}
                             </div>
-                            <div class="delete" (click)="overlook(notification.type, notification, notification.card)">
+                            <div class="delete" (click)="overlook(notification.type, notification, notification.card.id)">
                             </div>
                         </li>
                     </ul>

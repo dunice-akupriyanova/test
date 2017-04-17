@@ -121,9 +121,9 @@ export class MainComponent {
         this.notifications.splice(this.notifications.indexOf(notification), 1);
 
     }
-    overlook(type, notification, card?): void {
+    overlook(type, notification, cardID): void {
         console.log('overlook');
-        this.notificationsService.overlookNotification(type, this.user.id, notification.boardID).subscribe(
+        this.notificationsService.overlookNotification(type, this.user.id, notification.boardID, cardID).subscribe(
             data => {
                 console.log(data);
             }

@@ -21,13 +21,13 @@ router.use(session({ secret: 'SECRET', resave: true, saveUninitialized: true }))
 var passport = require('passport');
 
 router.use(passport.initialize());
-router.use(passport.session()); //???
+router.use(passport.session());
 
-passport.serializeUser(function(user, done) { //???
+passport.serializeUser(function(user, done) {
     done(null, user.id);
 });
 
-passport.deserializeUser(function(id, done) { //???
+passport.deserializeUser(function(id, done) {
     User.findById(id, function(err, user) {
         err
             ?
@@ -42,9 +42,8 @@ router.post('/token', function(req, res, next) {
         var username = req.body.username;
         var password = crypto.createHash('md5').update(req.body.password).digest('hex');
         User.findOne({ username: username }, function(err, user) {
-            if (err) return next(err);
-            if (!user) return res.send(false);
-            if (password != user.password) return res.send(false);
+            if (err || !user) return res.status(404).send(err);
+            if (password != user.password) return res.status(401).send(err);
             var accessTokenPayload = {
                 id: user._id,
                 exp: Date.now() + accessTokenExpTime
@@ -55,7 +54,7 @@ router.post('/token', function(req, res, next) {
             };
             var accessToken = jwt.encode(accessTokenPayload, cfg.jwtSecret);
             var refreshToken = jwt.encode(refreshTokenPayload, cfg.jwtSecret);
-            console.log('login=' + refreshTokenPayload.exp);
+            console.log('login=' + refreshToken);
             res.json({
                 accessToken: accessToken,
                 refreshToken: refreshToken
@@ -66,37 +65,29 @@ router.post('/token', function(req, res, next) {
     }
 });
 
-router.get('/test', function(req, res, next) {
-    res.send('OK, test');
-    console.log('test OK');
-});
-
 router.get("/user", auth.authenticate(), function(req, res) {
-    console.log("???");
     console.log(req.user);
-    if (req.user) {
-        res.json(req.user);
-    }
+    if (!req.user) return res.sendStatus(401);
+    res.json(req.user);
 });
 
 router.get('/logout', function(req, res) {
     console.log('ok logout auth');
     req.logout();
-    res.send('{}');
+    res.sendStatus(200);
 });
 
 router.post('/signup', function(req, res, next) {
     console.log('OK signup post auth');
+    console.log('req.body.username=', req.body);
     var hash = crypto.createHash('md5').update(req.body.password).digest('hex');
     var user = new User({ username: req.body.username, password: hash });
-    // console.log('signup user='+user);
+    console.log('user=', user);
     User.findOne({ username: req.body.username }, function(err, founduser) {
-        // var found=false;
-        // console.log('founduser');
-        // console.log(founduser);
-        if (founduser) { return; }
+        if (err) return res.status(404).send(err);
+        if (founduser) { return res.sendStatus(422); }
         user.save(function(err) {
-            console.log(err);
+            if (err) return res.status(422).send(err);
             var accessTokenPayload = {
                 id: user._id,
                 exp: Date.now() + accessTokenExpTime
@@ -107,20 +98,15 @@ router.post('/signup', function(req, res, next) {
             };
             var accessToken = jwt.encode(accessTokenPayload, cfg.jwtSecret);
             var refreshToken = jwt.encode(refreshTokenPayload, cfg.jwtSecret);
-            return err ?
-                next(err) :
-                req.logIn(user, function(err) {
-                    console.log('auth err=' + err);
-                    return err ?
-                        next(err) :
-                        res.json({
-                            accessToken: accessToken,
-                            refreshToken: refreshToken
-                        });
+            return req.logIn(user, function(err) {
+                if (err) return res.status(401).send(err);
+                return res.json({
+                    accessToken: accessToken,
+                    refreshToken: refreshToken
                 });
+            });
         });
     });
-    // console.log('found='+found);  
 });
 
 router.get("/refresh-token", function(req, res) {
@@ -130,7 +116,6 @@ router.get("/refresh-token", function(req, res) {
     if (refreshTokenPayload.exp < Date.now()) {
         console.log('refreshTokenPayload.exp' + refreshTokenPayload.exp);
         console.log('Date.now()' + Date.now());
-        console.log('refreshTokenPayload.exp<Date.now()');
         res.sendStatus(401);
         return;
     }

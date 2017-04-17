@@ -19,7 +19,6 @@ export class WebsocketService {
 
   private create(url): Rx.Subject<MessageEvent> {
     let ws = new WebSocket(url);
-
     let observable = Rx.Observable.create(
       (obs: Rx.Observer<MessageEvent>) => {
         ws.onopen = function (a) {

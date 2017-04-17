@@ -25,6 +25,7 @@ export class NotificationsService {
     }
     private handleError(error: Response | any) {
         let errMsg: string;
+        console.log(error);
         if (error instanceof Response) {
             console.log(error);
             const body = error.json() || '';
@@ -65,6 +66,7 @@ export class NotificationsService {
     }
     overlookNotification(type, userID, boardID, cardID?): Observable<any> {
         console.log('overlookNotification');
+        console.log('cardID=', cardID);
         let headers = new Headers({ 'Content-Type': 'application/json' });
         let options = new RequestOptions({ headers: headers });
         return this.http.put(`http://localhost:3000/users/notification`, { type, userID, cardID, boardID }, options)
@@ -73,8 +75,8 @@ export class NotificationsService {
     }
     getNotifications(user): Array<any> {
         this.getNotification(user.id).subscribe(data => {
-            // console.log('getNotifications data=');
-            // console.log(data);
+            console.log('getNotifications data=');
+            console.log(data);
             let dataLength = data.length;
             for (let i = 0; i < dataLength; i++) {
                 if (data[i].overlooked) {
