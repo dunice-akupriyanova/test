@@ -14,14 +14,18 @@ export class SignupComponent {
     password: string;
     constructor (private http: Http, private authService: AuthService, private router: Router) {}
     onSubmit(): void {
-        this.authService.postForm(this.email, this.password, 'http://localhost:3000/auth/signup').subscribe(
-                     data  => {
-                        this.authService.setTokens(data);
-                        this.authService.auth(data.accessToken).subscribe(user => {
-                            this.router.navigate(['/boards']);
-                        });
-                     },
-                     error =>  {});
+        this.authService.postForm(
+            this.email,
+            this.password,
+            'http://localhost:3000/auth/signup'
+        ).subscribe(
+            data  => {
+                    this.authService.setTokens(data);
+                    this.authService.auth(data.accessToken).subscribe(user => {
+                        this.router.navigate(['/boards']);
+                    });
+            },
+            error =>  {});
         this.email='';
         this.password='';
     }

@@ -4,6 +4,7 @@ import { Headers, RequestOptions } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 import { Board } from '../models/board';
 import { Card } from '../models/card';
+import { List } from '../models/list';
 import { AuthService } from './auth.service';
 import { BoardService } from './board.service';
 import { JwtHelper } from 'angular2-jwt';
@@ -42,7 +43,7 @@ export class BoardsService {
       console.log('no data');
       return;
     }
-    BoardsService.boards=[];
+    BoardsService.boards = [];
     for (let i = 0; i < data.length; i++) {
       BoardsService.boards[i] = new Board(data[i]._id, data[i].name, data[i].lists);
     }
@@ -59,17 +60,16 @@ export class BoardsService {
       .catch(this.handleError);
   }
   getBoardById(id): Board {
-      let result = BoardsService.boards.find(element=>element.id==id);
-      return result;
+    let result = BoardsService.boards.find(element => element.id == id);
+    return result;
   }
-  getCardById(id): Card {
-    for (let i=0; i<BoardsService.boards.length; i++) {
-      for (let j=0; j<BoardsService.boards[i].lists.length; j++) {
-        let found = BoardsService.boards[i].lists[j].cards.find(element=>element.id==id);
-          if (found) {
-              return found;
-          }
-      }
+  getCardById(board, id): Card {
+    for (let list of board.lists) {
+      let found = list.cards.find(element => element.id == id);
+        if (found) {
+          console.log('found');
+          return found;
+        }
     }
   }
 }

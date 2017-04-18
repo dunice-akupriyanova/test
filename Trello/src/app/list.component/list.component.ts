@@ -21,7 +21,7 @@ export class ListComponent {
     index: number;
     @Input()
     rights: string;
-    tokens: any = this.authService.getTokens();  
+    tokens: any = this.authService.getTokens();
     newCardName: string;
     constructor(
         private modalWindowService: ModalWindowService,
@@ -43,13 +43,13 @@ export class ListComponent {
     }
     updateBoard(): void {
         this.boardService.updateBoard().subscribe(
-            data => {},
-                    err => {
-                        this.authService.refreshTokens(this.tokens.refreshToken).subscribe(
-                            data => {
-                                        this.authService.setTokens(data);
-                                        this.boardService.updateBoard().subscribe();
-                                    });
+            data => { },
+            err => {
+                this.authService.refreshTokens(this.tokens.refreshToken).subscribe(
+                    data => {
+                        this.authService.setTokens(data);
+                        this.boardService.updateBoard().subscribe();
                     });
+            });
     }
 }

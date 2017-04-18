@@ -58,17 +58,17 @@ router.put('/:id', auth.authenticate(), function(req, res, next) {
         board.lists = req.body.lists;
         board.save(function(err) {
             if (err) return res.status(422).send(err);
-        });
-        for (key in clients) {
-            for (let client of clients[key]) {
-                let response = {
-                    title: 'updated',
-                    payload: board
+            for (key in clients) {
+                for (let client of clients[key]) {
+                    let response = {
+                        title: 'updated',
+                        payload: board
+                    }
+                    client.sendUTF(JSON.stringify(response));
                 }
-                client.sendUTF(JSON.stringify(response));
             }
-        }
-        res.send(board);
+            res.send(board);
+        });
     });
 });
 

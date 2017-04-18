@@ -24,12 +24,13 @@ router.post('/rights', function(req, res, next) {
             if (err) return res.status(422).send(err);
             res.send({ rights: rights });
         });
-    } else Right.findOne({ userID: userID, boardID: boardID }, function(err, rights) {
-        if (err || !rights) return res.status(404).send(err);
-        rights.remove();
-        res.sendStatus(204);
-    });
-    res.status(201);
+    } else {
+        Right.findOne({ userID: userID, boardID: boardID }, function(err, rights) {
+            if (err || !rights) return res.status(404).send(err);
+            rights.remove();
+            res.sendStatus(204);
+        });
+    }
 });
 
 router.get('/rights', function(req, res, next) {
@@ -90,11 +91,21 @@ router.delete('/notification', function(req, res, next) {
     let cardID = req.query.cardID;
     let boardID = req.query.boardID;
     let userID = req.query.userID;
-    Notification.findOne({ type: type, boardID: boardID, userID: userID, cardID: cardID }, function(err, notification) {
+    if (type == 'card') {
+        Notification.findOne({ type: type, boardID: boardID, userID: userID, cardID: cardID }, function(err, notification) {
+            console.log('notification=', notification);
+            if (err || !notification) return res.status(404).send(err);
+            res.send(notification);
+            notification.remove();
+        });
+        return;
+    }
+    Notification.findOne({ type: type, boardID: boardID, userID: userID }, function(err, notification) {
+        console.log('notification=', notification);
         if (err || !notification) return res.status(404).send(err);
         res.send(notification);
         notification.remove();
-    })
+    });
 });
 
 router.put('/notification', function(req, res, next) {
@@ -107,10 +118,9 @@ router.put('/notification', function(req, res, next) {
         notification.overlooked = true;
         notification.save(function(err) {
             if (err) return res.status(422).send(err);
+            res.send(notification);
         });
-        res.send(notification);
     })
 });
-
 
 module.exports = router;

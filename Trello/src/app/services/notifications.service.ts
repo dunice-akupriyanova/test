@@ -69,6 +69,7 @@ export class NotificationsService {
     }
     getNotifications(user): Array<any> {
         this.getNotification(user.id).subscribe(data => {
+            // console.log('data=', data);
             let dataLength = data.length;
             for (let i = 0; i < dataLength; i++) {
                 if (data[i].overlooked) {
@@ -82,16 +83,17 @@ export class NotificationsService {
                 this.notifications[i].boardName = board ? board.name : '';
                 if (!this.notifications[i].boardName) {
                     console.log('board is not found');
-                    this.removeNotification('board', user.id, data[i].boardID).subscribe();
+                    this.removeNotification(this.notifications[i].type, user.id, data[i].boardID, this.notifications[i].cardID).subscribe();
                     this.notifications.splice(i, 1);
                     data.splice(i, 1);
                     dataLength--;
                     i--;
+                    continue;
                 }
                 if (data[i].type == 'board') {
                     continue;
                 }
-                this.notifications[i].card = this.boardsService.getCardById(data[i].cardID) || this.boardService.getCardById(data[i].cardID);
+                this.notifications[i].card = this.boardsService.getCardById(board, data[i].cardID) || this.boardService.getCardById(data[i].cardID);
                 if (!this.notifications[i].card) {
                     console.log('card is not found');
                     this.removeNotification(data[i].type, user.id, data[i].boardID, data[i].cardID).subscribe();
@@ -99,10 +101,10 @@ export class NotificationsService {
                     this.notifications.splice(i, 1);
                     dataLength--;
                     i--;
+                    continue;
                 }
             }
             this.setCount();
-            return this.notifications;
         });
         return this.notifications;
     }
@@ -113,26 +115,14 @@ export class NotificationsService {
             NotificationsService.count.count = this.notifications.length;
             return;
         }
-        let equal = true;
-        if (this.notifications.length != NotificationsService.oldNotifications.length) {
-            NotificationsService.count.count++;
-            return;
-        }
         for (let i = 0; i < this.notifications.length; i++) {
-            if ((this.notifications[i].boardID != NotificationsService.oldNotifications[i].boardID) || (this.notifications[i].overlooked != NotificationsService.oldNotifications[i].overlooked)) {
-                equal = false;
+            if ((this.notifications.length != NotificationsService.oldNotifications.length) ||
+                (this.notifications[i].boardID != NotificationsService.oldNotifications[i].boardID) ||
+                (this.notifications[i].overlooked != NotificationsService.oldNotifications[i].overlooked) ||
+                (this.notifications[i].cardID != NotificationsService.oldNotifications[i].cardID)) {
+                NotificationsService.count.count++;
                 break;
             }
-            if (!this.notifications[i].cardID) {
-                continue;
-            }
-            if (this.notifications[i].cardID != NotificationsService.oldNotifications[i].cardID) {
-                equal = false;
-                break;
-            }
-        }
-        if (!equal) {
-            NotificationsService.count.count++;
         }
     }
 }

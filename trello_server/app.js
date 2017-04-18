@@ -51,7 +51,11 @@ app.use(function(err, req, res, next) {
         err.status = 401;
     }
     console.log('err.stack=', err.stack);
-    res.status(err.status || 500).send({ status: err.status ? err.status : 500, message: err.message, error: err.stack });
+    res.status(err.status || 500).send({
+        status: err.status ? err.status : 500,
+        message: err.message,
+        error: err.stack
+    });
 });
 
 module.exports = app;
