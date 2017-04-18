@@ -18,7 +18,7 @@ export class AuthService {
   private handleError(error: Response | any) {
     let errMsg: string;
     if (error instanceof Response) {
-      errMsg = `${error.status} - ${error.statusText || ''}`;
+      errMsg = `${error.status} - ${error.statusText || ''} ${error}`;
     } else {
       errMsg = error.message ? error.message : error.toString();
     }
@@ -47,7 +47,6 @@ export class AuthService {
       .catch(this.handleError);
   }
   logOut(): any {
-    console.log('logOut');
     this.setTokens('');
     return this.http.get('http://localhost:3000/auth/logout')
       .map(this.extractData)
@@ -56,7 +55,6 @@ export class AuthService {
   auth(accessToken): Observable<any> {
     let headers = new Headers({ 'Authorization': `JWT ${accessToken}` });
     let options = new RequestOptions({ headers: headers });
-    // console.log('accessToken auth='+accessToken);
     return this.http.get('http://localhost:3000/auth/user', options)
       .map(this.extractData)
       .catch(this.handleError);

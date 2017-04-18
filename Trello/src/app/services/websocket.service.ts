@@ -40,7 +40,6 @@ export class WebsocketService {
         }
       }
     }
-    // console.log('ws=', ws);
     return Rx.Subject.create(observer, observable);
   }
 

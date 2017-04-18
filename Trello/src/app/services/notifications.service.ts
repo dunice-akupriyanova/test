@@ -25,12 +25,8 @@ export class NotificationsService {
     }
     private handleError(error: Response | any) {
         let errMsg: string;
-        console.log(error);
         if (error instanceof Response) {
-            console.log(error);
-            const body = error.json() || '';
-            const err = body.error || JSON.stringify(body);
-            errMsg = `${error.status} - ${error.statusText || ''} ${err}`;
+            errMsg = `${error.status} - ${error.statusText || ''} ${error}`;
         } else {
             errMsg = error.message ? error.message : error.toString();
         }
@@ -65,8 +61,6 @@ export class NotificationsService {
             .catch(this.handleError);
     }
     overlookNotification(type, userID, boardID, cardID?): Observable<any> {
-        console.log('overlookNotification');
-        console.log('cardID=', cardID);
         let headers = new Headers({ 'Content-Type': 'application/json' });
         let options = new RequestOptions({ headers: headers });
         return this.http.put(`http://localhost:3000/users/notification`, { type, userID, cardID, boardID }, options)
@@ -75,8 +69,6 @@ export class NotificationsService {
     }
     getNotifications(user): Array<any> {
         this.getNotification(user.id).subscribe(data => {
-            console.log('getNotifications data=');
-            console.log(data);
             let dataLength = data.length;
             for (let i = 0; i < dataLength; i++) {
                 if (data[i].overlooked) {
@@ -87,17 +79,14 @@ export class NotificationsService {
                 }
                 this.notifications[i] = new Notification(data[i].type, data[i].userID, data[i].boardID, data[i].cardID, data[i].overlooked);
                 let board = this.boardsService.getBoardById(this.notifications[i].boardID);
-                this.notifications[i].boardName = board?board.name:'';
+                this.notifications[i].boardName = board ? board.name : '';
                 if (!this.notifications[i].boardName) {
                     console.log('board is not found');
-                    this.removeNotification('board', user.id, data[i].boardID).subscribe(
-                        data => {
-                            console.log(data);
-                            this.notifications.splice(i, 1);
-                            data.splice(i, 1);
-                            dataLength--;
-                            i--;
-                        });
+                    this.removeNotification('board', user.id, data[i].boardID).subscribe();
+                    this.notifications.splice(i, 1);
+                    data.splice(i, 1);
+                    dataLength--;
+                    i--;
                 }
                 if (data[i].type == 'board') {
                     continue;
@@ -105,47 +94,45 @@ export class NotificationsService {
                 this.notifications[i].card = this.boardsService.getCardById(data[i].cardID) || this.boardService.getCardById(data[i].cardID);
                 if (!this.notifications[i].card) {
                     console.log('card is not found');
-                    this.removeNotification(data[i].type, user.id, data[i].boardID, data[i].cardID).subscribe(
-                        data => {
-                            console.log(data);
-                        });
+                    this.removeNotification(data[i].type, user.id, data[i].boardID, data[i].cardID).subscribe();
                     data.splice(i, 1);
                     this.notifications.splice(i, 1);
                     dataLength--;
                     i--;
                 }
             }
-            // console.log(' service NotificationsService.oldNotifications=', NotificationsService.oldNotifications);
-            // console.log(' service this.notifications=', this.notifications);
-            if (!NotificationsService.oldNotifications.length) {
-                // console.log('new');
-                NotificationsService.count.count = this.notifications.length;
-                return this.notifications;
-            }
-            let equal = true;
-            if (this.notifications.length != NotificationsService.oldNotifications.length) {
-                // console.log("length, ++");
-                NotificationsService.count.count++;
-                return this.notifications;
-            }
-            for (let i = 0; i < this.notifications.length; i++) {
-                if ((this.notifications[i].boardID != NotificationsService.oldNotifications[i].boardID) || (this.notifications[i].overlooked != NotificationsService.oldNotifications[i].overlooked)) {
-                    equal = false;
-                }
-                if (!this.notifications[i].cardID) {
-                    continue;
-                }
-                if (this.notifications[i].cardID != NotificationsService.oldNotifications[i].cardID) {
-                    equal = false;
-                }
-            }
-            // console.log('equal=', equal);
-            if (!equal) {
-                // console.log("++");
-                NotificationsService.count.count++;
-            }
+            this.setCount();
             return this.notifications;
         });
         return this.notifications;
+    }
+    setCount(): void {
+        // console.log('NotificationsService.oldNotifications=', NotificationsService.oldNotifications);
+        // console.log('this.notifications=', this.notifications);
+        if (!NotificationsService.oldNotifications.length) {
+            NotificationsService.count.count = this.notifications.length;
+            return;
+        }
+        let equal = true;
+        if (this.notifications.length != NotificationsService.oldNotifications.length) {
+            NotificationsService.count.count++;
+            return;
+        }
+        for (let i = 0; i < this.notifications.length; i++) {
+            if ((this.notifications[i].boardID != NotificationsService.oldNotifications[i].boardID) || (this.notifications[i].overlooked != NotificationsService.oldNotifications[i].overlooked)) {
+                equal = false;
+                break;
+            }
+            if (!this.notifications[i].cardID) {
+                continue;
+            }
+            if (this.notifications[i].cardID != NotificationsService.oldNotifications[i].cardID) {
+                equal = false;
+                break;
+            }
+        }
+        if (!equal) {
+            NotificationsService.count.count++;
+        }
     }
 }

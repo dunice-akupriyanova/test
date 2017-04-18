@@ -27,14 +27,10 @@ export class UsersService {
     private handleError(error: Response | any) {
         let errMsg: string;
         if (error instanceof Response) {
-            console.log(error);
-            const body = error.json() || '';
-            const err = body.error || JSON.stringify(body);
-            errMsg = `${error.status} - ${error.statusText || ''} ${err}`;
+            errMsg = `${error.status} - ${error.statusText || ''} ${error}`;
         } else {
             errMsg = error.message ? error.message : error.toString();
         }
-        console.error(errMsg);
         return Observable.throw(errMsg);
     }
     getUsersFromServer(): Observable<any> {
@@ -74,14 +70,7 @@ export class UsersService {
             .map(this.extractData)
             .catch(this.handleError);
     }
-    refreshUser(data) {
+    refreshData(data) {
         this.refresh.next(data);
     }
-    // getAllRights(boardrID): Observable<any> {
-    //     let headers = new Headers({ 'Content-Type': 'application/json' });
-    //     let options = new RequestOptions({ headers: headers });
-    //     return this.http.get(`http://localhost:3000/users/rights/${boardrID}`, options)
-    //         .map(this.extractData)
-    //         .catch(this.handleError);
-    // }
 }

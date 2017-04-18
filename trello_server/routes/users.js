@@ -13,14 +13,9 @@ router.get('/', function(req, res, next) {
         if (err) return res.status(404).send(err);
         res.send(users);
     });
-    // User.findOne({username: '333'}, function(err, user) {
-    //       user.remove(function(err) {});
-    //   });
-    //   res.send('ok');
 });
 
 router.post('/rights', function(req, res, next) {
-    console.log("rights");
     let userID = req.body.userID;
     let boardID = req.body.boardID;
     let rights = req.body.rights;
@@ -48,15 +43,6 @@ router.get('/rights', function(req, res, next) {
     res.status(201);
 });
 
-router.get('/rights/:boardID', function(req, res, next) {
-    Right.find({ boardID: req.params.boardID }, function(err, rights) {
-        if (rights) {
-            res.send(rights);
-        } else res.send(new Array);
-    })
-    res.status(201);
-});
-
 router.post('/notification', function(req, res, next) {
     let type = req.body.type;
     let userID = req.body.userID;
@@ -72,7 +58,6 @@ router.post('/notification', function(req, res, next) {
             notification.save(function(err) {
                 if (err) return res.status(422).send(err);
             });
-            // res.send(JSON.stringify(notification));
             if (!clients[notification.userID]) return;
             for (let client of clients[notification.userID]) {
                 client.sendUTF(JSON.stringify(notification));
@@ -82,7 +67,6 @@ router.post('/notification', function(req, res, next) {
             newNotification.save(function(err) {
                 if (err) return res.status(422).send(err);
             });
-            // res.send(JSON.stringify(newNotification));
             if (!clients[newNotification.userID]) return;
             for (let client of clients[newNotification.userID]) {
                 client.sendUTF(JSON.stringify(newNotification));
@@ -118,14 +102,10 @@ router.put('/notification', function(req, res, next) {
     let cardID = req.body.cardID;
     let boardID = req.body.boardID;
     let userID = req.body.userID;
-    console.log('cardID=', cardID);
     Notification.findOne({ type: type, boardID: boardID, userID: userID, cardID: cardID }, function(err, notification) {
-        console.log('notification=', notification);
         if (err || !notification) return res.status(404).send(err);
         notification.overlooked = true;
         notification.save(function(err) {
-            console.log('notification2=', notification);
-            console.log('id=', notification._id);
             if (err) return res.status(422).send(err);
         });
         res.send(notification);

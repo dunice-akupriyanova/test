@@ -13,7 +13,7 @@ import { Router } from '@angular/router';
     selector: 'boards',
     templateUrl: './boards.component.html',
     styleUrls: ['./boards.component.css'],
-    providers: [AuthService, BoardsService, BoardService, UsersService]
+    providers: []
 })
 export class BoardsComponent {
     boards: Array<Board> = [];
@@ -38,7 +38,6 @@ export class BoardsComponent {
                 data => {
                     this.boardsService.putBoards(data);
                     this.boards = this.boardsService.getBoards();
-                    // console.log(this.boards);
                 },
                 err => {
                     this.authService.refreshTokens(this.tokens.refreshToken).subscribe(
@@ -48,10 +47,8 @@ export class BoardsComponent {
                                 data => {
                                     this.boardsService.putBoards(data);
                                     this.boards = this.boardsService.getBoards();
-                                    // console.log(this.boards);
                                 });
-                        }
-                    );
+                        });
                 });
         });
     }
@@ -69,15 +66,12 @@ export class BoardsComponent {
                             data => {
                                 this.add(data);
                             });
-                    }
-                );
+                    });
             });
     }
     add(data): void {
         this.newBoardName = '';
-        this.usersService.setRights(this.jwtHelper.decodeToken(this.tokens.accessToken).id, data._id, 'owner').subscribe(
-            d => { console.log(d); }
-        );
+        this.usersService.setRights(this.jwtHelper.decodeToken(this.tokens.accessToken).id, data._id, 'owner').subscribe();
         this.boardsService.getBoardsFromServer().subscribe(
             data => {
                 this.boardsService.putBoards(data);
@@ -92,8 +86,7 @@ export class BoardsComponent {
                                 this.boardsService.putBoards(data);
                                 this.boards = this.boardsService.getBoards();
                             });
-                    }
-                );
+                    });
             });
     }
     removeBoard(board): void {
@@ -105,48 +98,49 @@ export class BoardsComponent {
                 }
                 this.boards.splice(this.boards.findIndex((element) => element == board), 1);
                 this.boardService.deleteBoard(board.id).subscribe(
-                    data => { console.log(data); },
+                    data => {},
                     err => {
                         this.authService.refreshTokens(this.tokens.refreshToken).subscribe(
                             data => {
                                 this.authService.setTokens(data);
                                 this.boardService.deleteBoard(board.id).subscribe();
-                            }
-                        );
+                            });
                     });
             });
     }
     ngOnInit() {
+        this.boards = this.boardsService.getBoards();
         BoardService.currentBoard = null;
-        this.boardsService.getBoardsFromServer().subscribe(
-            data => {
-                this.boardsService.putBoards(data);
-                this.boards = this.boardsService.getBoards();
-            },
-            err => {
-                this.authService.refreshTokens(this.tokens.refreshToken).subscribe(
-                    data => {
-                        this.authService.setTokens(data);
-                        this.boardsService.getBoardsFromServer().subscribe(
-                            data => {
-                                this.boardsService.putBoards(data);
-                                this.boards = this.boardsService.getBoards();
-                            });
-                    }
-                );
-            });
+        this.usersService.refresh.subscribe(data => {
+            this.boards = this.boardsService.getBoards();
+        });
+        // this.boardsService.getBoardsFromServer().subscribe(
+        //     data => {
+        //         this.boardsService.putBoards(data);
+        //         this.boards = this.boardsService.getBoards();
+        //     },
+        //     err => {
+        //         this.authService.refreshTokens(this.tokens.refreshToken).subscribe(
+        //             data => {
+        //                 this.authService.setTokens(data);
+        //                 this.boardsService.getBoardsFromServer().subscribe(
+        //                     data => {
+        //                         this.boardsService.putBoards(data);
+        //                         this.boards = this.boardsService.getBoards();
+        //                     });
+        //             });
+        //     });
     }
     chooseBoard(id): void {
         this.user = this.usersService.getUser();
         this.usersService.getRights(this.user.id, id).subscribe(
             rights => {
-                if (rights.rights != 'none') {
-                    BoardService.currentBoard = this.boardsService.getBoardById(id);
-                    this.router.navigate([`/board/${id}`]);
-                } else { 
+                if (rights.rights == 'none') {
                     alert('No access rights!');
+                    return;
                 }
-            }
-        );
+                BoardService.currentBoard = this.boardsService.getBoardById(id);
+                this.router.navigate([`/board/${id}`]);                
+            });
     }
 }

@@ -18,7 +18,7 @@ import { NotificationWebsocketService } from '../services/notification-websocket
     selector: 'modal-window',
     templateUrl: './modal-window.component.html',
     styleUrls: ['./modal-window.component.css'],
-    providers: [BoardService, AuthService, UsersService, NotificationsService]
+    providers: []
 })
 export class ModalWindowComponent {
     currentCard: Card;

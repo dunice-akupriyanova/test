@@ -23,13 +23,10 @@ export class BoardsService {
   private handleError(error: Response | any) {
     let errMsg: string;
     if (error instanceof Response) {
-      const body = error.json() || '';
-      const err = body.error || JSON.stringify(body);
-      errMsg = `${error.status} - ${error.statusText || ''} ${err}`;
+      errMsg = `${error.status} - ${error.statusText || ''} ${error}`;
     } else {
       errMsg = error.message ? error.message : error.toString();
     }
-    console.error(errMsg);
     return Observable.throw(errMsg);
   }
   getBoardsFromServer(): Observable<any> {
@@ -41,7 +38,6 @@ export class BoardsService {
       .catch(this.handleError);
   }
   putBoards(data): void {
-    // console.log('put, data.length=', data.length);
     if (!data) {
       console.log('no data');
       return;
@@ -69,7 +65,6 @@ export class BoardsService {
   getCardById(id): Card {
     for (let i=0; i<BoardsService.boards.length; i++) {
       for (let j=0; j<BoardsService.boards[i].lists.length; j++) {
-        // console.log('board', i, 'list', j, 'cards', BoardsService.boards[i].lists[j].cards);
         let found = BoardsService.boards[i].lists[j].cards.find(element=>element.id==id);
           if (found) {
               return found;

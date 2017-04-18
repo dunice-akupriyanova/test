@@ -40,37 +40,22 @@ export class CurrentBoardComponent {
         private notificationWebsocketService: NotificationWebsocketService,
     ) {
         this.modalWindowService.refresh.subscribe(data => {
-            console.log('data=', data);
             this.currentBoard = data;
         });
         this.usersService.refresh.subscribe(data => {
             this.user = UsersService.user;
-            this.usersService.getRights(this.user.id, this.currentBoard.id).subscribe(
-                data => {
-                    this.rights = data.rights;
-                    this.users = this.usersService.getUsers();
+            this.route.params
+                .subscribe((params) => {
+                    this.initialization(params['id']);
                 });
         });
     }
     ngOnInit() {
         this.route.params
-            .subscribe((params) => {
-                this.boardsService.getBoardsFromServer().subscribe(
-                    data => {
-                        this.boardsService.putBoards(data);
-                        this.initialization(params['id']);
-                    },
-                    err => {
-                        this.authService.refreshTokens(this.tokens.refreshToken).subscribe(
-                            data => {
-                                this.authService.setTokens(data);
-                                this.boardsService.getBoardsFromServer().subscribe(
-                                    data => {
-                                        this.boardsService.putBoards(data);
-                                        this.initialization(params['id']);
-                                    });
-                            });
-                    });
+            .subscribe((params)=> {
+                if (this.boardsService.getBoardById(params['id'])) {
+                    this.initialization(params['id']);
+                }
             });
     }
     initialization(boardID): void {
@@ -88,11 +73,6 @@ export class CurrentBoardComponent {
             });
     }
     addList(): void {
-        if (this.rights == 'none' || this.rights == 'read') {
-            this.newName = '';
-            alert('No access rights!');
-            return
-        }
         if (!this.newName) { return; }
         this.currentBoard.lists.push(new List(this.newName, []));
         this.newName = '';
@@ -100,9 +80,7 @@ export class CurrentBoardComponent {
     }
     updateBoard(): void {
         this.boardService.updateBoard().subscribe(
-            data => {
-                // console.log(data);
-            },
+            data => {},
             err => {
                 this.authService.refreshTokens(this.tokens.refreshToken).subscribe(
                     data => {
@@ -112,12 +90,7 @@ export class CurrentBoardComponent {
             });
     }
     setRights(event, user) {
-        this.usersService.setRights(user.id, this.currentBoard.id, event.target.value).subscribe(
-            d => { console.log(d); }
-        );
-        console.log('this.currentBoard.id=', this.currentBoard.id);
-        this.notificationsService.setNotification('board', user.id, this.currentBoard).subscribe(
-            d => { console.log(d); }
-        )
+        this.usersService.setRights(user.id, this.currentBoard.id, event.target.value).subscribe();
+        this.notificationsService.setNotification('board', user.id, this.currentBoard).subscribe();
     }
 }

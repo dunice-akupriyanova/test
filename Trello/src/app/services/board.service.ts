@@ -20,24 +20,19 @@ export class BoardService {
         private http: Http,
         private authService: AuthService,
         private boardsService: BoardsService,
-        
+
     ) { }
     private extractData(res: Response) {
-        // console.log(res);
         let body = res.json();
         return body;
     }
     private handleError(error: Response | any) {
-        // console.log('error: ', error);
         let errMsg: string;
         if (error instanceof Response) {
-            const body = error.json() || '';
-            const err = body.error || JSON.stringify(body);
-            errMsg = `${error.status} - ${error.statusText || ''} ${err}`;
+            errMsg = `${error.status} - ${error.statusText || ''} ${error}`;
         } else {
             errMsg = error.message ? error.message : error.toString();
         }
-        console.error(errMsg);
         return Observable.throw(errMsg);
     }
     deleteBoard(id): Observable<any> {
@@ -72,8 +67,8 @@ export class BoardService {
         if (!BoardService.currentBoard) {
             return;
         }
-        for (let j=0; j<BoardService.currentBoard.lists.length; j++) {
-            let result = BoardService.currentBoard.lists[j].cards.find(element=>element.id==id);
+        for (let j = 0; j < BoardService.currentBoard.lists.length; j++) {
+            let result = BoardService.currentBoard.lists[j].cards.find(element => element.id == id);
             if (result) {
                 return result;
             }

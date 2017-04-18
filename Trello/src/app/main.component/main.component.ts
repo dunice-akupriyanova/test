@@ -12,17 +12,11 @@ import { Notification } from '../models/notification';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 import { CurrentBoardComponent } from '../current-board.component/current-board.component';
 
-import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
-import 'rxjs/add/operator/catch';
-import 'rxjs/add/operator/map';
-
-
 @Component({
     selector: 'main',
     templateUrl: './main.component.html',
     styleUrls: ['./main.component.css'],
-    providers: [UsersService]
+    providers: []
 })
 export class MainComponent {
     jwtHelper: JwtHelper = new JwtHelper();
@@ -32,7 +26,6 @@ export class MainComponent {
     rights: String;
     notifications: Array<any> = [];
     new: any = {};
-    static count: any = {};
     constructor(
         private usersService: UsersService,
         private boardsService: BoardsService,
@@ -56,13 +49,10 @@ export class MainComponent {
             }
             console.log("main, Response from websocket: ", msg);
             this.notifications = this.notificationsService.getNotifications(this.user);
-            console.log('ngOnInit, this.notifications=', this.notifications);
             for (let i = 0; i < this.notifications.length; i++) {
                 NotificationsService.oldNotifications[i] = new Notification(this.notifications[i].type, this.notifications[i].userID, this.notifications[i].boardID, this.notifications[i].cardID, this.notifications[i].overlooked);
             }
-            console.log('subscribe=', NotificationsService.oldNotifications);
         });
-
         this.boardsService.getBoardsFromServer().subscribe(
             data => {
                 this.OnInit(data);
@@ -87,10 +77,9 @@ export class MainComponent {
                 this.users = this.usersService.getUsers();
                 this.user = this.usersService.getUserById(this.jwtHelper.decodeToken(this.tokens.accessToken).id);
                 this.notifications = this.notificationsService.getNotifications(this.user);
-                this.usersService.refreshUser(this.user);
+                this.usersService.refreshData(this.user);
             });
-        MainComponent.count = NotificationsService.count;
-        this.new = MainComponent.count;
+        this.new = NotificationsService.count;
     }
     redirect(boardID, card?): void {
         this.usersService.getRights(this.user.id, boardID).subscribe(
@@ -112,7 +101,6 @@ export class MainComponent {
         );
     }
     removeNotification(type, notification, card?): void {
-        console.log('remove');
         this.notificationsService.removeNotification(type, this.user.id, notification.boardID).subscribe(
             data => {
                 console.log(data);
@@ -132,9 +120,8 @@ export class MainComponent {
         for (let i = 0; i < this.notifications.length; i++) {
             NotificationsService.oldNotifications[i] = new Notification(this.notifications[i].type, this.notifications[i].userID, this.notifications[i].boardID, this.notifications[i].cardID, this.notifications[i].overlooked);
         }
-        console.log('main NotificationsService.oldNotifications=', NotificationsService.oldNotifications);
     }
     reset(): void {
-        MainComponent.count.count = 0;
+        NotificationsService.count.count = 0;
     }
 }

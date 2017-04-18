@@ -10,7 +10,7 @@ import { AuthService } from '../services/auth.service';
     selector: 'list',
     templateUrl: './list.component.html',
     styleUrls: ['./list.component.css'],
-    providers: [BoardService, AuthService]
+    providers: []
 })
 export class ListComponent {
     @Input()
@@ -42,11 +42,8 @@ export class ListComponent {
         this.modalWindowService.openModal(card, this.rights, this.currentBoard);
     }
     updateBoard(): void {
-        // console.log('ok');
         this.boardService.updateBoard().subscribe(
-            data => {
-                        // console.log(data);
-                    },
+            data => {},
                     err => {
                         this.authService.refreshTokens(this.tokens.refreshToken).subscribe(
                             data => {
@@ -54,6 +51,5 @@ export class ListComponent {
                                         this.boardService.updateBoard().subscribe();
                                     });
                     });
-        // console.log('ok2');
     }
 }

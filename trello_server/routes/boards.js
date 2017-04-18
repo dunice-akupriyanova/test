@@ -9,7 +9,6 @@ var clients = require('../websockets');
 router.use(passport.initialize());
 
 router.get('/', auth.authenticate(), function(req, res, next) {
-    console.log(req.user);
     Board.find({}, function(err, boards) {
         if (err) return res.status(404).send(err);
         res.send(boards);
@@ -17,7 +16,6 @@ router.get('/', auth.authenticate(), function(req, res, next) {
 });
 
 router.post('/', auth.authenticate(), function(req, res, next) {
-    console.log(req.user);
     var board = new Board({ name: req.body.name, lists: req.body.lists ? req.body.lists : [] });
     board.save(function(err) {
         if (err) return res.status(422).send(err);
@@ -34,7 +32,6 @@ router.post('/', auth.authenticate(), function(req, res, next) {
 });
 
 router.delete('/:id', auth.authenticate(), function(req, res, next) {
-    console.log(req.user);
     Board.findOne({ _id: req.params.id }, function(err, board) {
         if (err || !board) return res.status(404).send(err);
         board.remove();
@@ -53,10 +50,8 @@ router.delete('/:id', auth.authenticate(), function(req, res, next) {
             }
         }
     })
-    res.sendStatus(200);
 });
 router.put('/:id', auth.authenticate(), function(req, res, next) {
-    console.log(req.user);
     var newBoard = new Board({ name: req.body.name, lists: req.body.lists ? req.body.lists : [] });
     Board.findOne({ _id: req.params.id }, function(err, board) {
         board.name = req.body.name;

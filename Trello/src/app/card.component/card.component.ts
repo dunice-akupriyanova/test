@@ -9,7 +9,7 @@ import { AuthService } from '../services/auth.service';
     selector: 'card',
     templateUrl: './card.component.html',
     styleUrls: ['./card.component.css'],
-    providers: [BoardService, AuthService]
+    providers: []
 })
 export class CardComponent {
     @Input()
@@ -18,7 +18,7 @@ export class CardComponent {
     list: List;
     @Input()
     rights: string;
-    tokens: any = this.authService.getTokens();   
+    tokens: any = this.authService.getTokens();
     constructor(
         private boardService: BoardService,
         private authService: AuthService
@@ -26,15 +26,13 @@ export class CardComponent {
     removeCard(list, card): void {
         this.list.cards.splice(this.list.cards.findIndex((element) => element == card), 1);
         this.boardService.updateBoard().subscribe(
-            data => {
-                        // console.log(data);
-            },
+            data => {},
             err => {
                 this.authService.refreshTokens(this.tokens.refreshToken).subscribe(
                     data => {
-                                this.authService.setTokens(data);
-                                this.boardService.updateBoard().subscribe();
-                            });
+                        this.authService.setTokens(data);
+                        this.boardService.updateBoard().subscribe();
+                    });
             });
     }
 }

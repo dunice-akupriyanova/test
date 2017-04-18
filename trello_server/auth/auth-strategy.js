@@ -12,14 +12,17 @@ var params = {
 module.exports = function() {
     var strategy = new Strategy(params, function(payload, done) {
         if (payload.exp < Date.now()) {
-            res.sendStatus(401);
+            return done(new Error("Expiry time is over"), null);
         }
         User.findOne({ _id: payload.id }, function(err, user) {
-            if (!user) return res.sendStatus(404);
-            return done(null, {
-                id: user._id,
-                username: user.username
-            });
+            if (user) {
+                return done(null, {
+                    id: user._id,
+                    username: user.username
+                });
+            } else {
+                return done(new Error("User not found"), null);
+            }
         });
     });
     passport.use(strategy);

@@ -16,14 +16,11 @@ var clients = {};
 wsServer.on('request', function(request) {
     var connection = request.accept(null, request.origin);
     connection.on('message', function(message) {
-        console.log('message=', message);
         if (JSON.parse(message.utf8Data).type == 'authenticate') {
             if (!JSON.parse(message.utf8Data).payload.tokens) return;
             let id = jwt.decode(JSON.parse(message.utf8Data).payload.tokens.accessToken, cfg.jwtSecret).id;
-            console.log('id=', id);
             User.findOne({ _id: id }, function(err, user) {
-                if (err || !user) return res.status(404).send(err);
-                console.log('user=', user);
+                if (err || !user) return;
                 if (!clients[user._id]) {
                     clients[user._id] = [];
                 }
@@ -32,8 +29,13 @@ wsServer.on('request', function(request) {
         }
     });
 
-    connection.on('close', function(connection) {
-        // close user connection
+    connection.on('close', function(reasonCode, description) {
+        for (key in clients) {
+            let index = clients[key].findIndex((element) => element == connection);
+            if (index != -1) {
+                clients[key].splice(index, 1);
+            }
+        }
     });
 });
 

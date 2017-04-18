@@ -4,7 +4,6 @@ import { AuthService } from '../services/auth.service';
 import { Router } from '@angular/router';
 
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
 import { JwtHelper } from 'angular2-jwt';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/map';
@@ -13,7 +12,7 @@ import 'rxjs/add/operator/map';
     selector: 'login',
     templateUrl: './login.component.html',
     styleUrls: ['./login.component.css'],
-    providers: [AuthService]
+    providers: []
 })
 export class LoginComponent {
     jwtHelper: JwtHelper = new JwtHelper();

@@ -6,7 +6,6 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 const mongoose = require("mongoose");
 var User = require('./models/user');
-var session = require('express-session');
 var db = mongoose.connection;
 var cors = require('cors');
 
@@ -17,33 +16,21 @@ db.once('open', function() {
     console.log("we're connected!");
 });
 
-
-var index = require('./routes/index');
 var users = require('./routes/users');
-var auth = require('./auth/auth');
+var auth = require('./routes/auth');
 var boards = require('./routes/boards');
 
 require('./websockets');
 
 var app = express();
-// app.use(bodyParser());
-app.use(session({ secret: 'SECRET', resave: true, saveUninitialized: true }));
 
 app.use(cors());
-// view engine setup
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'jade');
 
-
-// uncomment after placing your favicon in /public
-//app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', index);
 app.use('/users', users);
 app.use('/auth', auth);
 app.use('/boards', boards);
@@ -60,10 +47,11 @@ app.use(function(err, req, res, next) {
     // set locals, only providing error in development
     res.locals.message = err.message;
     res.locals.error = req.app.get('env') === 'development' ? err : {};
-
-    // render the error page
-    res.status(err.status || 500);
-    res.render('error');
+    if ((err.message == 'Expiry time is over') || (err.message == 'User not found')) {
+        err.status = 401;
+    }
+    console.log('err.stack=', err.stack);
+    res.status(err.status || 500).send({ status: err.status ? err.status : 500, message: err.message, error: err.stack });
 });
 
 module.exports = app;
