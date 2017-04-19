@@ -3,6 +3,7 @@ import { AuthService } from '../services/auth.service';
 import { UsersService } from '../services/users.service';
 import { BoardsService } from '../services/boards.service';
 import { BoardService } from '../services/board.service';
+import { Observable } from 'rxjs/Observable';
 import { NotificationsService } from '../services/notifications.service';
 import { NotificationWebsocketService } from '../services/notification-websocket.service';
 import { ModalWindowService } from '../modal-window.component/modal-window.service';
@@ -11,6 +12,13 @@ import { User } from '../models/user';
 import { Notification } from '../models/notification';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 import { CurrentBoardComponent } from '../current-board.component/current-board.component';
+
+import 'rxjs/add/operator/catch';
+import 'rxjs/add/operator/map';
+import 'rxjs/add/operator/switchMap';
+import 'rxjs/add/operator/takeWhile';
+// import 'rxjs/add/operator/flatMap';
+import 'rxjs/add/operator/scan';
 
 @Component({
     selector: 'main',
@@ -22,7 +30,8 @@ export class MainComponent {
     jwtHelper: JwtHelper = new JwtHelper();
     user: User;
     users: Array<User>;
-    tokens: any = this.authService.getTokens();
+    init: boolean = false;
+    tokens: any = AuthService.tokens;
     rights: String;
     notifications: Array<any> = [];
     new: any = {};
@@ -53,24 +62,33 @@ export class MainComponent {
                 NotificationsService.oldNotifications[i] = new Notification(this.notifications[i].type, this.notifications[i].userID, this.notifications[i].boardID, this.notifications[i].cardID, this.notifications[i].overlooked);
             }
         });
-        this.boardsService.getBoardsFromServer().subscribe(
-            data => {
-                this.OnInit(data);
-            },
-            err => {
-                this.authService.refreshTokens(this.tokens.refreshToken).subscribe(
-                    data => {
-                        this.authService.setTokens(data);
-                        this.boardsService.getBoardsFromServer().subscribe(
-                            data => {
-                                this.OnInit(data);
-                            });
-                    }
-                );
-            });
+        // this.boardsService.getBoardsFromServer().subscribe(
+        //     data => {
+        //         this.OnInit(data);
+        //     },
+        //     err => {
+        //         console.log('err=', err);
+        //         this.authService.refreshTokens(this.tokens.refreshToken).subscribe(
+        //             data => {
+        //                 // this.authService.setTokens(data);
+        //                 this.boardsService.getBoardsFromServer().subscribe(
+        //                     data => {
+        //                         this.OnInit(data);
+        //                     });
+        //             });
+        //     });
+        // console.log('this.boardsService.getBoardsFromServer()=', this.boardsService.getBoardsFromServer());
+        this.boardsService.getBoardsFromServer().subscribe(data => {
+            console.log('not error');
+            this.OnInit(data);
+        }, err => {});
+        this.boardsService.refresh.subscribe(data => {
+            console.log('after error');
+            this.OnInit(data);
+        });
     }
     OnInit(data): void {
-        this.boardsService.putBoards(data);
+        console.log('init');
         this.usersService.getUsersFromServer().subscribe(
             data => {
                 this.usersService.putUsers(data);

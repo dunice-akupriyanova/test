@@ -79,15 +79,19 @@ export class CurrentBoardComponent {
         this.updateBoard();
     }
     updateBoard(): void {
-        this.boardService.updateBoard().subscribe(
-            data => {},
-            err => {
-                this.authService.refreshTokens(this.tokens.refreshToken).subscribe(
-                    data => {
-                        this.authService.setTokens(data);
-                        this.boardService.updateBoard().subscribe();
-                    });
-            });
+        this.boardService.updateBoard().subscribe(data => {
+                console.log('data');
+            }, err => { });
+            this.boardService.update.subscribe();
+        // this.boardService.updateBoard().subscribe(
+        //     data => {},
+        //     err => {
+        //         this.authService.refreshTokens(this.tokens.refreshToken).subscribe(
+        //             data => {
+        //                 this.authService.setTokens(data);
+        //                 this.boardService.updateBoard().subscribe();
+        //             });
+        //     });
     }
     setRights(event, user) {
         this.usersService.setRights(user.id, this.currentBoard.id, event.target.value).subscribe();

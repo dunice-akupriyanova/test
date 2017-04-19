@@ -57,6 +57,7 @@ export class UsersService {
         return UsersService.user;
     }
     setRights(userID, boardID, rights): Observable<any> {
+        console.log('setRights', userID);
         let headers = new Headers({ 'Content-Type': 'application/json' });
         let options = new RequestOptions({ headers: headers });
         return this.http.post('http://localhost:3000/users/rights', { userID, boardID, rights }, options)

@@ -11,6 +11,7 @@ var params = {
 
 module.exports = function() {
     var strategy = new Strategy(params, function(payload, done) {
+        console.log('exp-now', payload.exp - Date.now());
         if (payload.exp < Date.now()) {
             return done(new Error("Expiry time is over"), null);
         }

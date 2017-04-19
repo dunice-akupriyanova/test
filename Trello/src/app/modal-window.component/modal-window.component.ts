@@ -47,14 +47,10 @@ export class ModalWindowComponent {
         modalWindowService.open.subscribe(data => {
             this.currentCard = <Card>data.card;
             this.id = this.currentCard.id;
-            // console.log('modal card ', this.currentCard);
             this.rights = data.rights;
             this.currentBoard = <Board>data.board;
-            // console.log('modal board ', this.currentBoard);
             this.user = this.usersService.getUser().username;
             this.users = this.usersService.getUsers();
-            // console.log(this.users);
-            // console.log('ok');
         });
         this.notificationWebsocketService.notifications.subscribe(msg => {
             if (<string>msg.title != 'updated') {
@@ -62,37 +58,52 @@ export class ModalWindowComponent {
             }
             console.log('Modal Window, response: ', msg);
             let boardID = msg.payload._id;
-            this.boardsService.getBoardsFromServer().subscribe(
-                data => {
-                    this.boardsService.putBoards(data);
-                    if (!BoardService.currentBoard || BoardService.currentBoard.id != boardID) { return; }
+            this.boardsService.getBoardsFromServer().subscribe(data => {
+                console.log('data');
+                this.refresh(boardID);
+            }, err => { });
+            this.boardsService.refresh.subscribe(data => {
+                this.refresh(boardID);
+            });
+            // this.boardsService.getBoardsFromServer().subscribe(
+            //     data => {
+            //         this.boardsService.putBoards(data);
+            //         if (!BoardService.currentBoard || BoardService.currentBoard.id != boardID) { return; }
 
-                    BoardService.currentBoard = this.boardsService.getBoardById(boardID);
-                    this.currentBoard = BoardService.currentBoard;
-                    // console.log('updated'); 
-                    this.modalWindowService.refreshBoard(this.currentBoard);
-                    if (!this.id) { return; }
-                    this.currentCard = this.boardService.getCardById(this.id);
-                },
-                err => {
-                    this.authService.refreshTokens(this.tokens.refreshToken).subscribe(
-                        data => {
-                            this.authService.setTokens(data);
-                            this.boardsService.getBoardsFromServer().subscribe(
-                                data => {
-                                    this.boardsService.putBoards(data);
-                                    if (!BoardService.currentBoard || BoardService.currentBoard.id != boardID) { return; }
-                                    BoardService.currentBoard = this.boardsService.getBoardById(boardID);
-                                    this.currentBoard = BoardService.currentBoard;
-                                    // console.log('updated'); 
-                                    this.modalWindowService.refreshBoard(this.currentBoard);
-                                    if (!this.id) { return; }
-                                    this.currentCard = this.boardService.getCardById(this.id);
-                                });
-                        }
-                    );
-                });
+            //         BoardService.currentBoard = this.boardsService.getBoardById(boardID);
+            //         this.currentBoard = BoardService.currentBoard;
+            //         // console.log('updated'); 
+            //         this.modalWindowService.refreshBoard(this.currentBoard);
+            //         if (!this.id) { return; }
+            //         this.currentCard = this.boardService.getCardById(this.id);
+            //     },
+            //     err => {
+            //         this.authService.refreshTokens(this.tokens.refreshToken).subscribe(
+            //             data => {
+            //                 this.authService.setTokens(data);
+            //                 this.boardsService.getBoardsFromServer().subscribe(
+            //                     data => {
+            //                         this.boardsService.putBoards(data);
+            //                         if (!BoardService.currentBoard || BoardService.currentBoard.id != boardID) { return; }
+            //                         BoardService.currentBoard = this.boardsService.getBoardById(boardID);
+            //                         this.currentBoard = BoardService.currentBoard;
+            //                         // console.log('updated'); 
+            //                         this.modalWindowService.refreshBoard(this.currentBoard);
+            //                         if (!this.id) { return; }
+            //                         this.currentCard = this.boardService.getCardById(this.id);
+            //                     });
+            //             }
+            //         );
+            //     });
         });
+    }
+    refresh(boardID): void {
+        if (!BoardService.currentBoard || BoardService.currentBoard.id != boardID) { return; }
+        BoardService.currentBoard = this.boardsService.getBoardById(boardID);
+        this.currentBoard = BoardService.currentBoard;
+        this.modalWindowService.refreshBoard(this.currentBoard);
+        if (!this.id) { return; }
+        this.currentCard = this.boardService.getCardById(this.id);
     }
     hideDetails(card: Card): void {
         this.newComment = '';
@@ -101,16 +112,20 @@ export class ModalWindowComponent {
     }
     changeCard(): void {
         this.currentCard.date = (new Date()).toLocaleString();
-        this.boardService.updateBoard().subscribe(
-            data => { },
-            err => {
-                this.authService.refreshTokens(this.tokens.refreshToken).subscribe(
-                    data => {
-                        this.authService.setTokens(data);
-                        console.log('after refresh');
-                        this.boardService.updateBoard().subscribe();
-                    });
-            });
+        this.boardService.updateBoard().subscribe(data => {
+                console.log('data');
+            }, err => { });
+            this.boardService.update.subscribe();
+        // this.boardService.updateBoard().subscribe(
+        //     data => { },
+        //     err => {
+        //         this.authService.refreshTokens(this.tokens.refreshToken).subscribe(
+        //             data => {
+        //                 this.authService.setTokens(data);
+        //                 console.log('after refresh');
+        //                 this.boardService.updateBoard().subscribe();
+        //             });
+        //     });
     }
     addComment(): void {
         if (!this.newComment) { return; }

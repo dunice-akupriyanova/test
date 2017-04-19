@@ -9,7 +9,7 @@ var cfg = require('../config/config');
 var crypto = require('crypto');
 var jwt = require("jwt-simple");
 var auth = require("../auth/auth-strategy")();
-var accessTokenExpTime = 10 * 60 * 1000;
+var accessTokenExpTime = 15 * 1000;
 
 router.use(session({ secret: 'SECRET', resave: true, saveUninitialized: true }));
 
@@ -96,6 +96,7 @@ router.post('/signup', function(req, res, next) {
 
 router.get("/refresh-token", function(req, res) {
     var refreshToken = req.headers['authorization'];
+    console.log('refreshToken=', refreshToken);
     var refreshTokenPayload = jwt.decode(refreshToken, cfg.jwtSecret);
     var accessTokenPayload = {};
     if (refreshTokenPayload.exp < Date.now()) {
