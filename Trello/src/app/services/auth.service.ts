@@ -16,9 +16,9 @@ export class AuthService {
     let body = res.json();
     return body;
   }
-  private extractData2(res: Response) {
+  private extractDataRefresh(res: Response) {
     let body = res.json();
-    AuthService.SetTokens(body);
+    AuthService.setTokens(body);
     return body;
   }
   private handleError(error: Response | any) {
@@ -31,7 +31,6 @@ export class AuthService {
     return Observable.throw(errMsg);
   }
   constructor(private http: Http) { }
-  static HTTP: Http;
   postForm(username: string, password: string, url: string): Observable<any> {
     let headers = new Headers({ 'Content-Type': 'application/json' });
     let options = new RequestOptions({ headers: headers });
@@ -39,13 +38,33 @@ export class AuthService {
       .map(this.extractData)
       .catch(this.handleError);
   }
-  setTokens(tokens): void {
-    console.log('setTokens');
-    AuthService.tokens = tokens;
-    localStorage.setItem('tokens', JSON.stringify(tokens));
+  resetPassword(token: string, newPassword: string): Observable<any> {
+    let headers = new Headers({ 'Content-Type': 'application/json' });
+    let options = new RequestOptions({ headers: headers });
+    return this.http.post('http://localhost:3000/auth/reset-password', { token, newPassword }, options)
+      .map(this.extractData)
+      .catch(initialError => {
+        if (initialError.status == 401) {
+          alert('Expiry time of the link is over');
+          Observable.throw(initialError);
+          return;
+        }
+        alert('Wrong link');
+        return Observable.throw(initialError);
+      });
   }
-  static SetTokens(tokens): void {
-    console.log('SetTokens');
+  forgotPassword(login): Observable<any> {
+    let headers = new Headers({ 'Content-Type': 'application/json' });
+    let options = new RequestOptions({ headers: headers });
+    return this.http.post('http://localhost:3000/auth/forgot-password', { login }, options)
+      .map(this.extractData)
+      .catch(initialError => {
+        if (initialError.status != 404) return Observable.throw(initialError);
+        alert('Wrong login');
+        return Observable.throw(initialError);
+      });
+  }
+  static setTokens(tokens): void {
     AuthService.tokens = tokens;
     localStorage.setItem('tokens', JSON.stringify(tokens));
   }
@@ -53,67 +72,14 @@ export class AuthService {
     return AuthService.tokens;
   }
   refreshTokens(refreshToken): Observable<any> {
-    console.log('refreshTokens');
     let headers = new Headers({ 'Authorization': `${refreshToken}` });
     let options = new RequestOptions({ headers: headers });
-    // return this.http.get('http://localhost:3000/auth/refresh-token', options)
-    //   .map(this.extractData)
-    //   .catch(this.handleError);
     return this.http.get('http://localhost:3000/auth/refresh-token', options)
-      .map(this.extractData2)
+      .map(this.extractDataRefresh)
       .catch(this.handleError);
   }
-
-  static ExtractData2(res: Response) {
-    console.log('ExtractData2');
-    let body = res.json();
-    AuthService.SetTokens(body);
-    return body;
-  }
-  static HandleError(error: Response | any) {
-    let errMsg: string;
-    if (error instanceof Response) {
-      errMsg = `${error.status} - ${error.statusText || ''} ${error}`;
-    } else {
-      errMsg = error.message ? error.message : error.toString();
-    }
-    return Observable.throw(errMsg);
-  }
-  static refreshTokens2(): Observable<any> {
-    let headers = new Headers({ 'Authorization': `${AuthService.tokens.refreshToken}` });
-    let options = new RequestOptions({ headers: headers });
-    // return this.http.get('http://localhost:3000/auth/refresh-token', options)
-    //   .map(this.extractData)
-    //   .catch(this.handleError);
-    return this.HTTP.get('http://localhost:3000/auth/refresh-token', options)
-      .map(AuthService.ExtractData2)
-      .catch(AuthService.HandleError);;
-  }
-
-
-  refresh(refreshToken): Observable<any> {
-    console.log('refreshToken=', refreshToken);
-    let headers = new Headers({ 'authorization': `${refreshToken}` });
-    let options = new RequestOptions({ headers: headers });
-    return Observable.create(
-      observer => {
-        this.http.get('http://localhost:3000/auth/refresh-token', options)
-          .map(response => response.json())
-          .subscribe(data => {
-            if (typeof data.error != undefined && data.error === 0) {
-              this.setTokens(data);
-              observer.next(data.accessToken);
-            }
-            observer.complete();
-          },
-          error => {
-            this.logOut();
-            Observable.throw(error);
-          });
-      });
-  }
   logOut(): any {
-    this.setTokens('');
+    AuthService.setTokens('');
     return this.http.get('http://localhost:3000/auth/logout')
       .map(this.extractData)
       .catch(this.handleError);

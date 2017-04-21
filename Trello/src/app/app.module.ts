@@ -14,16 +14,19 @@ import { AppRoutingModule } from './routing/app-routing.module'
 import { LoginComponent } from './login.component/login.component';
 import { MainComponent } from './main.component/main.component';
 import { BoardsComponent } from './boards.component/boards.component';
+import { ResetPasswordComponent } from './reset-password.component/reset-password.component';
 import { CurrentBoardComponent } from './current-board.component/current-board.component';
 import { LoggedOutComponent } from './logged-out.component/logged-out.component';
 import { SignupComponent } from './signup.component/signup.component';
+import { ForgotPpassComponent } from './forgot-pass.component/forgot-pass.component';
 import { NotificationWebsocketService } from './services/notification-websocket.service';
 import { NotificationsService } from './services/notifications.service';
 import { BoardsService } from './services/boards.service';
 import { BoardService } from './services/board.service';
 import { AuthService } from './services/auth.service';
 import { UsersService } from './services/users.service';
-import { WebsocketService } from './services/websocket.service'
+import { WebsocketService } from './services/websocket.service';
+
 
 @NgModule({
     declarations: [
@@ -36,7 +39,9 @@ import { WebsocketService } from './services/websocket.service'
         SignupComponent,
         MainComponent,
         BoardsComponent,
-        CurrentBoardComponent
+        CurrentBoardComponent,
+        ResetPasswordComponent,
+        ForgotPpassComponent
     ],
     imports: [
         BrowserModule,

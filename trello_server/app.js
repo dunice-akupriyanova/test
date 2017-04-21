@@ -50,7 +50,6 @@ app.use(function(err, req, res, next) {
     if ((err.message == 'Expiry time is over') || (err.message == 'User not found')) {
         err.status = 401;
     }
-    console.log('err.stack=', err.stack);
     res.status(err.status || 500).send({
         status: err.status ? err.status : 500,
         message: err.message,

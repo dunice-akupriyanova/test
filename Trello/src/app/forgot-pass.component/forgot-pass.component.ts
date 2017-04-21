@@ -9,15 +9,13 @@ import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 
 @Component({
-    selector: 'login',
-    templateUrl: './login.component.html',
-    styleUrls: ['./login.component.css'],
+    selector: 'forgot-pass',
+    templateUrl: './forgot-pass.component.html',
+    styleUrls: ['./forgot-pass.component.css'],
     providers: []
 })
-export class LoginComponent {
-    // jwtHelper: JwtHelper = new JwtHelper();
+export class ForgotPpassComponent {
     username: string;
-    password: string;
     public forgotPass: Observable<any>;
     constructor(private http: Http,
         private authService: AuthService,
@@ -27,17 +25,13 @@ export class LoginComponent {
 
     }
     onSubmit(): void {
-        this.authService.postForm(this.username, this.password, 'http://localhost:3000/auth/token').subscribe(
-            data => {
-                AuthService.setTokens(data);
-                this.authService.auth(data.accessToken).subscribe(data => {
-                    this.router.navigate(['/boards']);
-                });
-            });
+        this.authService.forgotPassword(this.username).subscribe(data => {
+            if (!data) {
+                alert('Something went wrong');
+                return;
+            }
+            alert('The link for reset you password was sent to your email.');
+        });
         this.username = '';
-        this.password = '';
-    }
-    forgotPassword(): void {
-        this.router.navigate(['/forgot-pass']);
     }
 }

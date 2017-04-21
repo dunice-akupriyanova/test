@@ -37,84 +37,30 @@ export class BoardsComponent {
             this.boardsService.getBoardsFromServer().subscribe(data => {
                 this.boards = this.boardsService.getBoards();
             }, err => { });
-            this.boardsService.refresh.subscribe(data => {
+            this.boardsService.refresh.subscribe(() => {
                 this.boards = this.boardsService.getBoards();
             });
-            // this.boardsService.getBoardsFromServer().subscribe(
-            //     data => {
-            //         this.boardsService.putBoards(data);
-            //         this.boards = this.boardsService.getBoards();
-            //     },
-            //     err => {
-            //         this.authService.refreshTokens(this.tokens.refreshToken).subscribe(
-            //             data => {
-            //                 this.authService.setTokens(data);
-            //                 this.boardsService.getBoardsFromServer().subscribe(
-            //                     data => {
-            //                         this.boardsService.putBoards(data);
-            //                         this.boards = this.boardsService.getBoards();
-            //                     });
-            //             });
-            //     });
         });
     }
     addBoard(): void {
-        console.log('addBoard');
         if (!this.newBoardName) { return; }
 
         this.boardsService.addBoard(this.newBoardName).subscribe(data => {
-            console.log('data');
             this.add(data);
         }, err => {});
         this.boardsService.add.subscribe(data => {
             this.add(data);
         });
-
-        // this.boardsService.addBoard(this.newBoardName).subscribe(
-        //     data => {
-        //         this.add(data);
-        //     },
-        //     err => {
-        //         this.authService.refreshTokens(this.tokens.refreshToken).subscribe(
-        //             data => {
-        //                 this.authService.setTokens(data);
-        //                 this.boardsService.addBoard(this.newBoardName).subscribe(
-        //                     data => {
-        //                         this.add(data);
-        //                     });
-        //             });
-        //     });
     }
     add(data): void {
-        console.log('add');
-        console.log('this.tokens.accessToken=', this.tokens.accessToken);
         this.newBoardName = '';
-        this.usersService.setRights(this.jwtHelper.decodeToken(this.tokens.accessToken).id, data._id, 'owner').subscribe(
-            data=>{console.log('data=', data);}
-        );
+        this.usersService.setRights(this.jwtHelper.decodeToken(this.tokens.accessToken).id, data._id, 'owner').subscribe();
         this.boardsService.getBoardsFromServer().subscribe(data => {
-            console.log('data');
             this.boards = this.boardsService.getBoards();
         }, err => { });
         this.boardsService.refresh.subscribe(data => {
             this.boards = this.boardsService.getBoards();
         });
-        // this.boardsService.getBoardsFromServer().subscribe(
-        //     data => {
-        //         this.boardsService.putBoards(data);
-        //         this.boards = this.boardsService.getBoards();
-        //     },
-        //     err => {
-        //         this.authService.refreshTokens(this.tokens.refreshToken).subscribe(
-        //             data => {
-        //                 this.authService.setTokens(data);
-        //                 this.boardsService.getBoardsFromServer().subscribe(
-        //                     data => {
-        //                         this.boardsService.putBoards(data);
-        //                         this.boards = this.boardsService.getBoards();
-        //                     });
-        //             });
-        //     });
     }
     removeBoard(board): void {
         this.usersService.getRights(this.usersService.getUser().id, board.id).subscribe(
@@ -125,17 +71,6 @@ export class BoardsComponent {
                 }
                 this.boards.splice(this.boards.findIndex((element) => element == board), 1);
                 this.boardService.deleteBoard(board.id).subscribe(data => {}, err => {});
-                this.boardsService.refresh.subscribe();
-                
-                // this.boardService.deleteBoard(board.id).subscribe(
-                //     data => { },
-                //     err => {
-                //         this.authService.refreshTokens(this.tokens.refreshToken).subscribe(
-                //             data => {
-                //                 this.authService.setTokens(data);
-                //                 this.boardService.deleteBoard(board.id).subscribe();
-                //             });
-                //     });
             });
     }
     ngOnInit() {

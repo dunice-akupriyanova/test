@@ -6,7 +6,9 @@ import { LoginComponent }    from '../login.component/login.component';
 import { CurrentBoardComponent }    from '../current-board.component/current-board.component';
 import { MainComponent } from '../main.component/main.component';
 import { LoggedOutComponent } from '../logged-out.component/logged-out.component';
+import { ForgotPpassComponent } from '../forgot-pass.component/forgot-pass.component';
 import { SignupComponent } from '../signup.component/signup.component';
+import { ResetPasswordComponent } from '../reset-password.component/reset-password.component';
 
 
 const appRoutes: Routes = [
@@ -21,6 +23,14 @@ const appRoutes: Routes = [
     {
         path: 'signup',
         component: SignupComponent
+    },
+    {
+        path: 'reset/:token',
+        component: ResetPasswordComponent
+    },
+    {
+        path: 'forgot-pass',
+        component: ForgotPpassComponent
     },
     { 
         path: '',

@@ -24,22 +24,21 @@ router.post('/rights', function(req, res, next) {
             if (err) return res.status(422).send(err);
             res.send({ rights: rights });
         });
-    } else {
-        Right.findOne({ userID: userID, boardID: boardID }, function(err, rights) {
-            if (err || !rights) return res.status(404).send(err);
-            rights.remove();
-            res.sendStatus(204);
-        });
+        return;
     }
+    Right.findOne({ userID: userID, boardID: boardID }, function(err, rights) {
+        if (err || !rights) return res.status(404).send(err);
+        rights.remove();
+        res.sendStatus(204);
+    });
 });
 
 router.get('/rights', function(req, res, next) {
     let userID = req.query.userID;
     let boardID = req.query.boardID;
     Right.findOne({ userID: userID, boardID: boardID }, function(err, rights) {
-        if (rights) {
-            res.send(rights);
-        } else res.send({ rights: 'none' });
+        if (!rights || err) return res.send({ rights: 'none' });
+        res.send(rights);
     });
     res.status(201);
 });
@@ -63,15 +62,15 @@ router.post('/notification', function(req, res, next) {
             for (let client of clients[notification.userID]) {
                 client.sendUTF(JSON.stringify(notification));
             }
-        } else {
-            let newNotification = new Notification({ type: type, userID: userID, boardID: boardID, cardID: cardID, overlooked: false });
-            newNotification.save(function(err) {
-                if (err) return res.status(422).send(err);
-            });
-            if (!clients[newNotification.userID]) return;
-            for (let client of clients[newNotification.userID]) {
-                client.sendUTF(JSON.stringify(newNotification));
-            }
+            return;
+        }
+        let newNotification = new Notification({ type: type, userID: userID, boardID: boardID, cardID: cardID, overlooked: false });
+        newNotification.save(function(err) {
+            if (err) return res.status(422).send(err);
+        });
+        if (!clients[newNotification.userID]) return;
+        for (let client of clients[newNotification.userID]) {
+            client.sendUTF(JSON.stringify(newNotification));
         }
     });
 });
@@ -80,9 +79,8 @@ router.get('/notification', function(req, res, next) {
     let userID = req.query.userID;
     Notification.find({ userID: userID }, function(err, notifications) {
         if (err) return res.sendStatus(404);
-        if (notifications) {
-            res.send(notifications);
-        } else res.send(new Array);
+        if (!notifications) return res.send(new Array);
+        res.send(notifications);
     });
 });
 
@@ -93,7 +91,6 @@ router.delete('/notification', function(req, res, next) {
     let userID = req.query.userID;
     if (type == 'card') {
         Notification.findOne({ type: type, boardID: boardID, userID: userID, cardID: cardID }, function(err, notification) {
-            console.log('notification=', notification);
             if (err || !notification) return res.status(404).send(err);
             res.send(notification);
             notification.remove();
@@ -101,7 +98,6 @@ router.delete('/notification', function(req, res, next) {
         return;
     }
     Notification.findOne({ type: type, boardID: boardID, userID: userID }, function(err, notification) {
-        console.log('notification=', notification);
         if (err || !notification) return res.status(404).send(err);
         res.send(notification);
         notification.remove();

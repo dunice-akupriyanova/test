@@ -30,7 +30,6 @@ export class NotificationsService {
         } else {
             errMsg = error.message ? error.message : error.toString();
         }
-        console.error(errMsg);
         return Observable.throw(errMsg);
     }
     setNotification(type, userID, board, card?): Observable<any> {
@@ -53,7 +52,6 @@ export class NotificationsService {
             .catch(this.handleError);
     }
     removeNotification(type, userID, boardID, cardID?): Observable<any> {
-        console.log('removeNotification');
         let headers = new Headers({ 'Content-Type': 'application/json' });
         let options = new RequestOptions({ headers: headers });
         return this.http.delete(`http://localhost:3000/users/notification?type=${type}&cardID=${cardID}&boardID=${boardID}&userID=${userID}`, options)
@@ -69,7 +67,6 @@ export class NotificationsService {
     }
     getNotifications(user): Array<any> {
         this.getNotification(user.id).subscribe(data => {
-            // console.log('data=', data);
             let dataLength = data.length;
             for (let i = 0; i < dataLength; i++) {
                 if (data[i].overlooked) {
@@ -82,7 +79,6 @@ export class NotificationsService {
                 let board = this.boardsService.getBoardById(this.notifications[i].boardID);
                 this.notifications[i].boardName = board ? board.name : '';
                 if (!this.notifications[i].boardName) {
-                    console.log('board is not found');
                     this.removeNotification(this.notifications[i].type, user.id, data[i].boardID, this.notifications[i].cardID).subscribe();
                     this.notifications.splice(i, 1);
                     data.splice(i, 1);
@@ -95,7 +91,6 @@ export class NotificationsService {
                 }
                 this.notifications[i].card = this.boardsService.getCardById(board, data[i].cardID) || this.boardService.getCardById(data[i].cardID);
                 if (!this.notifications[i].card) {
-                    console.log('card is not found');
                     this.removeNotification(data[i].type, user.id, data[i].boardID, data[i].cardID).subscribe();
                     data.splice(i, 1);
                     this.notifications.splice(i, 1);
@@ -109,8 +104,6 @@ export class NotificationsService {
         return this.notifications;
     }
     setCount(): void {
-        // console.log('NotificationsService.oldNotifications=', NotificationsService.oldNotifications);
-        // console.log('this.notifications=', this.notifications);
         if (!NotificationsService.oldNotifications.length) {
             NotificationsService.count.count = this.notifications.length;
             return;

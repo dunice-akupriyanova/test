@@ -3,13 +3,16 @@ var router = express.Router();
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var User = require('../models/user');
+var Link = require('../models/link');
 var app = express();
 var session = require('express-session');
 var cfg = require('../config/config');
 var crypto = require('crypto');
 var jwt = require("jwt-simple");
 var auth = require("../auth/auth-strategy")();
-var accessTokenExpTime = 15 * 1000;
+var transporter = require('../libs/transporter')();
+const nodemailer = require('nodemailer');
+var accessTokenExpTime = 5 * 60 * 1000;
 
 router.use(session({ secret: 'SECRET', resave: true, saveUninitialized: true }));
 
@@ -21,7 +24,6 @@ router.use(passport.session());
 passport.serializeUser(function(user, done) {
     done(null, user.id);
 });
-
 passport.deserializeUser(function(id, done) {
     User.findById(id, function(err, user) {
         err
@@ -55,6 +57,73 @@ router.post('/token', function(req, res, next) {
     });
 });
 
+router.post('/reset-password', function(req, res, next) {
+    var token = req.body.token;
+    Link.findOne({ token: token }, function(err, link) {
+        token = jwt.decode(token, cfg.jwtSecret);
+        if (err || !link) return res.status(404).send(err);
+        userID = token.id;
+        if (token.exp < Date.now()) {
+            return res.status(401).send('');
+        }
+        User.findOne({ _id: userID }, function(err, user) {
+            if (err || !user) return res.status(404).send(err);
+            var newPassword = crypto.createHash('md5').update(req.body.newPassword).digest('hex');
+            user.password = newPassword;
+            user.save(function(err) {
+                if (err) return res.status(422).send(err);
+                res.send({});
+            });
+        });
+        link.remove();
+    });
+});
+
+router.post('/forgot-password', function(req, res, next) {
+    var username = req.body.login;
+    User.findOne({ username: username }, function(err, user) {
+        if (err || !user) return res.status(404).send(err);
+        var token = {
+            exp: Date.now() + 1000 * 60 * 60,
+            id: user._id
+        };
+        var token = jwt.encode(token, cfg.jwtSecret);
+        let newLink = new Link({ userID: user._id, token: token });
+        Link.findOne({ userID: user._id }, function(err, link) {
+            if (err || !link) return console.log(err);
+            link.remove();
+        });
+        let saveLink = new Promise(function(resolve, reject) {
+            newLink.save(function(err, link) {
+                if (err) return reject(err);
+                resolve(link);
+            });
+        });
+        saveLink.then(
+            response => {
+                let link = `http://localhost:4200/reset/${token}`;
+                let mailOptions = {
+                    from: '"no reply" <trello.server@mail.ru>',
+                    to: user.username,
+                    subject: `Forgot password for ${user.username}`,
+                    text: `Dear ${user.username}! Click here to reset your password: ${link}`,
+                };
+                transporter.sendMail(mailOptions).then(
+                    response => {
+                        res.send(true);
+                        console.log('Message %s sent: %s', response.messageId, response.response);
+                    },
+                    error => {
+                        res.send(false);
+                        console.log(error);
+                    }
+                );
+            },
+            error => {
+                res.status(422).send(err);
+            });
+    });
+});
 router.get("/user", auth.authenticate(), function(req, res) {
     if (!req.user) return res.sendStatus(401);
     res.json(req.user);
@@ -96,7 +165,6 @@ router.post('/signup', function(req, res, next) {
 
 router.get("/refresh-token", function(req, res) {
     var refreshToken = req.headers['authorization'];
-    console.log('refreshToken=', refreshToken);
     var refreshTokenPayload = jwt.decode(refreshToken, cfg.jwtSecret);
     var accessTokenPayload = {};
     if (refreshTokenPayload.exp < Date.now()) {

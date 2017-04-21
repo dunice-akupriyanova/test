@@ -53,28 +53,17 @@ export class BoardsService {
             .catch(this.handleError)
             .subscribe(data => {
               this.putBoards(data);
-              this.refreshData(data);
+              this.refresh.next();
             });
         });
       })
       .map(res => {
         let body = res.json();
         this.putBoards(body);
-        // this.refreshData(body);
         return body;
       });
-    // return this.http.get('http://localhost:3000/boards', options)
-    //   .map(this.extractData)
-    //   .catch(this.handleError);
-  }
-  refreshData(data) {
-    this.refresh.next(data);
-  }
-  add_board(data) {
-    this.add.next(data);
   }
   putBoards(data): void {
-    console.log('putBoards');
     if (!data) {
       console.log('no data');
       return;
@@ -101,18 +90,14 @@ export class BoardsService {
             .map(this.extractData)
             .catch(this.handleError)
             .subscribe(data => {
-              this.add_board(data);
+              this.add.next(data);
             });
         });
       })
       .map(res => {
         let body = res.json();
-        this.add_board(body);
         return body;
       });
-    // return this.http.post('http://localhost:3000/boards', { name }, options)
-    //   .map(this.extractData)
-    //   .catch(this.handleError);
   }
   getBoardById(id): Board {
     let result = BoardsService.boards.find(element => element.id == id);
@@ -122,7 +107,6 @@ export class BoardsService {
     for (let list of board.lists) {
       let found = list.cards.find(element => element.id == id);
       if (found) {
-        console.log('found');
         return found;
       }
     }

@@ -4,20 +4,25 @@
     height: 100%;
     background-color: #0079BF;
 }
+
 .login {
     border-radius: 5px;
     padding: 1px 20px 20px;
-    background-color: #E2E4E6;;
+    background-color: #E2E4E6;
+    ;
     width: 400px;
     margin: 40px auto;
     height: auto;
 }
-input[name='email'], input[name='password'] {
+
+input[name='login'],
+input[name='password'] {
     display: block;
     margin-top: 10px;
-    margin-bottom: 10px; 
+    margin-bottom: 10px;
 }
-.green_button{
+
+.green_button {
     background-color: #61BD4F;
     color: white;
     padding: 5px;
@@ -26,6 +31,7 @@ input[name='email'], input[name='password'] {
     padding: 7px 20px;
     border-radius: 2px;
 }
+
 .blue_button {
     vertical-align: middle;
     display: inline-block;
@@ -38,4 +44,16 @@ input[name='email'], input[name='password'] {
     text-align: center;
     border-radius: 2px;
     background-color: blue;
+}
+
+.forgot_password {
+    margin-left: 10px;
+    font-size: 17px;
+    display: inline-block;
+    color: #9A9A9A;
+}
+
+.forgot_password:hover {
+    cursor: pointer;
+    color: #505050;
 }

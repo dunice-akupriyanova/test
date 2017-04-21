@@ -1,49 +1,54 @@
-
 .lists {
     width: auto;
     margin-top: 0;
     padding-left: 25px;
     white-space: nowrap;
 }
+
 input[name="newList"] {
-    padding-left: 5px; 
+    padding-left: 5px;
     margin-bottom: 5px;
     margin-top: 5px;
     border-radius: 3px;
     border: 1px solid #AAAAAA;
 }
-textarea[name="current_board_name"], .current_board_name {
+
+textarea[name="current_board_name"],
+.current_board_name {
     padding-left: 8px;
     display: inline-block;
-    font: 18px Arial,Helvetica,sans-serif;
+    font: 18px Arial, Helvetica, sans-serif;
     border: 0;
-    resize:none;
+    resize: none;
     background-color: transparent;
     text-align: center;
-	display: block;
-	padding-left: 16px;
-	padding-right: 0;
+    display: block;
+    padding-left: 16px;
+    padding-right: 0;
     margin: 0 auto;
     color: white;
     font-weight: 700;
 }
+
 textarea[name="current_board_name"]:focus {
     background-color: white;
     color: black;
 }
+
 .current_board {
     display: inline-block;
     color: white;
-    margin: 15px; 
+    margin: 15px;
 }
+
 .content {
     padding-top: 20px;
     background-color: #0079BF;
     min-width: 100%;
-    min-height: 100%;
     position: absolute;
     top: 40px;
 }
+
 .list {
     font-size: 18px;
     white-space: normal;
@@ -55,19 +60,24 @@ textarea[name="current_board_name"]:focus {
     width: auto;
     background-color: #E2E4E6;
 }
+
 form {
     display: inline-block;
 }
+
 input {
     display: block;
 }
+
 textarea {
     overflow: hidden;
 }
+
 textarea:focus {
     overflow: auto;
 }
-.add_button{
+
+.add_button {
     background-color: #61BD4F;
     color: white;
     padding: 5px;
@@ -76,6 +86,7 @@ textarea:focus {
     padding: 7px 20px;
     border-radius: 2px;
 }
+
 .delete {
     cursor: pointer;
     height: 18px;
@@ -87,19 +98,22 @@ textarea:focus {
     margin-right: 3px;
     border-radius: 2px;
 }
+
 .delete:hover {
     background-color: #c0c5c7;
 }
+
 a {
     text-decoration: none;
     color: inherit;
     display: inline-block;
 }
+
 .add_members {
     margin-right: 40px;
     padding: 10px;
     color: white;
-    font-weight: 800; 
+    font-weight: 800;
     text-align: center;
     line-height: 20px;
     box-sizing: border-box;
@@ -111,10 +125,12 @@ a {
     border-radius: 2px;
     background-color: #4F96BF;
 }
+
 .owner {
     line-height: 20px;
     font-size: 14px;
 }
+
 .users {
     display: none;
     position: absolute;
@@ -123,6 +139,7 @@ a {
     color: black;
     border-radius: 2px;
 }
+
 .user {
     line-height: 40px;
     display: block;
@@ -131,18 +148,22 @@ a {
     padding: 10px;
     background-color: #E2E4E6;
 }
+
 .user:hover {
     background-color: #CCD1D3;
 }
+
 .add_members:hover .users {
     display: block;
 }
+
 .username {
     float: left;
     height: 40px;
     width: 90px;
     display: inline-block;
 }
+
 .rigths {
     cursor: pointer;
     width: 45px;

@@ -1,37 +1,42 @@
 .title {
     margin: 0 auto;
     width: 100px;
-    font: 20px Arial,Helvetica,sans-serif;
+    font: 20px Arial, Helvetica, sans-serif;
     color: white;
     font-weight: 700;
 }
+
 .board_name {
     cursor: pointer;
     padding: 10px;
     display: inline-block;
     margin-right: 5px;
 }
+
 .list:hover {
     background-color: #CCD1D3;
 }
-li.list:last-child:hover{
+
+li.list:last-child:hover {
     background-color: #E2E4E6;
 }
+
 input[name="newBoard"] {
-    padding-left: 5px; 
+    padding-left: 5px;
     margin-bottom: 5px;
     margin-top: 5px;
     border-radius: 3px;
     border: 1px solid #AAAAAA;
 }
+
 .content {
     padding-top: 20px;
     background-color: #0079BF;
     min-width: 100%;
-    min-height: 100%;
     position: absolute;
     top: 40px;
 }
+
 .list {
     font-size: 18px;
     white-space: normal;
@@ -43,22 +48,28 @@ input[name="newBoard"] {
     width: auto;
     background-color: #E2E4E6;
 }
+
 li.list:last-child {
     padding: 10px;
 }
+
 form {
     display: inline-block;
 }
+
 input {
     display: block;
 }
+
 textarea {
     overflow: hidden;
 }
+
 textarea:focus {
     overflow: auto;
 }
-.add_button{
+
+.add_button {
     background-color: #61BD4F;
     color: white;
     padding: 5px;
@@ -67,6 +78,7 @@ textarea:focus {
     padding: 7px 20px;
     border-radius: 2px;
 }
+
 .delete {
     border: 0.5px #AAB1BB solid;
     opacity: 0;
@@ -79,12 +91,15 @@ textarea:focus {
     margin-right: 15px;
     border-radius: 2px;
 }
+
 .delete:hover {
     background-color: #c0c5c7;
 }
+
 .list:hover .delete {
     opacity: 1;
 }
+
 a {
     text-decoration: none;
     color: inherit;

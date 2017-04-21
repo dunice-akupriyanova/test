@@ -3,6 +3,7 @@ var User = require('./models/user');
 var jwt = require("jwt-simple");
 var cfg = require('./config/config');
 var http = require('http');
+const nodemailer = require('nodemailer');
 
 var server = http.createServer(function(request, response) {});
 server.listen(8080, function() {});

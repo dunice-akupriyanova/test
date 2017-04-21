@@ -1,0 +1,21 @@
+<div class="login_container">
+    <div class="login">
+        <h1>
+            Enter your login
+        </h1>
+        <form (ngSubmit)="onSubmit()" #loginForm="ngForm">
+            <label>
+                Login
+                <input type="text" name="username" placeholder="Login" [(ngModel)]="username">
+            </label>
+            <div class="buttons">
+                <input class="green_button" type="submit" value="Get reset password link">
+                <a routerLink="/login" routerLinkActive="active">
+                    <div class="blue_button">
+                        Back
+                    </div>
+                </a>
+            </div>
+        </form>
+    </div>
+</div>

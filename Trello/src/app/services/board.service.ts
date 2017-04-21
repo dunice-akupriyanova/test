@@ -5,7 +5,6 @@ import { Observable } from 'rxjs/Observable';
 import { Board } from '../models/board';
 import { AuthService } from './auth.service';
 import { BoardsService } from './boards.service';
-import { Subject } from 'rxjs/Subject';
 import { JwtHelper } from 'angular2-jwt';
 import { Card } from '../models/card';
 import 'rxjs/add/operator/catch';
@@ -17,8 +16,6 @@ export class BoardService {
     tokens = this.authService.getTokens();
     boards: Array<Board> = this.boardsService.getBoards();
     static currentBoard: Board;
-    refresh = new Subject<any>();
-    update = new Subject<any>();
     constructor(
         private http: Http,
         private authService: AuthService,
@@ -38,12 +35,6 @@ export class BoardService {
         }
         return Observable.throw(errMsg);
     }
-    refreshData(data) {
-        this.refresh.next(data);
-    }
-    update_board(data) {
-        this.update.next(data);
-    }
     deleteBoard(id): Observable<any> {
         this.tokens = this.authService.getTokens();
         let headers = new Headers({ 'Authorization': `JWT ${this.tokens.accessToken}` });
@@ -57,18 +48,13 @@ export class BoardService {
                     return this.http.delete(`http://localhost:3000/boards/${id}`, newOptions)
                         .map(this.extractData)
                         .catch(this.handleError)
-                        .subscribe(data => {
-                            this.refreshData(data);
-                        });
+                        .subscribe();
                 });
             })
             .map(res => {
                 let body = res.json();
-                this.refreshData(body);
                 return body;
             });
-        // return this.http.delete(`http://localhost:3000/boards/${id}`, options)
-        //     .map(this.extractData);
     }
     getBoard(data): Board {
         if (!data) {
@@ -90,19 +76,13 @@ export class BoardService {
                     return this.http.put(`http://localhost:3000/boards/${BoardService.currentBoard.id}`, { name: BoardService.currentBoard.name, lists: BoardService.currentBoard.lists }, newOptions)
                         .map(this.extractData)
                         .catch(this.handleError)
-                        .subscribe(data => {
-                            this.update_board(data);
-                        });
+                        .subscribe();
                 });
             })
             .map(res => {
                 let body = res.json();
-                this.update_board(body);
                 return body;
             });
-        // return this.http.put(`http://localhost:3000/boards/${BoardService.currentBoard.id}`, { name: BoardService.currentBoard.name, lists: BoardService.currentBoard.lists }, options)
-        //     .map(this.extractData)
-        //     .catch(this.handleError);
     }
     setCurrentBoard(board): void {
         BoardService.currentBoard = board;

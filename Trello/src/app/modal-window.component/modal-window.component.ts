@@ -56,45 +56,13 @@ export class ModalWindowComponent {
             if (<string>msg.title != 'updated') {
                 return;
             }
-            console.log('Modal Window, response: ', msg);
             let boardID = msg.payload._id;
             this.boardsService.getBoardsFromServer().subscribe(data => {
-                console.log('data');
                 this.refresh(boardID);
             }, err => { });
             this.boardsService.refresh.subscribe(data => {
                 this.refresh(boardID);
             });
-            // this.boardsService.getBoardsFromServer().subscribe(
-            //     data => {
-            //         this.boardsService.putBoards(data);
-            //         if (!BoardService.currentBoard || BoardService.currentBoard.id != boardID) { return; }
-
-            //         BoardService.currentBoard = this.boardsService.getBoardById(boardID);
-            //         this.currentBoard = BoardService.currentBoard;
-            //         // console.log('updated'); 
-            //         this.modalWindowService.refreshBoard(this.currentBoard);
-            //         if (!this.id) { return; }
-            //         this.currentCard = this.boardService.getCardById(this.id);
-            //     },
-            //     err => {
-            //         this.authService.refreshTokens(this.tokens.refreshToken).subscribe(
-            //             data => {
-            //                 this.authService.setTokens(data);
-            //                 this.boardsService.getBoardsFromServer().subscribe(
-            //                     data => {
-            //                         this.boardsService.putBoards(data);
-            //                         if (!BoardService.currentBoard || BoardService.currentBoard.id != boardID) { return; }
-            //                         BoardService.currentBoard = this.boardsService.getBoardById(boardID);
-            //                         this.currentBoard = BoardService.currentBoard;
-            //                         // console.log('updated'); 
-            //                         this.modalWindowService.refreshBoard(this.currentBoard);
-            //                         if (!this.id) { return; }
-            //                         this.currentCard = this.boardService.getCardById(this.id);
-            //                     });
-            //             }
-            //         );
-            //     });
         });
     }
     refresh(boardID): void {
@@ -112,24 +80,10 @@ export class ModalWindowComponent {
     }
     changeCard(): void {
         this.currentCard.date = (new Date()).toLocaleString();
-        this.boardService.updateBoard().subscribe(data => {
-                console.log('data');
-            }, err => { });
-            this.boardService.update.subscribe();
-        // this.boardService.updateBoard().subscribe(
-        //     data => { },
-        //     err => {
-        //         this.authService.refreshTokens(this.tokens.refreshToken).subscribe(
-        //             data => {
-        //                 this.authService.setTokens(data);
-        //                 console.log('after refresh');
-        //                 this.boardService.updateBoard().subscribe();
-        //             });
-        //     });
+        this.boardService.updateBoard().subscribe(data => {}, err => {});
     }
     addComment(): void {
         if (!this.newComment) { return; }
-        // console.log('this.newComment=', this.newComment);
         this.currentCard.comments.push(new Comment(this.newComment, this.user, (new Date()).toLocaleString()));
         this.setNotification('card', this.searchNotifications(this.newComment));
         this.newComment = '';
@@ -177,9 +131,6 @@ export class ModalWindowComponent {
             this.searchString = value.substring(value.lastIndexOf('@') + 1);
             this.searchUser(this.searchString, this.target);
         }
-        // console.log('this.searchString='+this.searchString);
-        // console.log('result:');
-        // console.log(this.searchResult);
     }
     searchUser(value, target): void {
         this.searchResult = [];
@@ -222,9 +173,6 @@ export class ModalWindowComponent {
                 }
             }
         }
-        // console.log('result=', result);
-        // console.log('searchNotification');
-        // console.log(result);
         return result;
     }
     getUser(username): string {
@@ -236,28 +184,20 @@ export class ModalWindowComponent {
         return '';
     }
     setNotification(type, data): void {
-        console.log('setNotification', data);
         for (let i = 0; i < data.length; i++) {
-            this.notificationsService.setNotification(type, data[i], this.currentBoard, this.currentCard).subscribe(data => {
-                console.log('from server', data);
-            });
+            this.notificationsService.setNotification(type, data[i], this.currentBoard, this.currentCard).subscribe();
         }
     }
     changeMember(user, event): void {
         if (!event.target.hasAttribute('checked')) {
             this.currentCard.members.push(user.username);
-            this.notificationsService.setNotification('card', user.id, this.currentBoard, this.currentCard).subscribe(data => {
-                console.log('from server', data);
-            });
+            this.notificationsService.setNotification('card', user.id, this.currentBoard, this.currentCard).subscribe();
             this.changeCard();
             event.target.setAttribute('checked', '');
-        } else {
-            this.currentCard.members.splice(this.currentCard.members.indexOf(user.username), 1);
-            this.notificationsService.setNotification('card', user.id, this.currentBoard, this.currentCard).subscribe(data => {
-                console.log('from server', data);
-            });
-            this.changeCard();
-            event.target.removeAttribute('checked');
+            return;
         }
+        this.currentCard.members.splice(this.currentCard.members.indexOf(user.username), 1);
+        this.notificationsService.setNotification('card', user.id, this.currentBoard, this.currentCard).subscribe();
+        this.changeCard();
     }
 }
