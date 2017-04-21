@@ -21,7 +21,6 @@ export class ListComponent {
     index: number;
     @Input()
     rights: string;
-    tokens: any = this.authService.getTokens();
     newCardName: string;
     constructor(
         private modalWindowService: ModalWindowService,

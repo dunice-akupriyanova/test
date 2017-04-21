@@ -32,7 +32,6 @@ export class ModalWindowComponent {
     searchResult: Array<String> = [];
     currentBoard: Board;
     target: any;
-    tokens: any = this.authService.getTokens();
     newCommentIsEditing: Boolean = false;
     id: number | string;
     constructor(

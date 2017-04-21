@@ -9,6 +9,7 @@ var clients = require('../websockets');
 router.use(passport.initialize());
 
 router.get('/', auth.authenticate(), function(req, res, next) {
+    console.log('user=', req.user);
     Board.find({}, function(err, boards) {
         if (err) return res.status(404).send(err);
         res.send(boards);

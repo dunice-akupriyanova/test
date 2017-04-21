@@ -18,7 +18,6 @@ export class CardComponent {
     list: List;
     @Input()
     rights: string;
-    tokens: any = this.authService.getTokens();
     constructor(
         private boardService: BoardService,
         private authService: AuthService

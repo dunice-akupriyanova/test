@@ -13,7 +13,6 @@ import 'rxjs/add/operator/map';
 export class UsersService {
     static users: Array<any> = [];
     jwtHelper: JwtHelper = new JwtHelper();
-    tokens = this.authService.getTokens();
     static user: User;
     refresh = new Subject<any>();
     constructor(
@@ -44,7 +43,7 @@ export class UsersService {
         for (let i = 0; i < data.length; i++) {
             UsersService.users[i] = new User(data[i]._id, data[i].username);
         }
-        UsersService.user = this.getUserById(this.jwtHelper.decodeToken(this.tokens.accessToken).id);
+        UsersService.user = this.getUserById(this.jwtHelper.decodeToken(AuthService.tokens.accessToken).id);
     }
     getUsers(): Array<User> {
         return UsersService.users;

@@ -17,7 +17,6 @@ import 'rxjs/add/operator/map';
 @Injectable()
 export class BoardsService {
   jwtHelper: JwtHelper = new JwtHelper();
-  tokens = this.authService.getTokens();
   static boards: Array<Board> = [];
   refresh = new Subject<any>();
   add = new Subject<any>();
@@ -39,8 +38,7 @@ export class BoardsService {
     return Observable.throw(errMsg);
   }
   getBoardsFromServer(): Observable<any> {
-    this.tokens = this.authService.getTokens();
-    let headers = new Headers({ 'Authorization': `JWT ${this.tokens.accessToken}` });
+    let headers = new Headers({ 'Authorization': `JWT ${AuthService.tokens.accessToken}` });
     let options = new RequestOptions({ headers: headers });
     return this.http.get('http://localhost:3000/boards', options)
       .catch(initialError => {
@@ -77,8 +75,7 @@ export class BoardsService {
     return BoardsService.boards;
   }
   addBoard(name): Observable<any> {
-    this.tokens = this.authService.getTokens();
-    let headers = new Headers({ 'Authorization': `JWT ${this.tokens.accessToken}` });
+    let headers = new Headers({ 'Authorization': `JWT ${AuthService.tokens.accessToken}` });
     let options = new RequestOptions({ headers: headers });
     return this.http.post('http://localhost:3000/boards', { name }, options)
       .catch(initialError => {

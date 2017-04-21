@@ -18,9 +18,8 @@ import { Router } from '@angular/router';
 export class BoardsComponent {
     boards: Array<Board> = [];
     newBoardName: string;
-    user: User;
+    user: User = UsersService.user;
     jwtHelper: JwtHelper = new JwtHelper();
-    tokens: any = this.authService.getTokens();
     rights: string;
     constructor(
         private authService: AuthService,
@@ -54,7 +53,7 @@ export class BoardsComponent {
     }
     add(data): void {
         this.newBoardName = '';
-        this.usersService.setRights(this.jwtHelper.decodeToken(this.tokens.accessToken).id, data._id, 'owner').subscribe();
+        this.usersService.setRights(this.jwtHelper.decodeToken(AuthService.tokens.accessToken).id, data._id, 'owner').subscribe();
         this.boardsService.getBoardsFromServer().subscribe(data => {
             this.boards = this.boardsService.getBoards();
         }, err => { });
@@ -65,10 +64,10 @@ export class BoardsComponent {
     removeBoard(board): void {
         this.usersService.getRights(this.usersService.getUser().id, board.id).subscribe(
             rights => {
-                if (rights.rights != 'owner') {
-                    alert('No access rights!');
-                    return;
-                }
+                // if (rights.rights != 'owner') {
+                //     alert('No access rights!');
+                //     return;
+                // }
                 this.boards.splice(this.boards.findIndex((element) => element == board), 1);
                 this.boardService.deleteBoard(board.id).subscribe(data => {}, err => {});
             });
@@ -82,8 +81,11 @@ export class BoardsComponent {
     }
     chooseBoard(id): void {
         this.user = this.usersService.getUser();
+        console.log('this.user=', this.user);
+        console.log('this.user.id=', this.user.id);
         this.usersService.getRights(this.user.id, id).subscribe(
             rights => {
+                console.log('rights.rights=', rights.rights);
                 if (rights.rights == 'none') {
                     alert('No access rights!');
                     return;

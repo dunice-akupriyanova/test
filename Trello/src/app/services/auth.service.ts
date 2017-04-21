@@ -68,9 +68,6 @@ export class AuthService {
     AuthService.tokens = tokens;
     localStorage.setItem('tokens', JSON.stringify(tokens));
   }
-  getTokens(): any {
-    return AuthService.tokens;
-  }
   refreshTokens(refreshToken): Observable<any> {
     let headers = new Headers({ 'Authorization': `${refreshToken}` });
     let options = new RequestOptions({ headers: headers });

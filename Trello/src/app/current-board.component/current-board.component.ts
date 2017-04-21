@@ -24,7 +24,6 @@ export class CurrentBoardComponent {
     jwtHelper: JwtHelper = new JwtHelper();
     currentBoard: Board;
     newName: string;
-    tokens: any = this.authService.getTokens();
     users: Array<User> = this.usersService.getUsers();
     user: User = UsersService.user;
     rights: String;
