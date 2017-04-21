@@ -2,7 +2,6 @@ var express = require('express');
 var router = express.Router();
 var User = require('../models/user');
 var Link = require('../models/link');
-var session = require('express-session');
 var cfg = require('../config/config');
 var crypto = require('crypto');
 var jwt = require("jwt-simple");
@@ -10,8 +9,6 @@ var auth = require("../auth/auth-strategy")();
 var transporter = require('../libs/transporter')();
 const nodemailer = require('nodemailer');
 var accessTokenExpTime = 5 * 60 * 1000;
-
-router.use(session({ secret: 'SECRET', resave: true, saveUninitialized: true }));
 
 var passport = require('passport');
 

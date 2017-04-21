@@ -81,11 +81,8 @@ export class BoardsComponent {
     }
     chooseBoard(id): void {
         this.user = this.usersService.getUser();
-        console.log('this.user=', this.user);
-        console.log('this.user.id=', this.user.id);
         this.usersService.getRights(this.user.id, id).subscribe(
             rights => {
-                console.log('rights.rights=', rights.rights);
                 if (rights.rights == 'none') {
                     alert('No access rights!');
                     return;
