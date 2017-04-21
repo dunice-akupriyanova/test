@@ -45,9 +45,7 @@ export class MainComponent {
         private modalWindowService: ModalWindowService,
         private notificationWebsocketService: NotificationWebsocketService,
         private router: Router
-    ) {
-
-    }
+    ) {}
     logOut(): void {
         this.authService.logOut().subscribe();
     }

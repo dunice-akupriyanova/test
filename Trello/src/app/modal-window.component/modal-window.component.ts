@@ -111,7 +111,6 @@ export class ModalWindowComponent {
     }
     check(value: String, event): void {
         this.target = event.target;
-
         if (value[value.length - 1] == '@') {
             this.searching = true;
             return;

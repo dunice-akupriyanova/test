@@ -21,9 +21,7 @@ export class ForgotPpassComponent {
         private authService: AuthService,
         private router: Router,
         private wsService: WebsocketService
-    ) {
-
-    }
+    ) {}
     onSubmit(): void {
         this.authService.forgotPassword(this.username).subscribe(data => {
             if (!data) {

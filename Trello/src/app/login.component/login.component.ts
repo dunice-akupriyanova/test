@@ -23,9 +23,7 @@ export class LoginComponent {
         private authService: AuthService,
         private router: Router,
         private wsService: WebsocketService
-    ) {
-
-    }
+    ) {}
     onSubmit(): void {
         this.authService.postForm(this.username, this.password, 'http://localhost:3000/auth/token').subscribe(
             data => {

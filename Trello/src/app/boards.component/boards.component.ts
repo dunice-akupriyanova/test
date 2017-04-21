@@ -64,10 +64,10 @@ export class BoardsComponent {
     removeBoard(board): void {
         this.usersService.getRights(this.usersService.getUser().id, board.id).subscribe(
             rights => {
-                // if (rights.rights != 'owner') {
-                //     alert('No access rights!');
-                //     return;
-                // }
+                if (rights.rights != 'owner') {
+                    alert('No access rights!');
+                    return;
+                }
                 this.boards.splice(this.boards.findIndex((element) => element == board), 1);
                 this.boardService.deleteBoard(board.id).subscribe(data => {}, err => {});
             });

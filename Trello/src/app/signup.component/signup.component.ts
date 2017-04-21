@@ -12,7 +12,10 @@ import { Router } from '@angular/router';
 export class SignupComponent {
     login: string;
     password: string;
-    constructor(private http: Http, private authService: AuthService, private router: Router) { }
+    constructor(private http: Http,
+                private authService: AuthService,
+                private router: Router
+                ) { }
     onSubmit(): void {
         this.authService.postForm(
             this.login,
